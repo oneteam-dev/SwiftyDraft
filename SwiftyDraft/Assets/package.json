@@ -1,0 +1,51 @@
+{
+  "private": true,
+  "name": "swifty-draft-internal",
+  "version": "1.0.0",
+  "description": "SwiftyDraft Internal Asset",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src",
+    "test": "mocha --compilers js:babel-register test/**/*.js",
+    "clean": "if [ -d dist ]; then rm -rf dist; fi",
+    "build": "npm run clean && npm run jade && webpack",
+    "build:watch": "npm run clean && npm run jade && webpack --progress --colors --watch",
+    "jade": "jade -o dist src/index.jade"
+  },
+  "author": "Oneteam Inc.",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap-styl": "^5.0.5",
+    "classnames": "^2.2.3",
+    "lodash": "^4.11.1",
+    "oneteam-rte": "0.0.5",
+    "react": "^15.0.1",
+    "react-dom": "^15.0.1"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.7.5",
+    "babel-core": "^6.7.6",
+    "babel-eslint": "^6.0.3",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.6.0",
+    "babel-preset-power-assert": "^1.0.0",
+    "babel-preset-react": "^6.5.0",
+    "babel-register": "^6.7.2",
+    "css-loader": "^0.23.1",
+    "eslint": "^2.8.0",
+    "eslint-plugin-babel": "^3.2.0",
+    "eslint-plugin-react": "^5.0.1",
+    "jade": "^1.11.0",
+    "jsdom": "^8.4.0",
+    "mocha": "^2.4.5",
+    "power-assert": "^1.3.1",
+    "react": "^15.0.1",
+    "react-addons-test-utils": "^15.0.1",
+    "react-dom": "^15.0.1",
+    "style-loader": "^0.13.1",
+    "stylus": "^0.54.2",
+    "stylus-loader": "^2.0.0",
+    "webpack": "^1.13.0",
+    "webpack-dev-server": "^1.14.1"
+  }
+}
