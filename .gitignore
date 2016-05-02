@@ -23,3 +23,5 @@ xcuserdata/
 *.xcscmblueprint
 
 node_modules/
+
+Pods/

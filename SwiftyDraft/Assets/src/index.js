@@ -4,5 +4,5 @@ import SwiftyDraft from './SwiftyDraft';
 import './index.styl';
 
 ReactDOM.render((
-  <SwiftyDraft />
+    <SwiftyDraft ref={c => window.editor = c} />
 ), document.getElementById('app-root'));
