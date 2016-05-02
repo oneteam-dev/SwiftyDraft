@@ -9,7 +9,9 @@
 import UIKit
 import SwiftyDraft
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UIScrollViewDelegate {
+
+    @IBOutlet var draftView: SwiftyDraft!
 
     override func viewDidLoad() {
         super.viewDidLoad()
