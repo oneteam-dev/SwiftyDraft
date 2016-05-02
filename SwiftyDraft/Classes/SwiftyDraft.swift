@@ -10,15 +10,7 @@ import UIKit
 import WebKit
 
 
-
-@IBDesignable public class SwiftyDraft: UIView, WKNavigationDelegate, WKScriptMessageHandler {
-
-    static let internalScheme = "swiftydraft-internal"
-
-    enum EditorEvent: String {
-        // window.webkit.messageHandlers.didChangeEditorState.postMessage(editorState);
-        case ChangeState = "didChangeEditorState"
-    }
+@IBDesignable public class SwiftyDraft: UIView, WKNavigationDelegate {
 
     public lazy var webView: WKWebView = {
         let c = WKWebViewConfiguration()
@@ -39,7 +31,7 @@ import WebKit
         return uc
     }()
 
-    @IBOutlet public weak var scrollViewDelegate: UIScrollViewDelegate? {
+    public weak var scrollViewDelegate: UIScrollViewDelegate? {
         get { return self.webView.scrollView.delegate }
         set(value) { self.webView.scrollView.delegate = value }
     }
@@ -71,12 +63,6 @@ import WebKit
 
     public func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction,
                         decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        if let URL = navigationAction.request.URL
-            , path = URL.path where URL.scheme == SwiftyDraft.internalScheme {
-            self.handleInternalNavigation(path)
-            decisionHandler(.Cancel)
-            return
-        }
         decisionHandler(.Allow)
     }
 
@@ -84,15 +70,5 @@ import WebKit
         webView.becomeFirstResponder()
         webView.evaluateJavaScript("setTimeout(function(){ window.editor.focus() }, 1000)", completionHandler: nil)
     }
-
-    // MARK: - WKScriptMessageHandler
-
-    public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        // TODO Handle mssages
-    }
-
-    // MARK: -
-
-    private func handleInternalNavigation(path: String) {}
 
 }
