@@ -15,7 +15,6 @@
 		85D18EB81CD7145900F2E5AC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 85D18EB61CD7145900F2E5AC /* LaunchScreen.storyboard */; };
 		85D18EC11CD7345200F2E5AC /* Pods.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 85D18EBF1CD7345200F2E5AC /* Pods.debug.xcconfig */; };
 		85D18EC21CD7345200F2E5AC /* Pods.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 85D18EC01CD7345200F2E5AC /* Pods.release.xcconfig */; };
-		9DDCD288D98C9E1DCE204E66 /* Pods_SwiftyDraftExample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9A71415984AD48533077C571 /* Pods_SwiftyDraftExample.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +36,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9DDCD288D98C9E1DCE204E66 /* Pods_SwiftyDraftExample.framework in Frameworks */,
 				45B65D412B8CAC59A7E4BB58 /* Pods.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
