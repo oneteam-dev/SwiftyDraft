@@ -7,33 +7,17 @@
 //
 
 import UIKit
-import WebKit
 
+@IBDesignable public class SwiftyDraft: UIView {
 
-@IBDesignable public class SwiftyDraft: UIView, WKNavigationDelegate {
-
-    public lazy var webView: WKWebView = {
-        let c = WKWebViewConfiguration()
-        c.allowsAirPlayForMediaPlayback = true
-        c.allowsInlineMediaPlayback = true
-        c.allowsPictureInPictureMediaPlayback = true
-        c.userContentController = self.userContentController
-        let wv = WKWebView(frame: self.frame, configuration: c)
-        wv.navigationDelegate = self
-        wv.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+    public lazy var webView: UIWebView = {
+        let wv = UIWebView(frame: self.frame)
         self.addSubview(wv)
         return wv
     }()
 
-    public lazy var userContentController: WKUserContentController = {
-        let uc = WKUserContentController()
-        uc.addScriptMessageHandler(self, name: EditorEvent.ChangeState.rawValue)
-        return uc
-    }()
-
-    public lazy var editorToolbar: UIView = {
-        let v = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 50))
-        v.backgroundColor = UIColor.redColor()
+    public lazy var editorToolbar: Toolbar = {
+        let v = Toolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
         return v
     }()
 
@@ -52,8 +36,15 @@ import WebKit
     }
 
     private func setup() {
-        self.webView.loadFileURL(htmlURL, allowingReadAccessToURL: resourceBundle.bundleURL)
-        self.webView.addRichEditorInputAccessoryView(self.editorToolbar)
+        self.webView.scalesPageToFit = false
+        self.webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        self.webView.dataDetectorTypes = .None
+        self.webView.backgroundColor = UIColor.whiteColor()
+        self.webView.delegate = self
+        self.webView.keyboardDisplayRequiresUserAction = false
+        self.webView.cjw_inputAccessoryView = self.editorToolbar
+        let req = NSURLRequest(URL: htmlURL)
+        self.webView.loadRequest(req)
     }
 
     // MARK: - UIView
@@ -73,19 +64,4 @@ import WebKit
         let b = self.bounds
         self.webView.frame = CGRect(origin: CGPointZero, size: b.size)
     }
-
-    // MARK: - WKNavigationDelegate
-
-    public func webView(webView: WKWebView, decidePolicyForNavigationAction navigationAction: WKNavigationAction,
-                        decisionHandler: (WKNavigationActionPolicy) -> Void) {
-        decisionHandler(.Allow)
-    }
-
-    public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        webView.becomeFirstResponder()
-        webView.evaluateJavaScript("window.editor.focus();", completionHandler: { (a, b) in
-
-        })
-    }
-
 }
