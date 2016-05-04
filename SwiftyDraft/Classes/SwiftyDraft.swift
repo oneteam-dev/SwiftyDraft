@@ -18,6 +18,7 @@ import UIKit
 
     public lazy var editorToolbar: Toolbar = {
         let v = Toolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
+        v.editor = self
         return v
     }()
 
@@ -26,12 +27,12 @@ import UIKit
         set(value) { self.webView.scrollView.delegate = value }
     }
 
-    public var htmlURL: NSURL {
+    public static var htmlURL: NSURL {
         return resourceBundle.URLForResource("index", withExtension: "html")!
     }
 
-    public var resourceBundle: NSBundle {
-        let bundleURL = NSBundle(forClass: self.dynamicType).URLForResource("SwiftyDraft", withExtension: "bundle")!
+    public static var resourceBundle: NSBundle {
+        let bundleURL = NSBundle(forClass: self).URLForResource("SwiftyDraft", withExtension: "bundle")!
         return NSBundle(URL: bundleURL)!
     }
 
@@ -43,8 +44,20 @@ import UIKit
         self.webView.delegate = self
         self.webView.keyboardDisplayRequiresUserAction = false
         self.webView.cjw_inputAccessoryView = self.editorToolbar
-        let req = NSURLRequest(URL: htmlURL)
+        let req = NSURLRequest(URL: SwiftyDraft.htmlURL)
         self.webView.loadRequest(req)
+    }
+
+    internal func toolbarButtonTapped(buttonTag: Toolbar.ButtonTag, _ item: UIBarButtonItem) {
+        if let js = buttonTag.javaScript {
+            runScript(js)
+        }
+    }
+
+    private func runScript(script: String) -> String? {
+        let js = "(function(){ try { return \(script) } catch(e) { return e } }).call()"
+        let res = self.webView.stringByEvaluatingJavaScriptFromString(js)
+        return res
     }
 
     // MARK: - UIView
