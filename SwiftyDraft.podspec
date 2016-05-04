@@ -24,4 +24,20 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'SwiftyDraft' => ['SwiftyDraft/Assets/dist/*.js', 'SwiftyDraft/Assets/dist/*.html']
   }
+
+  s.prepare_command = <<-CMD
+    if [ -d $HOME/.nodenv/bin ]; then
+      export PATH=$HOME/.nodenv/bin:$PATH
+      eval "$(nodenv init -)"
+    fi
+
+    if [ -d $HOME/.nodenv/shims ]; then
+      export PATH=$HOME/.nodenv/shims:$PATH
+      eval "$(nodenv init -)"
+    fi
+
+    cd SwiftyDraft/Assets
+    npm -v >/dev/null 2>&1 && npm install && npm run build
+    cd -
+  CMD
 end

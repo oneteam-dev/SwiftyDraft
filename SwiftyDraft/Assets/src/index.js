@@ -6,4 +6,3 @@ import './index.styl';
 ReactDOM.render((
     <SwiftyDraft ref={c => window.editor = c} />
 ), document.getElementById('app-root'));
-

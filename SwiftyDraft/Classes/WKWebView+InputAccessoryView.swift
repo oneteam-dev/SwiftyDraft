@@ -12,17 +12,21 @@ private var ToolbarHandle: UInt8 = 0
 
 extension WKWebView {
 
-    func addRichEditorInputAccessoryView(toolbar: UIView?) {
-        guard let toolbar = toolbar else { return }
-        objc_setAssociatedObject(self, &ToolbarHandle, toolbar, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-
+    var contentView: UIView? {
         var candidateView: UIView? = nil
         for view in self.scrollView.subviews {
             if String(view.dynamicType).hasPrefix("WKContent") {
                 candidateView = view
             }
         }
-        guard let targetView = candidateView else { return }
+        return candidateView
+    }
+
+    func addRichEditorInputAccessoryView(toolbar: UIView?) {
+        guard let toolbar = toolbar else { return }
+        objc_setAssociatedObject(self, &ToolbarHandle, toolbar, objc_AssociationPolicy.OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+
+        guard let targetView = self.contentView else { return }
         let newClass: AnyClass? = classWithCustomAccessoryView(targetView)
         object_setClass(targetView, newClass)
     }
@@ -44,6 +48,11 @@ extension WKWebView {
         objc_registerClassPair(newClass);
 
         return newClass
+    }
+
+    func set_keyboardDisplayRequiresUserAction() {
+        contentView?.performSelector("")
+
     }
 
     @objc func getCustomInputAccessoryView() -> UIView? {

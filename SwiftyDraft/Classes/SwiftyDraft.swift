@@ -31,6 +31,12 @@ import WebKit
         return uc
     }()
 
+    public lazy var editorToolbar: UIView = {
+        let v = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: 50))
+        v.backgroundColor = UIColor.redColor()
+        return v
+    }()
+
     public weak var scrollViewDelegate: UIScrollViewDelegate? {
         get { return self.webView.scrollView.delegate }
         set(value) { self.webView.scrollView.delegate = value }
@@ -45,12 +51,21 @@ import WebKit
         return NSBundle(URL: bundleURL)!
     }
 
+    private func setup() {
+        self.webView.loadFileURL(htmlURL, allowingReadAccessToURL: resourceBundle.bundleURL)
+        self.webView.addRichEditorInputAccessoryView(self.editorToolbar)
+    }
+
     // MARK: - UIView
 
-    public override func awakeFromNib() {
-        super.awakeFromNib()
-        let url = htmlURL
-        self.webView.loadFileURL(url, allowingReadAccessToURL: resourceBundle.bundleURL)
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setup()
+    }
+    
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        setup()
     }
 
     public override func layoutSubviews() {
@@ -68,7 +83,9 @@ import WebKit
 
     public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         webView.becomeFirstResponder()
-        webView.evaluateJavaScript("setTimeout(function(){ window.editor.focus() }, 1000)", completionHandler: nil)
+        webView.evaluateJavaScript("window.editor.focus();", completionHandler: { (a, b) in
+
+        })
     }
 
 }

@@ -10,6 +10,11 @@ export default class SwiftyDraft extends Component {
     setEditor(editor) {
         this.editor = editor;
     }
+    focus() {
+        if(this.editor) {
+            this.editor.focus();
+        }
+    }
     toggleBlockType(type) {
         if(this.editor) {
             this.editor.toggleBlockType(type);

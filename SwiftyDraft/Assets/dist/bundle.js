@@ -20075,6 +20075,13 @@
 	            this.editor = editor;
 	        }
 	    }, {
+	        key: 'focus',
+	        value: function focus() {
+	            if (this.editor) {
+	                this.editor.focus();
+	            }
+	        }
+	    }, {
 	        key: 'toggleBlockType',
 	        value: function toggleBlockType(type) {
 	            if (this.editor) {
