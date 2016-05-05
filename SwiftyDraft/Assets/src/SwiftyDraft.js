@@ -15,6 +15,11 @@ export default class SwiftyDraft extends Component {
             this.editor.focus();
         }
     }
+    blur() {
+        if(this.editor) {
+            this.editor.blur();
+        }
+    }
     toggleBlockType(type) {
         if(this.editor) {
             this.editor.toggleBlockType(type);

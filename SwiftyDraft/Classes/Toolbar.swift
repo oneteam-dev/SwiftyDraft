@@ -11,7 +11,7 @@ import UIKit
 public class Toolbar: UIView {
 
     enum ButtonTag: Int {
-        case InsertLink
+        case InsertLink = 1000
         case RemoveLink
         case Heading
         case Bold
@@ -67,28 +67,74 @@ public class Toolbar: UIView {
             case .NumberedList: return BlockType.UnorderedListItem.javaScript
             default: return nil
             }
-
         }
     }
 
-    public let scrollView = UIScrollView()
-    private let toolbar = UIToolbar()
+    let scrollView = UIScrollView()
+    let toolbar = UIToolbar()
+    let closeButton = UIButton(type: .Custom)
+    let openButton = UIButton(type: .Custom)
+    var opened = true {
+        didSet {
+            setNeedsLayout()
+        }
+    }
 
     private func setup() {
-        self.addSubview(scrollView)
+        addSubview(scrollView)
+        addSubview(closeButton)
+        addSubview(openButton)
+        let unselectedTintColor = UIColor(white: 0.8, alpha: 1.0)
+        let borderColor = UIColor(white: 0.95, alpha: 1.0)
+        closeButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
+                              forControlEvents: .TouchUpInside)
+        openButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
+                              forControlEvents: .TouchUpInside)
+        closeButton.setTitle("CL", forState: .Normal)
+        openButton.setTitle("OP", forState: .Normal)
+        closeButton.setTitleColor(unselectedTintColor, forState: .Normal)
+        openButton.setTitleColor(unselectedTintColor, forState: .Normal)
+        closeButton.backgroundColor = UIColor.whiteColor()
+        openButton.backgroundColor = UIColor.whiteColor()
+        var borderLeft = CALayer()
+        borderLeft.backgroundColor = borderColor.CGColor
+        borderLeft.frame = CGRect(x: 0, y: 0, width: 1, height: 9999)
+        closeButton.layer.addSublayer(borderLeft)
+        borderLeft = CALayer()
+        borderLeft.backgroundColor = borderColor.CGColor
+        borderLeft.frame = CGRect(x: 0, y: 0, width: 1, height: 9999)
+        openButton.layer.addSublayer(borderLeft)
         scrollView.addSubview(toolbar)
         scrollView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
         scrollView.backgroundColor = UIColor.clearColor()
         toolbar.autoresizingMask = .FlexibleWidth
+        toolbar.barTintColor = UIColor.whiteColor()
+        toolbar.backgroundColor = UIColor.clearColor()
+        let borderTop = CALayer()
+        borderTop.backgroundColor = borderColor.CGColor
+        borderTop.frame = CGRect(x: 0, y: 0, width: 9999, height: 1.0)
+        layer.addSublayer(borderTop)
         var items: [UIBarButtonItem] = []
         for t in ButtonTag.all {
-            let item = UIBarButtonItem(title: t.iconName, style: .Bordered, target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
+            let item = UIBarButtonItem(
+                title: t.iconName, style: .Bordered,
+                target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
             item.tag = t.rawValue
+            item.tintColor = unselectedTintColor
             items.append(item)
         }
-        self.toolbarItems = items
+        toolbarItems = items
+    }
+
+    @objc private func toggleOpened(item: AnyObject?) {
+        opened = !opened
+        if opened {
+            editor?.focus()
+        } else {
+            editor?.blur()
+        }
     }
 
     @objc private func toolbarButtonTapped(item: AnyObject?) {
@@ -120,10 +166,15 @@ public class Toolbar: UIView {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
-        toolbar.backgroundColor = UIColor.redColor()
         let b = self.bounds
         toolbar.frame = CGRect(x: 0, y: 0, width: 200 * CGFloat(self.toolbarItems.count) , height: b.height)
         scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
         scrollView.contentSize = toolbar.frame.size
+        let closeButtonWidth: CGFloat = 44
+        let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: b.height)
+        closeButton.frame = f
+        openButton.frame = f
+        openButton.hidden = opened
+        closeButton.hidden = !opened
     }
 }

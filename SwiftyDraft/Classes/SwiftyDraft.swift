@@ -48,10 +48,20 @@ import UIKit
         self.webView.loadRequest(req)
     }
 
-    internal func toolbarButtonTapped(buttonTag: Toolbar.ButtonTag, _ item: UIBarButtonItem) {
+    func toolbarButtonTapped(buttonTag: Toolbar.ButtonTag, _ item: UIBarButtonItem) {
         if let js = buttonTag.javaScript {
             runScript(js)
         }
+    }
+
+    func focus() {
+        webView.resignFirstResponder()
+        runScript("window.editor.focus()")
+    }
+
+    func blur() {
+        runScript("window.editor.blur()")
+        webView.becomeFirstResponder()
     }
 
     private func runScript(script: String) -> String? {
