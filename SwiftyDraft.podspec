@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'SwiftyDraft/Classes/**/*'
   s.resource_bundles = {
-    'SwiftyDraft' => ['SwiftyDraft/Assets/dist/*.js', 'SwiftyDraft/Assets/dist/*.html']
+    'SwiftyDraft' => ['SwiftyDraft/Assets/*.js', 'SwiftyDraft/Assets/*.html', 'SwiftyDraft/Assets/Images.xcassets']
   }
 
   s.prepare_command = <<-CMD
@@ -36,8 +36,6 @@ Pod::Spec.new do |s|
       eval "$(nodenv init -)"
     fi
 
-    cd SwiftyDraft/Assets
     npm -v >/dev/null 2>&1 && npm install && npm run build
-    cd -
   CMD
 end

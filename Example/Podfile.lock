@@ -9,6 +9,6 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  SwiftyDraft: 8424a929430f8caf62f62e1f543a9a51b09c089b
+  SwiftyDraft: 236be2f3bfcfe4254a405cceae4e9d3a6ccc3007
 
 COCOAPODS: 0.39.0

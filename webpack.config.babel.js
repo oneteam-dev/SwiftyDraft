@@ -1,8 +1,8 @@
+/*eslint-env node */
 import path from 'path';
-import webpack from 'webpack';
 import bootstrap from 'bootstrap-styl';
 
-const entry = ['./src/index.js'];
+const entry = ['./SwiftyDraft/Sources/index.js'];
 const plugins = [];
 
 export default {
@@ -10,7 +10,7 @@ export default {
   entry,
   cache: true,
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'SwiftyDraft/Assets'),
     filename: 'bundle.js'
   },
   display: { errorDetails: true },
