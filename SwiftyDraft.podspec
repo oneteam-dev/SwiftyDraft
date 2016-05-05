@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'SwiftyDraft/Classes/**/*'
   s.resource_bundles = {
-    'SwiftyDraft' => ['SwiftyDraft/Assets/*.js', 'SwiftyDraft/Assets/*.html', 'SwiftyDraft/Assets/Images.xcassets']
+    'SwiftyDraft' => ['SwiftyDraft/Assets/*.js', 'SwiftyDraft/Assets/*.html', 'SwiftyDraft/Assets/Icons/*.png']
   }
 
   s.prepare_command = <<-CMD

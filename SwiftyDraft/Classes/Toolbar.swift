@@ -10,66 +10,6 @@ import UIKit
 
 public class Toolbar: UIView {
 
-    enum ButtonTag: Int {
-        case InsertLink = 1000
-        case RemoveLink
-        case Heading
-        case Bold
-        case Italic
-        case Strikethrough
-        case Blockquote
-        case CheckBox
-        case BulletedList
-        case NumberedList
-
-        static var all: [ButtonTag] {
-            return [
-                .InsertLink,
-                .RemoveLink,
-                .Heading,
-                .Bold,
-                .Italic,
-                .Strikethrough,
-                .Blockquote,
-                .CheckBox,
-                .BulletedList,
-                .NumberedList
-            ]
-        }
-
-        var iconImage: UIImage {
-            return UIImage(named: "toolbar-icon-\(iconName)", inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)!
-        }
-
-        var iconName: String {
-            switch self {
-            case InsertLink: return "insert-link"
-            case RemoveLink: return "remove-link"
-            case Heading: return "heading"
-            case Bold: return "bold"
-            case Italic: return "italic"
-            case Strikethrough: return "strikethrough"
-            case Blockquote: return "blockquote"
-            case CheckBox: return "check-box"
-            case BulletedList: return "bulleted-list"
-            case NumberedList: return "numbered-list"
-            }
-        }
-
-        var javaScript: String? {
-            switch self {
-            case .Bold: return InlineStyle.Bold.javaScript
-            case .Italic: return InlineStyle.Italic.javaScript
-            case .Strikethrough: return InlineStyle.Strikethrough.javaScript
-            case .Blockquote: return BlockType.Blockquote.javaScript
-            case .CheckBox: return BlockType.CheckableListItem.javaScript
-            case .BulletedList: return BlockType.OrderedListItem.javaScript
-            case .NumberedList: return BlockType.UnorderedListItem.javaScript
-            default: return nil
-            }
-        }
-    }
-
     let scrollView = UIScrollView()
     let toolbar = UIToolbar()
     let closeButton = UIButton(type: .Custom)
@@ -77,6 +17,12 @@ public class Toolbar: UIView {
     var opened = true {
         didSet {
             setNeedsLayout()
+        }
+    }
+
+    var headingLevel: Int = 1 {
+        didSet {
+            self.updateToolbarItems()
         }
     }
 
@@ -89,9 +35,19 @@ public class Toolbar: UIView {
         closeButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
                               forControlEvents: .TouchUpInside)
         openButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
-                              forControlEvents: .TouchUpInside)
-        closeButton.setTitle("CL", forState: .Normal)
-        openButton.setTitle("OP", forState: .Normal)
+                             forControlEvents: .TouchUpInside)
+        closeButton.tintColor = unselectedTintColor
+        openButton.tintColor = unselectedTintColor
+        var img = UIImage(named: "toolbar-icon-close",
+            inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)?
+            .imageWithRenderingMode(.AlwaysTemplate)
+        closeButton.setImage(img, forState: .Normal)
+        closeButton.setImage(img, forState: .Highlighted)
+        img = UIImage(named: "toolbar-icon-open",
+            inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)?
+            .imageWithRenderingMode(.AlwaysTemplate)
+        openButton.setImage(img, forState: .Normal)
+        openButton.setImage(img, forState: .Highlighted)
         closeButton.setTitleColor(unselectedTintColor, forState: .Normal)
         openButton.setTitleColor(unselectedTintColor, forState: .Normal)
         closeButton.backgroundColor = UIColor.whiteColor()
@@ -119,13 +75,23 @@ public class Toolbar: UIView {
         var items: [UIBarButtonItem] = []
         for t in ButtonTag.all {
             let item = UIBarButtonItem(
-                title: t.iconName, style: .Bordered,
+                image: t.iconImage(withHeadingLevel: headingLevel), style: .Bordered,
                 target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
             item.tag = t.rawValue
             item.tintColor = unselectedTintColor
             items.append(item)
         }
         toolbarItems = items
+    }
+
+    private func updateToolbarItems() {
+        var items = self.toolbarItems
+        if let headingIndex = items.indexOf({ i in return i.tag == ButtonTag.Heading.rawValue }) {
+            let t = ButtonTag.Heading
+            let newItem = UIBarButtonItem(
+                image: t.iconImage(withHeadingLevel: headingLevel), style: .Bordered,
+                target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
+        }
     }
 
     @objc private func toggleOpened(item: AnyObject?) {
@@ -167,7 +133,7 @@ public class Toolbar: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         let b = self.bounds
-        toolbar.frame = CGRect(x: 0, y: 0, width: 200 * CGFloat(self.toolbarItems.count) , height: b.height)
+        toolbar.frame = CGRect(x: 0, y: 0, width: 50 * CGFloat(self.toolbarItems.count) , height: b.height)
         scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
         scrollView.contentSize = toolbar.frame.size
         let closeButtonWidth: CGFloat = 44

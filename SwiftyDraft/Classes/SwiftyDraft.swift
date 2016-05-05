@@ -48,7 +48,7 @@ import UIKit
         self.webView.loadRequest(req)
     }
 
-    func toolbarButtonTapped(buttonTag: Toolbar.ButtonTag, _ item: UIBarButtonItem) {
+    func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
         if let js = buttonTag.javaScript {
             runScript(js)
         }
