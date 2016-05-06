@@ -127,11 +127,16 @@ public class Toolbar: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         let b = self.bounds
-        toolbar.frame = CGRect(x: 0, y: 0, width: 44 * CGFloat(self.toolbarItems.count) , height: b.height)
-        scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
-        scrollView.contentSize = toolbar.frame.size
         let closeButtonWidth: CGFloat = 44
-        let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: b.height)
+        let toolbarWidth: CGFloat = self.toolbarItems.reduce(0) { sofar, item in
+            var w = (item.valueForKey("view") as? UIView)?.bounds.width ?? 22.0
+            return sofar + w + 11.0
+        } + 55
+        let toolbarSize = CGSize(width: toolbarWidth, height: 44)
+        toolbar.frame = CGRect(origin: CGPointZero, size: toolbarSize)
+        scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
+        scrollView.contentSize = toolbarSize
+        let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: 44)
         closeButton.frame = f
         openButton.frame = f
         openButton.hidden = opened
