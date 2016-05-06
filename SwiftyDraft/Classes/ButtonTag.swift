@@ -11,7 +11,11 @@ import Foundation
 enum ButtonTag: Int {
     case InsertLink = 1000
     case RemoveLink
-    case Heading
+    case Heading1
+    case Heading2
+    case Heading3
+    case Heading4
+    case Heading5
     case Bold
     case Italic
     case Strikethrough
@@ -24,30 +28,36 @@ enum ButtonTag: Int {
         return [
             .InsertLink,
             .RemoveLink,
-            .Heading,
             .Bold,
             .Italic,
             .Strikethrough,
             .Blockquote,
             .CheckBox,
             .BulletedList,
-            .NumberedList
+            .NumberedList,
+            .Heading1,
+            .Heading2,
+            .Heading3,
+            .Heading4,
+            .Heading5
         ]
     }
 
-    func iconImage(withHeadingLevel headingLevel: Int? = nil) -> UIImage {
-        var iconName = "toolbar-icon-\(self.iconName)"
-        if let headingLevel = headingLevel where self == .Heading {
-            iconName = "\(iconName)-\(headingLevel)"
-        }
-        return UIImage(named: iconName, inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)!
+    var iconImage: UIImage {
+        return UIImage(named: "toolbar-icon-\(self.iconName)",
+                       inBundle: SwiftyDraft.resourceBundle,
+                       compatibleWithTraitCollection: nil)!
     }
 
     var iconName: String {
         switch self {
         case InsertLink: return "insert-link"
         case RemoveLink: return "remove-link"
-        case Heading: return "heading"
+        case Heading1: return "heading-1"
+        case Heading2: return "heading-2"
+        case Heading3: return "heading-3"
+        case Heading4: return "heading-4"
+        case Heading5: return "heading-5"
         case Bold: return "bold"
         case Italic: return "italic"
         case Strikethrough: return "strikethrough"
@@ -60,13 +70,18 @@ enum ButtonTag: Int {
 
     var javaScript: String? {
         switch self {
+        case .Heading1: return BlockType.Heading1.javaScript
+        case .Heading2: return BlockType.Heading2.javaScript
+        case .Heading3: return BlockType.Heading3.javaScript
+        case .Heading4: return BlockType.Heading4.javaScript
+        case .Heading5: return BlockType.Heading5.javaScript
         case .Bold: return InlineStyle.Bold.javaScript
         case .Italic: return InlineStyle.Italic.javaScript
         case .Strikethrough: return InlineStyle.Strikethrough.javaScript
         case .Blockquote: return BlockType.Blockquote.javaScript
         case .CheckBox: return BlockType.CheckableListItem.javaScript
-        case .BulletedList: return BlockType.OrderedListItem.javaScript
-        case .NumberedList: return BlockType.UnorderedListItem.javaScript
+        case .BulletedList: return BlockType.UnorderedListItem.javaScript
+        case .NumberedList: return BlockType.OrderedListItem.javaScript
         default: return nil
         }
     }

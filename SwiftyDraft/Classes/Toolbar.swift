@@ -75,7 +75,7 @@ public class Toolbar: UIView {
         var items: [UIBarButtonItem] = []
         for t in ButtonTag.all {
             let item = UIBarButtonItem(
-                image: t.iconImage(withHeadingLevel: headingLevel), style: .Bordered,
+                image: t.iconImage, style: .Plain,
                 target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
             item.tag = t.rawValue
             item.tintColor = unselectedTintColor
@@ -85,13 +85,7 @@ public class Toolbar: UIView {
     }
 
     private func updateToolbarItems() {
-        var items = self.toolbarItems
-        if let headingIndex = items.indexOf({ i in return i.tag == ButtonTag.Heading.rawValue }) {
-            let t = ButtonTag.Heading
-            let newItem = UIBarButtonItem(
-                image: t.iconImage(withHeadingLevel: headingLevel), style: .Bordered,
-                target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
-        }
+        // FIXME
     }
 
     @objc private func toggleOpened(item: AnyObject?) {
@@ -133,7 +127,7 @@ public class Toolbar: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         let b = self.bounds
-        toolbar.frame = CGRect(x: 0, y: 0, width: 50 * CGFloat(self.toolbarItems.count) , height: b.height)
+        toolbar.frame = CGRect(x: 0, y: 0, width: 44 * CGFloat(self.toolbarItems.count) , height: b.height)
         scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
         scrollView.contentSize = toolbar.frame.size
         let closeButtonWidth: CGFloat = 44

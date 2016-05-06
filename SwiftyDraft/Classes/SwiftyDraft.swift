@@ -76,7 +76,7 @@ import UIKit
         super.init(frame: frame)
         setup()
     }
-    
+
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         setup()
