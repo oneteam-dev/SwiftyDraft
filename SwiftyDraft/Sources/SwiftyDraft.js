@@ -46,6 +46,16 @@ export default class SwiftyDraft extends Component {
         this.setState({callbackToken});
         this.callbackNavigation('didSetCallbackToken', callbackToken);
     }
+    debugLog(...args) {
+        this.callbackNavigation('debugLog', args);
+        console.debug(...args);
+    }
+    getHTML() {
+        if(this.editor) {
+          return this.editor.serializedHTML;
+        }
+        return "";
+    }
     triggerOnChange() {
         const data = {
             inlineStyles: this.getCurrentInlineStyles(),

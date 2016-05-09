@@ -3,7 +3,6 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="10085"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
@@ -19,14 +18,14 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9JA-eb-c6A" customClass="SwiftyDraft" customModule="SwiftyDraft">
-                                <rect key="frame" x="20" y="20" width="560" height="580"/>
+                                <rect key="frame" x="0.0" y="20" width="600" height="580"/>
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="9JA-eb-c6A" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="8oC-KC-TV5"/>
-                            <constraint firstItem="9JA-eb-c6A" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="cWd-FT-LFy"/>
+                            <constraint firstItem="9JA-eb-c6A" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="8oC-KC-TV5"/>
+                            <constraint firstItem="9JA-eb-c6A" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="cWd-FT-LFy"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="9JA-eb-c6A" secondAttribute="bottom" id="gHF-J3-q1L"/>
                             <constraint firstItem="9JA-eb-c6A" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="hFT-6l-PEW"/>
                         </constraints>

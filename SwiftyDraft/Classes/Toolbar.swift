@@ -104,15 +104,11 @@ public class Toolbar: UIView {
         for item in toolbarItems {
             var selected = false
             if let buttonTag = ButtonTag(rawValue: item.tag) {
-                print("\(item.tag) \(buttonTag) \(self.currentBlockType) \(self.currentInlineStyles)")
                 if let blockType = buttonTag.blockType {
                     selected = blockType == self.currentBlockType
                 } else if let inlineStyle = buttonTag.inlineStyle {
                     selected = self.currentInlineStyles.contains(inlineStyle)
                 }
-            }
-            if selected {
-                print("yoa")
             }
             item.tintColor = selected ? selectedTintColor : unselectedTintColor
         }

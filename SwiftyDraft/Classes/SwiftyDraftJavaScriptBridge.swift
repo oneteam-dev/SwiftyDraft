@@ -20,6 +20,10 @@ extension SwiftyDraft: UIWebViewDelegate {
         }
     }
 
+    var html: String {
+        return runScript("window.editor.getHTML()") ?? ""
+    }
+
     func setCallbackToken() {
         runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
     }
@@ -60,6 +64,8 @@ extension SwiftyDraft: UIWebViewDelegate {
             let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).map({ InlineStyle(rawValue: $0)! })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             didChangeEditorState(withInlineStyles: inlineStyles, blockType: blockType)
+        case .DebugLog:
+            print(data)
         }
     }
 

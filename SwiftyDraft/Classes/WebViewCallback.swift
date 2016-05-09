@@ -9,6 +9,7 @@
 import Foundation
 
 enum WebViewCallback: String {
+    case DebugLog = "debugLog"
     case DidSetCallbackToken = "didSetCallbackToken"
     case DidChangeEditorState = "didChangeEditorState"
 }
