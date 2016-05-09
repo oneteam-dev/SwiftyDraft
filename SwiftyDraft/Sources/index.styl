@@ -14,31 +14,33 @@ $heading5-font-size = 14px
 $heading-line-height = 1.5
 $list-line-height = 2.14
 $blockquote-border-left-color = rgba(#333, 0.08)
-$topic-title-height = 50px
-$topic-recipients-height = 45px
-$header-height = $topic-title-height + $topic-recipients-height
-$footer-height = 76px
-$richeditor-toolbar-height = 35px
 $toolbar-selected-background-color = rgba(#333, 0.08)
 $toolbar-hover-background-color = rgba(#333, 0.04)
 
-body
-  -webkit-tap-highlight-color: rgba(0,0,0,0)
-  padding: 0
-  margin: 0
-
-.rich-editor-toolbar
-  display: none
-
-#rich-editor
+.rich-text-editor
   &.RichEditor-hidePlaceholder
     .public-DraftEditorPlaceholder-root
       display: none
   .public-DraftEditorPlaceholder-root
     color: rgba(#333, 0.1)
-  .rich-editor-body
-    height: 100%
-    width: 100%
+  .rich-text-editor-toolbar-button-insert-link
+    position: relative
+    z-index: 1
+    display: inline-block
+    &-input
+      position: absolute
+      width: 500px
+      top: 24px
+      z-index: 1
+      display: none
+      &.is-show
+        display: block
+    .insert-link-error-message
+      display: none
+      margin-left: 10px
+      &.is-show
+        display: inline-block
+  .rich-text-editor-body
     color: #555
     font-size: 14px
     line-height: 1.5
@@ -82,19 +84,35 @@ body
         &:checked
           border-color: #009cd6
           background-color: rgba(0, 174, 239, 0.8)
+        //   &::before
+        //     content: ""
+        //     width: 6px
+        //     height: 10px
+        //     border-bottom: 2px solid #fff
+        //     border-right: 2px solid #fff
+        //     transform: rotate(45deg)
+        //     top: 3px
+        //     left: 6px
       &.is-checked + .checkable-list-item-text
         text-decoration: line-through
         color: #d6d6d6
     .checkable-list-item-text
       padding-left: 28px
+    .iframe-placeholder
+      -webkit-user-select: none
+      user-select: none
   .DraftEditor-root
-    min-height: 100vh
+    height: 100%
     max-height: none
+    min-height: 100vh
     overflow: auto
-    padding: 0 10px
+    padding: 18px 10px
     position: relative
     z-index: 1
     cursor: text
+    .link
+      color: #00aeef
+      text-decoration: underline
     a
       cursor: text
       &:hover,
@@ -109,9 +127,3 @@ body
   h4:first-child,
   h5:first-child
     margin-top: 0
-  .align-center .public-DraftStyleDefault-ltr
-    text-align: center
-  .align-right .public-DraftStyleDefault-ltr
-    text-align: right
-  .align-justify .public-DraftStyleDefault-ltr
-    text-align: justify

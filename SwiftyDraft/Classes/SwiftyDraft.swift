@@ -10,6 +10,20 @@ import UIKit
 
 @IBDesignable public class SwiftyDraft: UIView {
 
+    lazy var callbackToken: String = {
+        var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
+        let len = letters.count
+        var randomString = ""
+
+        while randomString.utf8.count < len {
+            let idx = Int(arc4random_uniform(UInt32(letters.count)))
+            randomString = "\(randomString)\(letters[idx])"
+            letters.removeAtIndex(idx)
+        }
+        
+        return randomString
+    }()
+
     public lazy var webView: UIWebView = {
         let wv = UIWebView(frame: self.frame)
         self.addSubview(wv)
@@ -46,28 +60,13 @@ import UIKit
         self.webView.cjw_inputAccessoryView = self.editorToolbar
         let req = NSURLRequest(URL: SwiftyDraft.htmlURL)
         self.webView.loadRequest(req)
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
+                       name: UIKeyboardDidChangeFrameNotification, object: nil)
     }
 
-    func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
-        if let js = buttonTag.javaScript {
-            runScript(js)
-        }
-    }
-
-    func focus() {
-        webView.resignFirstResponder()
-        runScript("window.editor.focus()")
-    }
-
-    func blur() {
-        runScript("window.editor.blur()")
-        webView.becomeFirstResponder()
-    }
-
-    private func runScript(script: String) -> String? {
-        let js = "(function(){ try { return \(script) } catch(e) { return e } }).call()"
-        let res = self.webView.stringByEvaluatingJavaScriptFromString(js)
-        return res
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     // MARK: - UIView
