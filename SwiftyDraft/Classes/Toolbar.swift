@@ -20,7 +20,25 @@ public class Toolbar: UIView {
         }
     }
 
-    var headingLevel: Int = 1 {
+    var currentInlineStyles = [InlineStyle]() {
+        didSet {
+            self.updateToolbarItems()
+        }
+    }
+
+    var currentBlockType = BlockType.Unstyled {
+        didSet {
+            self.updateToolbarItems()
+        }
+    }
+
+    var unselectedTintColor = UIColor(white: 0.8, alpha: 1.0) {
+        didSet {
+            self.updateToolbarItems()
+        }
+    }
+
+    var selectedTintColor = UIColor(red: 0/255, green: 173/255, blue: 242/255, alpha: 1) {
         didSet {
             self.updateToolbarItems()
         }
@@ -36,8 +54,6 @@ public class Toolbar: UIView {
                               forControlEvents: .TouchUpInside)
         openButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
                              forControlEvents: .TouchUpInside)
-        closeButton.tintColor = unselectedTintColor
-        openButton.tintColor = unselectedTintColor
         var img = UIImage(named: "toolbar-icon-close",
             inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)?
             .imageWithRenderingMode(.AlwaysTemplate)
@@ -48,8 +64,6 @@ public class Toolbar: UIView {
             .imageWithRenderingMode(.AlwaysTemplate)
         openButton.setImage(img, forState: .Normal)
         openButton.setImage(img, forState: .Highlighted)
-        closeButton.setTitleColor(unselectedTintColor, forState: .Normal)
-        openButton.setTitleColor(unselectedTintColor, forState: .Normal)
         closeButton.backgroundColor = UIColor.whiteColor()
         openButton.backgroundColor = UIColor.whiteColor()
         var borderLeft = CALayer()
@@ -85,7 +99,24 @@ public class Toolbar: UIView {
     }
 
     private func updateToolbarItems() {
-        // FIXME
+        closeButton.tintColor = unselectedTintColor
+        openButton.tintColor = unselectedTintColor
+        for item in toolbarItems {
+            var selected = false
+            if let buttonTag = ButtonTag(rawValue: item.tag) {
+                print("\(item.tag) \(buttonTag) \(self.currentBlockType) \(self.currentInlineStyles)")
+                if let blockType = buttonTag.blockType {
+                    selected = blockType == self.currentBlockType
+                } else if let inlineStyle = buttonTag.inlineStyle {
+                    selected = self.currentInlineStyles.contains(inlineStyle)
+                }
+            }
+            if selected {
+                print("yoa")
+            }
+            item.tintColor = selected ? selectedTintColor : unselectedTintColor
+        }
+
     }
 
     @objc private func toggleOpened(item: AnyObject?) {
@@ -107,6 +138,7 @@ public class Toolbar: UIView {
         didSet {
             self.toolbar.items = toolbarItems
             self.setNeedsLayout()
+            self.updateToolbarItems()
         }
     }
 

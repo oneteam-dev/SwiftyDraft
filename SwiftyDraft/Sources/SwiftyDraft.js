@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import RichTextEditor from 'oneteam-rte';
+import RichTextEditor, { Body } from 'oneteam-rte';
 
 export default class SwiftyDraft extends Component {
     constructor(props) {
@@ -30,13 +30,43 @@ export default class SwiftyDraft extends Component {
             this.editor.toggleInlineStyle(style);
         }
     }
+    getCurrentInlineStyles() {
+        if(this.editor) {
+            return this.editor.getCurrentInlineStyles();
+        }
+        return [];
+    }
+    getCurrentBlockType() {
+        if(this.editor) {
+            return this.editor.getCurrentBlockType();
+        }
+        return "";
+    }
+    setCallbackToken(callbackToken) {
+        this.setState({callbackToken});
+        this.callbackNavigation('didSetCallbackToken', callbackToken);
+    }
+    triggerOnChange() {
+        const data = {
+            inlineStyles: this.getCurrentInlineStyles(),
+            blockType: this.getCurrentBlockType()
+        };
+        this.callbackNavigation('didChangeEditorState', data);
+    }
+    callbackNavigation(method, data) {
+        const {callbackToken} = this.state;
+        if(callbackToken) {
+            const path = [method, encodeURIComponent(JSON.stringify(data))].join('/');
+            window.location.href = `callback-${callbackToken}://swifty-draft.internal/${path}`;
+        }
+    }
     render() {
         return (
             <RichTextEditor
-                ref={(c) => this.setEditor(c)}
-                onClickAddImage={() => {}}
-                onClickFileAttach={() => {}}
-                tooltipTexts={{}} />
+                onChange={() => { this.triggerOnChange() }}
+                ref={(c) => this.setEditor(c)}>
+                <Body />
+            </RichTextEditor>
         )
     }
 }

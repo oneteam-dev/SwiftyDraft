@@ -20236,17 +20236,62 @@
 	            }
 	        }
 	    }, {
+	        key: 'getCurrentInlineStyles',
+	        value: function getCurrentInlineStyles() {
+	            if (this.editor) {
+	                return this.editor.getCurrentInlineStyles();
+	            }
+	            return [];
+	        }
+	    }, {
+	        key: 'getCurrentBlockType',
+	        value: function getCurrentBlockType() {
+	            if (this.editor) {
+	                return this.editor.getCurrentBlockType();
+	            }
+	            return "";
+	        }
+	    }, {
+	        key: 'setCallbackToken',
+	        value: function setCallbackToken(callbackToken) {
+	            this.setState({ callbackToken: callbackToken });
+	            this.callbackNavigation('didSetCallbackToken', callbackToken);
+	        }
+	    }, {
+	        key: 'triggerOnChange',
+	        value: function triggerOnChange() {
+	            var data = {
+	                inlineStyles: this.getCurrentInlineStyles(),
+	                blockType: this.getCurrentBlockType()
+	            };
+	            this.callbackNavigation('didChangeEditorState', data);
+	        }
+	    }, {
+	        key: 'callbackNavigation',
+	        value: function callbackNavigation(method, data) {
+	            var callbackToken = this.state.callbackToken;
+
+	            if (callbackToken) {
+	                var path = [method, encodeURIComponent(JSON.stringify(data))].join('/');
+	                window.location.href = 'callback-' + callbackToken + '://swifty-draft.internal/' + path;
+	            }
+	        }
+	    }, {
 	        key: 'render',
 	        value: function render() {
 	            var _this2 = this;
 
-	            return _react2.default.createElement(_oneteamRte2.default, {
-	                ref: function ref(c) {
-	                    return _this2.setEditor(c);
-	                },
-	                onClickAddImage: function onClickAddImage() {},
-	                onClickFileAttach: function onClickFileAttach() {},
-	                tooltipTexts: {} });
+	            return _react2.default.createElement(
+	                _oneteamRte2.default,
+	                {
+	                    onChange: function onChange() {
+	                        _this2.triggerOnChange();
+	                    },
+	                    ref: function ref(c) {
+	                        return _this2.setEditor(c);
+	                    } },
+	                _react2.default.createElement(_oneteamRte.Body, null)
+	            );
 	        }
 	    }]);
 
@@ -54712,11 +54757,26 @@
 	    _this.insertIFrame = function (iframeTagString) {
 	      return _this._insertIFrame(iframeTagString);
 	    };
+	    _this.getCurrentBlockType = function () {
+	      for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	        args[_key] = arguments[_key];
+	      }
+
+	      return _utils.getCurrentBlockType.apply(undefined, [_this.state.editorState].concat(args));
+	    };
+	    _this.hasCurrentInlineStyle = function () {
+	      for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+	        args[_key2] = arguments[_key2];
+	      }
+
+	      return _utils.hasCurrentInlineStyle.apply(undefined, [_this.state.editorState].concat(args));
+	    };
+
 	    for (var key in functions) {
 	      _this[key] = function (fn) {
 	        return function () {
-	          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-	            args[_key] = arguments[_key];
+	          for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
+	            args[_key3] = arguments[_key3];
 	          }
 
 	          _this.changeEditorState(fn.apply(undefined, [_this.state.editorState].concat(args)));
@@ -54727,6 +54787,32 @@
 	  }
 
 	  _createClass(RichTextEditor, [{
+	    key: 'getCurrentInlineStyles',
+	    value: function getCurrentInlineStyles() {
+	      var ret = [];
+	      for (var key in _constants.INLINE_STYLES) {
+	        var value = _constants.INLINE_STYLES[key];
+	        if (this.hasCurrentInlineStyle(value)) {
+	          ret.push(value);
+	        }
+	      }
+	      return ret;
+	    }
+	  }, {
+	    key: 'focus',
+	    value: function focus() {
+	      if (this._body) {
+	        this._body.focus();
+	      }
+	    }
+	  }, {
+	    key: 'blur',
+	    value: function blur() {
+	      if (this._body) {
+	        this._body.blur();
+	      }
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
@@ -54753,7 +54839,7 @@
 	            return _this2['_' + child.type.name.toLowerCase()] = c;
 	          },
 	          onToggleHeadingAfter: function onToggleHeadingAfter() {
-	            return _this2._body ? _this2._body.focus() : null;
+	            return _this2.focus();
 	          }
 	        });
 	      });

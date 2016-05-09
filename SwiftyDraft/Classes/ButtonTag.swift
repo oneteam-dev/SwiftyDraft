@@ -68,21 +68,31 @@ enum ButtonTag: Int {
         }
     }
 
-    var javaScript: String? {
+    var blockType: BlockType? {
         switch self {
-        case .Heading1: return BlockType.Heading1.javaScript
-        case .Heading2: return BlockType.Heading2.javaScript
-        case .Heading3: return BlockType.Heading3.javaScript
-        case .Heading4: return BlockType.Heading4.javaScript
-        case .Heading5: return BlockType.Heading5.javaScript
-        case .Bold: return InlineStyle.Bold.javaScript
-        case .Italic: return InlineStyle.Italic.javaScript
-        case .Strikethrough: return InlineStyle.Strikethrough.javaScript
-        case .Blockquote: return BlockType.Blockquote.javaScript
-        case .CheckBox: return BlockType.CheckableListItem.javaScript
-        case .BulletedList: return BlockType.UnorderedListItem.javaScript
-        case .NumberedList: return BlockType.OrderedListItem.javaScript
+        case .Heading1: return .Heading1
+        case .Heading2: return .Heading2
+        case .Heading3: return .Heading3
+        case .Heading4: return .Heading4
+        case .Heading5: return .Heading5
+        case .Blockquote: return .Blockquote
+        case .CheckBox: return .CheckableListItem
+        case .BulletedList: return .UnorderedListItem
+        case .NumberedList: return .OrderedListItem
         default: return nil
         }
+    }
+
+    var inlineStyle: InlineStyle? {
+        switch self {
+        case .Bold: return .Bold
+        case .Italic: return .Italic
+        case .Strikethrough: return .Strikethrough
+        default: return nil
+        }
+    }
+
+    var javaScript: String? {
+        return blockType?.javaScript ?? inlineStyle?.javaScript
     }
 }

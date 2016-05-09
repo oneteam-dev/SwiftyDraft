@@ -1,0 +1,91 @@
+//
+//  SwiftyDraftJavaScriptBridge.swift
+//  SwiftyDraft
+//
+//  Created by Atsushi Nagase on 5/9/16.
+//
+//
+
+import UIKit
+
+extension SwiftyDraft: UIWebViewDelegate {
+
+    public var editorInitialized: Bool {
+        return runScript("!!window.editor") == "true"
+    }
+
+    func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
+        if let js = buttonTag.javaScript {
+            runScript(js)
+        }
+    }
+
+    func setCallbackToken() {
+        runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
+    }
+
+    func focus() {
+        webView.becomeFirstResponder()
+        runScript("window.editor.focus()")
+    }
+
+    func blur() {
+        webView.becomeFirstResponder()
+        runScript("window.editor.blur()")
+    }
+
+    func didChangeEditorState(withInlineStyles inlineStyles: [InlineStyle], blockType: BlockType) {
+        self.editorToolbar.currentInlineStyles = inlineStyles
+        self.editorToolbar.currentBlockType = blockType
+    }
+
+    func didSetCallbackToken(token: String) {
+        if token != callbackToken {
+            let crashMe: Int? = nil
+            crashMe!
+        }
+    }
+
+    private func runScript(script: String) -> String? {
+        let js = "(function(){ try { return \(script); } catch(e) { return e + '' } }).call()"
+        let res = self.webView.stringByEvaluatingJavaScriptFromString(js)
+        return res
+    }
+
+    private func handleWebViewCallback(callback: WebViewCallback, data: AnyObject?) {
+        switch callback {
+        case .DidSetCallbackToken:
+            didSetCallbackToken(data as! String)
+        case .DidChangeEditorState:
+            let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).map({ InlineStyle(rawValue: $0)! })
+            let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
+            didChangeEditorState(withInlineStyles: inlineStyles, blockType: blockType)
+        }
+    }
+
+    // MARK: - UIWebViewDelegate
+
+    public func webViewDidFinishLoad(webView: UIWebView) {
+        focus()
+        setCallbackToken()
+    }
+
+    public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest,
+                        navigationType: UIWebViewNavigationType) -> Bool {
+        if let url = request.URL
+            , pathComponents = url.pathComponents
+            , callback = WebViewCallback(rawValue: pathComponents[1])
+            where url.scheme == "callback-\(callbackToken)" {
+            do {
+                let data = try NSJSONSerialization.JSONObjectWithData(
+                    pathComponents[2].dataUsingEncoding(NSUTF8StringEncoding)!,
+                    options: .AllowFragments)
+                self.handleWebViewCallback(callback, data: data)
+            } catch {
+                self.handleWebViewCallback(callback, data: nil)
+            }
+            return false
+        }
+        return true
+    }
+}
