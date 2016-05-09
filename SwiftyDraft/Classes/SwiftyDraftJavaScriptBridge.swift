@@ -10,6 +10,15 @@ import UIKit
 
 extension SwiftyDraft: UIWebViewDelegate {
 
+    func handleKeyboardChangeFrame(note: NSNotification) {
+        // FIXME!
+        //guard let h = self.runScript("window.innerHeight") else { return }
+        //print("v", h)
+        //runScript("document.getElementById('app-root').style.height = '\(h)px'")
+        //runScript("document.getElementById('app-root').style.overflow = 'hidden'")
+        //runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
+    }
+
     public var editorInitialized: Bool {
         return runScript("!!window.editor") == "true"
     }
@@ -53,6 +62,9 @@ extension SwiftyDraft: UIWebViewDelegate {
     private func runScript(script: String) -> String? {
         let js = "(function(){ try { return \(script); } catch(e) { return e + '' } }).call()"
         let res = self.webView.stringByEvaluatingJavaScriptFromString(js)
+        if let res = res where res.hasPrefix("TypeError:") {
+            print(res)
+        }
         return res
     }
 
@@ -65,7 +77,7 @@ extension SwiftyDraft: UIWebViewDelegate {
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             didChangeEditorState(withInlineStyles: inlineStyles, blockType: blockType)
         case .DebugLog:
-            print(data)
+            print("[DEBUG] \(data)")
         }
     }
 

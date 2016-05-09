@@ -60,6 +60,13 @@ import UIKit
         self.webView.cjw_inputAccessoryView = self.editorToolbar
         let req = NSURLRequest(URL: SwiftyDraft.htmlURL)
         self.webView.loadRequest(req)
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
+                       name: UIKeyboardDidChangeFrameNotification, object: nil)
+    }
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
 
     // MARK: - UIView

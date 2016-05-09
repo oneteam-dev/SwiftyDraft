@@ -5,7 +5,10 @@ export default class SwiftyDraft extends Component {
     constructor(props) {
         super(props);
         this.editor = null;
-        this.state = { editorState: {} };
+        this.state = { editorState: {}, paddingTop: 0 };
+    }
+    setPaddingTop(paddingTop) {
+        this.setState({ paddingTop });
     }
     setEditor(editor) {
         this.editor = editor;
@@ -46,9 +49,11 @@ export default class SwiftyDraft extends Component {
         this.setState({callbackToken});
         this.callbackNavigation('didSetCallbackToken', callbackToken);
     }
-    debugLog(...args) {
-        this.callbackNavigation('debugLog', args);
-        console.debug(...args);
+    debugLog(data) {
+        if(console.debug) {
+          console.debug(data);
+        }
+        this.callbackNavigation('debugLog', data);
     }
     getHTML() {
         if(this.editor) {
@@ -72,11 +77,13 @@ export default class SwiftyDraft extends Component {
     }
     render() {
         return (
-            <RichTextEditor
-                onChange={() => { this.triggerOnChange() }}
-                ref={(c) => this.setEditor(c)}>
-                <Body />
-            </RichTextEditor>
+            <div style={{ paddingTop: this.state.paddingTop }}>
+              <RichTextEditor
+                  onChange={() => { this.triggerOnChange() }}
+                  ref={(c) => this.setEditor(c)}>
+                  <Body />
+              </RichTextEditor>
+            </div>
         )
     }
 }

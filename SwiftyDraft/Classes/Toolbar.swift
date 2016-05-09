@@ -48,6 +48,7 @@ public class Toolbar: UIView {
         addSubview(scrollView)
         addSubview(closeButton)
         addSubview(openButton)
+        backgroundColor = UIColor.whiteColor()
         let unselectedTintColor = UIColor(white: 0.8, alpha: 1.0)
         let borderColor = UIColor(white: 0.95, alpha: 1.0)
         closeButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
@@ -96,6 +97,11 @@ public class Toolbar: UIView {
             items.append(item)
         }
         toolbarItems = items
+        let nc = NSNotificationCenter.defaultCenter()
+        nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardShow(_:)),
+                       name: UIKeyboardDidShowNotification, object: nil)
+        nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardHide(_:)),
+                       name: UIKeyboardDidHideNotification, object: nil)
     }
 
     private func updateToolbarItems() {
@@ -140,7 +146,22 @@ public class Toolbar: UIView {
 
     internal var editor: SwiftyDraft?
 
+    // MARK: - Keyboard handling
+
+    func handleKeyboardShow(note: NSNotification) {
+        guard let keyboardSize = note.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue() else { return }
+        self.opened = keyboardSize.height > self.bounds.height
+    }
+
+    func handleKeyboardHide(note: NSNotification) {
+        self.opened = false
+    }
+
     // MARK: - UIView
+
+    deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
