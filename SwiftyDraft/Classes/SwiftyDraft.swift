@@ -65,6 +65,33 @@ import UIKit
                        name: UIKeyboardDidChangeFrameNotification, object: nil)
     }
 
+    public func promptLinkURL() {
+        guard let vc = UIApplication.sharedApplication().windows.first?.rootViewController else {
+            assertionFailure("Root Controller does not exist")
+            return
+        }
+        let ac = UIAlertController(title: "Insert Link", message: "Please input URL to link", preferredStyle: .Alert)
+        var textField: UITextField!
+        ac.addTextFieldWithConfigurationHandler { tf in
+            tf.placeholder = "https://"
+            tf.keyboardType = .URL
+            textField = tf
+        }
+        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
+            guard let val = textField.text else { return }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.focus()
+                self.insertLink(val)
+            }
+        }))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.focus()
+            }
+        }))
+        vc.presentViewController(ac, animated: true, completion: nil)
+    }
+
     deinit {
         NSNotificationCenter.defaultCenter().removeObserver(self)
     }

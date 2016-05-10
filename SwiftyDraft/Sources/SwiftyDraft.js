@@ -23,6 +23,11 @@ export default class SwiftyDraft extends Component {
             this.editor.blur();
         }
     }
+    toggleLink(url = null) {
+        if(this.editor) {
+          this.editor.toggleLink(url);
+        }
+    }
     toggleBlockType(type) {
         if(this.editor) {
             this.editor.toggleBlockType(type);

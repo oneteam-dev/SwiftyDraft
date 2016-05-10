@@ -26,6 +26,8 @@ extension SwiftyDraft: UIWebViewDelegate {
     func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
         if let js = buttonTag.javaScript {
             runScript(js)
+        } else if buttonTag == .InsertLink {
+            promptLinkURL()
         }
     }
 
@@ -35,6 +37,10 @@ extension SwiftyDraft: UIWebViewDelegate {
 
     func setCallbackToken() {
         runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
+    }
+
+    func insertLink(url: String) {
+        runScript("window.editor.toggleLink(\"\(url)\")")
     }
 
     func focus() {
@@ -53,10 +59,7 @@ extension SwiftyDraft: UIWebViewDelegate {
     }
 
     func didSetCallbackToken(token: String) {
-        if token != callbackToken {
-            let crashMe: Int? = nil
-            crashMe!
-        }
+        assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
     }
 
     private func runScript(script: String) -> String? {

@@ -93,6 +93,9 @@ enum ButtonTag: Int {
     }
 
     var javaScript: String? {
+        if self == .RemoveLink {
+            return "window.editor.toggleLink(null)"
+        }
         return blockType?.javaScript ?? inlineStyle?.javaScript
     }
 }
