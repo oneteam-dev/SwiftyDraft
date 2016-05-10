@@ -9,22 +9,29 @@
 import UIKit
 import SwiftyDraft
 
-class ViewController: UIViewController, UIScrollViewDelegate, SwiftyDraftImagePickerDelegate, SwiftyDraftFilePickerDelegate {
+class ViewController: UIViewController {
 
     @IBOutlet var draftView: SwiftyDraft!
+    @IBOutlet var metaView: UIView!
+    @IBOutlet var metaViewTopConstraint: NSLayoutConstraint!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         draftView.scrollViewDelegate = self
         draftView.filePickerDelegate = self
         draftView.imagePickerDelegate = self
+        draftView.paddingTop = metaView.bounds.height
     }
+}
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
+extension ViewController: UIScrollViewDelegate {
+    func scrollViewDidScroll(scrollView: UIScrollView) {
+        metaViewTopConstraint.constant = scrollView.contentOffset.y
     }
+}
 
 
+extension ViewController: SwiftyDraftImagePickerDelegate {
     func draftEditor(editor: SwiftyDraft, requestImageAttachment callback: (result: SwiftyDraftImageResult) -> Void) {
         let ac = UIAlertController(title: "Image Picker Demo", message: "Fill your example content", preferredStyle: .Alert)
         var nameField: UITextField!
@@ -59,7 +66,9 @@ class ViewController: UIViewController, UIScrollViewDelegate, SwiftyDraftImagePi
         }))
         self.presentViewController(ac, animated: true, completion: nil)
     }
+}
 
+extension ViewController: SwiftyDraftFilePickerDelegate {
     func draftEditor(editor: SwiftyDraft, requestFileAttachment callback: (result: SwiftyDraftFileResult) -> Void) {
         let ac = UIAlertController(title: "File Picker Demo", message: "Fill your example content", preferredStyle: .Alert)
         var nameField: UITextField!
@@ -94,6 +103,4 @@ class ViewController: UIViewController, UIScrollViewDelegate, SwiftyDraftImagePi
         }))
         self.presentViewController(ac, animated: true, completion: nil)
     }
-    
 }
-

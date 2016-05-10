@@ -20203,11 +20203,6 @@
 	    }
 
 	    _createClass(SwiftyDraft, [{
-	        key: 'setPaddingTop',
-	        value: function setPaddingTop(paddingTop) {
-	            this.setState({ paddingTop: paddingTop });
-	        }
-	    }, {
 	        key: 'setEditor',
 	        value: function setEditor(editor) {
 	            this.editor = editor;
@@ -20351,6 +20346,14 @@
 	                    _react2.default.createElement(_oneteamRte.Body, null)
 	                )
 	            );
+	        }
+	    }, {
+	        key: 'paddingTop',
+	        set: function set(paddingTop) {
+	            this.setState({ paddingTop: paddingTop });
+	        },
+	        get: function get() {
+	            return this.state.paddingTop;
 	        }
 	    }]);
 

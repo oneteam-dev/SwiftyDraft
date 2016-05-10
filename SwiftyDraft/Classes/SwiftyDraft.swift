@@ -27,6 +27,14 @@ import UIKit
         return randomString
     }()
 
+    public var paddingTop: CGFloat = 0.0 {
+        didSet(value) {
+            if(editorInitialized) {
+                domPaddingTop = value
+            }
+        }
+    }
+
     public lazy var webView: UIWebView = {
         let wv = UIWebView(frame: self.frame)
         self.addSubview(wv)

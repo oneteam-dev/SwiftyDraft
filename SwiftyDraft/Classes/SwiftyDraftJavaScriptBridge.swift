@@ -25,6 +25,18 @@ extension SwiftyDraft: UIWebViewDelegate {
         return runScript("!!window.editor") == "true"
     }
 
+    var domPaddingTop: CGFloat {
+        get {
+            if let v = runScript("window.editor.paddingTop") {
+                return CGFloat(Int(v) ?? 0)
+            }
+            return 0
+        }
+        set(value) {
+            runScript("window.editor.paddingTop = \(value)")
+        }
+    }
+
     func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
         switch buttonTag {
         case .InsertLink:
@@ -90,6 +102,7 @@ extension SwiftyDraft: UIWebViewDelegate {
 
     func didSetCallbackToken(token: String) {
         assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
+        domPaddingTop = paddingTop
     }
 
     private func runScript(script: String) -> String? {

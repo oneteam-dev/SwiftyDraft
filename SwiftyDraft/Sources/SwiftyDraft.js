@@ -7,8 +7,11 @@ export default class SwiftyDraft extends Component {
         this.editor = null;
         this.state = { editorState: {}, paddingTop: 0 };
     }
-    setPaddingTop(paddingTop) {
+    set paddingTop(paddingTop) {
         this.setState({ paddingTop });
+    }
+    get paddingTop() {
+        return this.state.paddingTop;
     }
     setEditor(editor) {
         this.editor = editor;
