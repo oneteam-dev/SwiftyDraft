@@ -1,0 +1,11 @@
+"button.ok" = "完了";
+"button.cancel" = "Cancel";
+
+"embed_iframe.prompt.placeholder" = "<iframe> タグのみ使用可能";
+"embed_iframe.prompt.title" = "iframe を埋め込む";
+"embed_iframe.prompt.message" = "埋め込みコードを入力して下さい。";
+
+"insert_link.prompt.title" = "リンクを挿入";
+"insert_link.prompt.message" = "リンクする URL を入力して下さい。";
+
+"editor.placeholder" = "本文を入力...";

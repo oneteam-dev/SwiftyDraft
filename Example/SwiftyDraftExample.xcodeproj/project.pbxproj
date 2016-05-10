@@ -28,6 +28,8 @@
 		85D18EB91CD7145900F2E5AC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		85D18EBF1CD7345200F2E5AC /* Pods.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		85D18EC01CD7345200F2E5AC /* Pods.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		85D18EE91CE1F0F400F2E5AC /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
+		85D18EEA1CE1F0F400F2E5AC /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		9A71415984AD48533077C571 /* Pods_SwiftyDraftExample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SwiftyDraftExample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -228,6 +230,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				85D18EB21CD7145900F2E5AC /* Base */,
+				85D18EE91CE1F0F400F2E5AC /* ja */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -236,6 +239,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				85D18EB71CD7145900F2E5AC /* Base */,
+				85D18EEA1CE1F0F400F2E5AC /* ja */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";

@@ -20343,7 +20343,7 @@
 	                        ref: function ref(c) {
 	                            return _this2.setEditor(c);
 	                        } },
-	                    _react2.default.createElement(_oneteamRte.Body, null)
+	                    _react2.default.createElement(_oneteamRte.Body, { placeholder: this.placeholder })
 	                )
 	            );
 	        }
@@ -20354,6 +20354,14 @@
 	        },
 	        get: function get() {
 	            return this.state.paddingTop;
+	        }
+	    }, {
+	        key: 'placeholder',
+	        set: function set(value) {
+	            this.setState({ placeholder: value });
+	        },
+	        get: function get() {
+	            return this.state.placeholder || _oneteamRte.Body.defaultProps.placeholder;
 	        }
 	    }]);
 

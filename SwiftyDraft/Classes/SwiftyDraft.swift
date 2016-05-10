@@ -8,6 +8,10 @@
 
 import UIKit
 
+func localizedStringForKey(key: String) -> String {
+    return SwiftyDraft.localizedStringForKey(key)
+}
+
 @IBDesignable public class SwiftyDraft: UIView {
 
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
@@ -23,14 +27,22 @@ import UIKit
             randomString = "\(randomString)\(letters[idx])"
             letters.removeAtIndex(idx)
         }
-        
+
         return randomString
     }()
 
     public var paddingTop: CGFloat = 0.0 {
         didSet(value) {
-            if(editorInitialized) {
+            if editorInitialized {
                 domPaddingTop = value
+            }
+        }
+    }
+
+    public var placeholder: String = localizedStringForKey("editor.placeholder") {
+        didSet(value) {
+            if editorInitialized {
+                domPlaceholder = value
             }
         }
     }
@@ -57,8 +69,14 @@ import UIKit
     }
 
     public static var resourceBundle: NSBundle {
-        let bundleURL = NSBundle(forClass: self).URLForResource("SwiftyDraft", withExtension: "bundle")!
+        let bundleURL = NSBundle(forClass: self)
+            .URLForResource("SwiftyDraft", withExtension: "bundle")!
         return NSBundle(URL: bundleURL)!
+    }
+
+    static func localizedStringForKey(key: String) -> String {
+        return NSLocalizedString(key, tableName: "SwiftyDraft",
+                                 bundle: resourceBundle, value: "", comment: "")
     }
 
     private func setup() {
@@ -81,22 +99,29 @@ import UIKit
             assertionFailure("Root Controller does not exist")
             return
         }
-        let ac = UIAlertController(title: "Embed iframe", message: "Please input embed code", preferredStyle: .Alert)
+        let ac = UIAlertController(
+            title: localizedStringForKey("embed_iframe.prompt.title"),
+            message: localizedStringForKey("embed_iframe.prompt.message"),
+            preferredStyle: .Alert)
         var textField: UITextField!
         ac.addTextFieldWithConfigurationHandler { tf in
-            tf.placeholder = "Only <iframe> tag is allowed"
+            tf.placeholder = localizedStringForKey("embed_iframe.placeholder")
             tf.keyboardType = .ASCIICapable
             tf.autocorrectionType = .No
             textField = tf
         }
-        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
-            if let val = textField.text where val.hasPrefix("<iframe ") && val.hasSuffix("</iframe>") {
-                self.insertIFrame(val)
-            }
-            self.focus(true)
+        ac.addAction(UIAlertAction(
+            title: localizedStringForKey("button.ok"),
+            style: .Default, handler: { _ in
+                if let val = textField.text where val.hasPrefix("<iframe ") && val.hasSuffix("</iframe>") {
+                    self.insertIFrame(val)
+                }
+                self.focus(true)
         }))
-        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
-            self.focus(true)
+        ac.addAction(UIAlertAction(
+            title: localizedStringForKey("button.cancel"),
+            style: .Cancel, handler: { _ in
+                self.focus(true)
         }))
         vc.presentViewController(ac, animated: true, completion: nil)
     }
@@ -106,20 +131,23 @@ import UIKit
             assertionFailure("Root Controller does not exist")
             return
         }
-        let ac = UIAlertController(title: "Insert Link", message: "Please input URL to link", preferredStyle: .Alert)
+        let ac = UIAlertController(
+            title: localizedStringForKey("insert_link.prompt.title"),
+            message: localizedStringForKey("insert_link.prompt.message"),
+            preferredStyle: .Alert)
         var textField: UITextField!
         ac.addTextFieldWithConfigurationHandler { tf in
             tf.placeholder = "https://"
             tf.keyboardType = .URL
             textField = tf
         }
-        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
+        ac.addAction(UIAlertAction(title: localizedStringForKey("button.ok"), style: .Default, handler: { _ in
             if let val = textField.text {
                 self.insertLink(val)
             }
             self.focus(true)
         }))
-        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
+        ac.addAction(UIAlertAction(title: localizedStringForKey("button.cancel"), style: .Cancel, handler: { _ in
             self.focus(true)
         }))
         vc.presentViewController(ac, animated: true, completion: nil)

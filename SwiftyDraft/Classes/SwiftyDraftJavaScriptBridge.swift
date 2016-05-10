@@ -37,6 +37,15 @@ extension SwiftyDraft: UIWebViewDelegate {
         }
     }
 
+    var domPlaceholder: String {
+        get {
+            return runScript("window.editor.placeholder") ?? ""
+        }
+        set(value) {
+            runScript("window.editor.placeholder = \"\(value)\"")
+        }
+    }
+
     func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
         switch buttonTag {
         case .InsertLink:
@@ -103,6 +112,7 @@ extension SwiftyDraft: UIWebViewDelegate {
     func didSetCallbackToken(token: String) {
         assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
         domPaddingTop = paddingTop
+        domPlaceholder = placeholder
     }
 
     private func runScript(script: String) -> String? {

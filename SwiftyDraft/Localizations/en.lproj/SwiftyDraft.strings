@@ -1,0 +1,11 @@
+"button.ok" = "OK";
+"button.cancel" = "Cancel";
+
+"embed_iframe.prompt.placeholder" = "Only <iframe> tag is allowed";
+"embed_iframe.prompt.title" = "Embed iframe";
+"embed_iframe.prompt.message" = "Please input embed code";
+
+"insert_link.prompt.title" = "Insert Link";
+"insert_link.prompt.message" = "Please input URL to link";
+
+"editor.placeholder" = "Contents here...";

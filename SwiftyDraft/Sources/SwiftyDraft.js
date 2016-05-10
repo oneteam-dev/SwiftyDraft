@@ -13,6 +13,12 @@ export default class SwiftyDraft extends Component {
     get paddingTop() {
         return this.state.paddingTop;
     }
+    set placeholder(value) {
+        this.setState({ placeholder: value });
+    }
+    get placeholder() {
+        return this.state.placeholder || Body.defaultProps.placeholder;
+    }
     setEditor(editor) {
         this.editor = editor;
     }
@@ -104,7 +110,7 @@ export default class SwiftyDraft extends Component {
               <RichTextEditor
                   onChange={() => { this.triggerOnChange() }}
                   ref={(c) => this.setEditor(c)}>
-                  <Body />
+                  <Body placeholder={this.placeholder} />
               </RichTextEditor>
             </div>
         )
