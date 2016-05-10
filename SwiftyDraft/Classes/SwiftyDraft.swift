@@ -65,6 +65,35 @@ import UIKit
                        name: UIKeyboardDidChangeFrameNotification, object: nil)
     }
 
+    public func promptEmbedCode() {
+        guard let vc = UIApplication.sharedApplication().windows.first?.rootViewController else {
+            assertionFailure("Root Controller does not exist")
+            return
+        }
+        let ac = UIAlertController(title: "Embed iframe", message: "Please input embed code", preferredStyle: .Alert)
+        var textField: UITextField!
+        ac.addTextFieldWithConfigurationHandler { tf in
+            tf.placeholder = "Only <iframe> tag is allowed"
+            tf.keyboardType = .ASCIICapable
+            tf.autocorrectionType = .No
+            textField = tf
+        }
+        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
+            if let val = textField.text where val.hasPrefix("<iframe") && val.hasSuffix("</iframe>") {
+                self.insertIFrame(val)
+            }
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.focus()
+            }
+        }))
+        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
+                self.focus()
+            }
+        }))
+        vc.presentViewController(ac, animated: true, completion: nil)
+    }
+
     public func promptLinkURL() {
         guard let vc = UIApplication.sharedApplication().windows.first?.rootViewController else {
             assertionFailure("Root Controller does not exist")
@@ -78,8 +107,9 @@ import UIKit
             textField = tf
         }
         ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
-            guard let val = textField.text else { return }
-            self.insertLink(val)
+            if let val = textField.text {
+                self.insertLink(val)
+            }
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                 self.focus()
             }

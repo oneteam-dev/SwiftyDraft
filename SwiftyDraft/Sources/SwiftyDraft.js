@@ -23,6 +23,11 @@ export default class SwiftyDraft extends Component {
             this.editor.blur();
         }
     }
+    insertIFrame(iframeTag) {
+        if(this.editor) {
+            this.editor._insertIFrame(iframeTag); // FIXME: DO NOT use private method
+        }
+    }
     toggleLink(url = null) {
         if(this.editor) {
           this.editor.toggleLink(url);

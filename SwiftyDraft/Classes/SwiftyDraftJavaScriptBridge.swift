@@ -24,10 +24,15 @@ extension SwiftyDraft: UIWebViewDelegate {
     }
 
     func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
-        if let js = buttonTag.javaScript {
-            runScript(js)
-        } else if buttonTag == .InsertLink {
+        switch buttonTag {
+        case .InsertLink:
             promptLinkURL()
+        case .EmbedCode:
+            promptEmbedCode()
+        default:
+            if let js = buttonTag.javaScript {
+                runScript(js)
+            }
         }
     }
 
@@ -41,6 +46,10 @@ extension SwiftyDraft: UIWebViewDelegate {
 
     func insertLink(url: String) {
         runScript("window.editor.toggleLink(\"\(url)\")")
+    }
+
+    func insertIFrame(src: String) {
+        runScript("window.editor.insertIFrame(\"\(src)\")")
     }
 
     func focus() {

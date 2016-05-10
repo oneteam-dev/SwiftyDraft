@@ -23,6 +23,7 @@ enum ButtonTag: Int {
     case CheckBox
     case BulletedList
     case NumberedList
+    case EmbedCode
 
     static var all: [ButtonTag] {
         return [
@@ -40,6 +41,7 @@ enum ButtonTag: Int {
             .Heading3,
             .Heading4,
             .Heading5
+            // .EmbedCode
         ]
     }
 
@@ -65,6 +67,7 @@ enum ButtonTag: Int {
         case CheckBox: return "check-box"
         case BulletedList: return "bulleted-list"
         case NumberedList: return "numbered-list"
+        case EmbedCode: return "embed"
         }
     }
 
