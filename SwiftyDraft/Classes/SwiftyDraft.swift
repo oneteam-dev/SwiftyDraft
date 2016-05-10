@@ -79,9 +79,9 @@ import UIKit
         }
         ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
             guard let val = textField.text else { return }
+            self.insertLink(val)
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
                 self.focus()
-                self.insertLink(val)
             }
         }))
         ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
