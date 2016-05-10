@@ -10,6 +10,9 @@ import UIKit
 
 @IBDesignable public class SwiftyDraft: UIView {
 
+    public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
+    public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
+
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
         let len = letters.count
@@ -79,17 +82,13 @@ import UIKit
             textField = tf
         }
         ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
-            if let val = textField.text where val.hasPrefix("<iframe") && val.hasSuffix("</iframe>") {
+            if let val = textField.text where val.hasPrefix("<iframe ") && val.hasSuffix("</iframe>") {
                 self.insertIFrame(val)
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                self.focus()
-            }
+            self.focus(true)
         }))
         ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                self.focus()
-            }
+            self.focus(true)
         }))
         vc.presentViewController(ac, animated: true, completion: nil)
     }
@@ -110,16 +109,26 @@ import UIKit
             if let val = textField.text {
                 self.insertLink(val)
             }
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                self.focus()
-            }
+            self.focus(true)
         }))
         ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue()) {
-                self.focus()
-            }
+            self.focus(true)
         }))
         vc.presentViewController(ac, animated: true, completion: nil)
+    }
+
+    public func openImagePicker() {
+        self.imagePickerDelegate?.draftEditor(self, requestImageAttachment: { result in
+            self.insertImage(result)
+            self.focus(true)
+        })
+    }
+
+    public func openFilePicker() {
+        self.filePickerDelegate?.draftEditor(self, requestFileAttachment: { result in
+            self.insertFileDownload(result)
+            self.focus(true)
+        })
     }
 
     deinit {

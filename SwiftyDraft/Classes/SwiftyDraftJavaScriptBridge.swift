@@ -11,12 +11,14 @@ import UIKit
 extension SwiftyDraft: UIWebViewDelegate {
 
     func handleKeyboardChangeFrame(note: NSNotification) {
-        // FIXME!
-        //guard let h = self.runScript("window.innerHeight") else { return }
-        //print("v", h)
-        //runScript("document.getElementById('app-root').style.height = '\(h)px'")
-        //runScript("document.getElementById('app-root').style.overflow = 'hidden'")
-        //runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
+        //
+        // FIXME! to much spaces in the bottom
+        //
+        // guard let h = self.runScript("window.innerHeight") else { return }
+        // print("v", h)
+        // runScript("document.getElementById('app-root').style.height = '\(h)px'")
+        // runScript("document.getElementById('app-root').style.overflow = 'hidden'")
+        // runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
     }
 
     public var editorInitialized: Bool {
@@ -29,6 +31,10 @@ extension SwiftyDraft: UIWebViewDelegate {
             promptLinkURL()
         case .EmbedCode:
             promptEmbedCode()
+        case .AttachFile:
+            openFilePicker()
+        case .InsertImage:
+            openImagePicker()
         default:
             if let js = buttonTag.javaScript {
                 runScript(js)
@@ -52,9 +58,24 @@ extension SwiftyDraft: UIWebViewDelegate {
         runScript("window.editor.insertIFrame(\"\(src)\")")
     }
 
-    func focus() {
-        webView.becomeFirstResponder()
-        runScript("window.editor.focus()")
+    func insertImage(img: SwiftyDraftImageResult) {
+        runScript("window.editor.insertImage(\(img.json))")
+    }
+
+    func insertFileDownload(file: SwiftyDraftFileResult) {
+        runScript("window.editor.insertDownloadLink(\(file.json))")
+    }
+
+    func focus(delayed: Bool = false) {
+        let fn = {
+            self.webView.becomeFirstResponder()
+            self.runScript("window.editor.focus()")
+        }
+        if delayed {
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), fn)
+        } else {
+            fn()
+        }
     }
 
     func blur() {

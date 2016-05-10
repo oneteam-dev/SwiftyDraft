@@ -24,9 +24,13 @@ enum ButtonTag: Int {
     case BulletedList
     case NumberedList
     case EmbedCode
+    case InsertImage
+    case AttachFile
 
     static var all: [ButtonTag] {
         return [
+            .InsertImage,
+            .AttachFile,
             .InsertLink,
             .RemoveLink,
             .Bold,
@@ -68,6 +72,8 @@ enum ButtonTag: Int {
         case BulletedList: return "bulleted-list"
         case NumberedList: return "numbered-list"
         case EmbedCode: return "embed"
+        case InsertImage: return "insert-picture"
+        case AttachFile: return "file-attach"
         }
     }
 
