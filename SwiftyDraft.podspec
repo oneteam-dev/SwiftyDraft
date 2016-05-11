@@ -30,17 +30,4 @@ Pod::Spec.new do |s|
     ]
   }
 
-  s.prepare_command = <<-CMD
-    if [ -d $HOME/.nodenv/bin ]; then
-      export PATH=$HOME/.nodenv/bin:$PATH
-      eval "$(nodenv init -)"
-    fi
-
-    if [ -d $HOME/.nodenv/shims ]; then
-      export PATH=$HOME/.nodenv/shims:$PATH
-      eval "$(nodenv init -)"
-    fi
-
-    npm -v >/dev/null 2>&1 && npm install && npm run build
-  CMD
 end
