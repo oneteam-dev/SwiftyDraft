@@ -78,23 +78,23 @@ extension SwiftyDraft: UIWebViewDelegate {
         runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
     }
 
-    func insertLink(url: String) {
+    public func insertLink(url: String) {
         runScript("window.editor.toggleLink(\"\(url)\")")
     }
 
-    func insertIFrame(src: String) {
+    public func insertIFrame(src: String) {
         runScript("window.editor.insertIFrame(\"\(src)\")")
     }
 
-    func insertImage(img: SwiftyDraftImageResult) {
+    public func insertImage(img: SwiftyDraftImageResult) {
         runScript("window.editor.insertImage(\(img.json))")
     }
 
-    func insertFileDownload(file: SwiftyDraftFileResult) {
+    public func insertFileDownload(file: SwiftyDraftFileResult) {
         runScript("window.editor.insertDownloadLink(\(file.json))")
     }
 
-    func focus(delayed: Bool = false) {
+    public func focus(delayed: Bool = false) {
         let fn = {
             self.webView.becomeFirstResponder()
             self.runScript("window.editor.focus()")
@@ -106,7 +106,7 @@ extension SwiftyDraft: UIWebViewDelegate {
         }
     }
 
-    func blur() {
+    public func blur() {
         webView.becomeFirstResponder()
         runScript("window.editor.blur()")
     }
