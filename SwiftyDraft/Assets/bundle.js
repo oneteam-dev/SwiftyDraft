@@ -20303,9 +20303,16 @@
 	        key: 'getHTML',
 	        value: function getHTML() {
 	            if (this.editor) {
-	                return this.editor.serializedHTML;
+	                return this.editor.html;
 	            }
 	            return "";
+	        }
+	    }, {
+	        key: 'setHTML',
+	        value: function setHTML(html) {
+	            if (this.editor) {
+	                this.editor.html = html;
+	            }
 	        }
 	    }, {
 	        key: 'triggerOnChange',
@@ -54759,6 +54766,23 @@
 	  _inherits(RichTextEditor, _Component);
 
 	  _createClass(RichTextEditor, [{
+	    key: 'createEditorState',
+	    value: function createEditorState(html) {
+	      var decorator = new _draftJs.CompositeDecorator([_LinkDecorator2.default, _DownloadLinkDecorator2.default].concat(_toConsumableArray(this.props.decorators)));
+	      var cleanHTML = html.replace(/>\s+</g, '><'); // FIXME ;(
+	      var editorState = (0, _utils.createEditorState)(cleanHTML, decorator);
+	      var checkedState = (0, _utils.createCheckedState)(editorState.getCurrentContent().getBlocksAsArray());
+	      return { editorState: editorState, checkedState: checkedState };
+	    }
+	  }, {
+	    key: 'html',
+	    set: function set(html) {
+	      this.setState(this.createEditorState(html));
+	    },
+	    get: function get() {
+	      return this.serializedHTML;
+	    }
+	  }, {
 	    key: 'serializedHTML',
 	    get: function get() {
 	      return (0, _stateToHTML2.default)(this._editorState, this._checkedState);
@@ -54798,12 +54822,9 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(RichTextEditor).call(this, props));
 
-	    var decorator = new _draftJs.CompositeDecorator([_LinkDecorator2.default, _DownloadLinkDecorator2.default].concat(_toConsumableArray(_this.props.decorators)));
-	    var initialHtml = _this.props.initialHtml.replace(/>\s+</g, '><'); // FIXME ;(
-	    var editorState = (0, _utils.createEditorState)(initialHtml, decorator);
-	    var checkedState = (0, _utils.createCheckedState)(editorState.getCurrentContent().getBlocksAsArray());
-
-	    _this.state = { editorState: editorState, checkedState: checkedState, isOpenInsertLinkInput: false };
+	    var state = _this.createEditorState(_this.props.initialHtml);
+	    state.isOpenInsertLinkInput = false;
+	    _this.state = state;
 
 	    var triggerLock = 0; // To reduce triggering change callbacks.
 	    var triggerOnChange = function triggerOnChange() {

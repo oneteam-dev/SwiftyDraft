@@ -8,4 +8,4 @@
 "insert_link.prompt.title" = "Insert Link";
 "insert_link.prompt.message" = "Please input URL to link";
 
-"editor.placeholder" = "Contents here...";
+"editor.placeholder" = "Contents here..."; 

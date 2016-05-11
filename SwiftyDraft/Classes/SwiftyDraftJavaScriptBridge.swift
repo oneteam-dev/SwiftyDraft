@@ -63,8 +63,15 @@ extension SwiftyDraft: UIWebViewDelegate {
         }
     }
 
-    var html: String {
-        return runScript("window.editor.getHTML()") ?? ""
+    var domHTML: String {
+        get {
+            return runScript("window.editor.getHTML()") ?? ""
+        }
+        set(value) {
+            if editorInitialized {
+                runScript("window.editor.setHTML(\(value.javaScriptEscapedString()))")
+            }
+        }
     }
 
     func setCallbackToken() {
@@ -113,6 +120,7 @@ extension SwiftyDraft: UIWebViewDelegate {
         assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
         domPaddingTop = paddingTop
         domPlaceholder = placeholder
+        domHTML = html
     }
 
     private func runScript(script: String) -> String? {

@@ -86,9 +86,14 @@ export default class SwiftyDraft extends Component {
     }
     getHTML() {
         if(this.editor) {
-          return this.editor.serializedHTML;
+          return this.editor.html;
         }
         return "";
+    }
+    setHTML(html) {
+        if(this.editor) {
+          this.editor.html = html;
+        }
     }
     triggerOnChange() {
         const data = {
