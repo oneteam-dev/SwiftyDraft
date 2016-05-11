@@ -148,7 +148,9 @@ extension SwiftyDraft: UIWebViewDelegate {
     // MARK: - UIWebViewDelegate
 
     public func webViewDidFinishLoad(webView: UIWebView) {
-        focus()
+        if self.isFirstResponder() {
+            focus()
+        }
         setCallbackToken()
     }
 

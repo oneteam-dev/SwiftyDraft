@@ -31,7 +31,7 @@ func localizedStringForKey(key: String) -> String {
         return randomString
     }()
 
-    private var _initialHTML: String? = nil
+    private var _initialHTML: String? = ""
 
     public var html: String {
         get {
