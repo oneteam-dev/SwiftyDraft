@@ -117,8 +117,8 @@ func localizedStringForKey(key: String) -> String {
     }
 
     public func promptEmbedCode() {
-        guard let vc = UIApplication.sharedApplication().windows.first?.rootViewController else {
-            assertionFailure("Root Controller does not exist")
+        guard let vc = UIApplication.sharedApplication().keyWindow?.visibleViewController else {
+            assertionFailure("View Controller does not exist")
             return
         }
         let ac = UIAlertController(
@@ -149,8 +149,8 @@ func localizedStringForKey(key: String) -> String {
     }
 
     public func promptLinkURL() {
-        guard let vc = UIApplication.sharedApplication().windows.first?.rootViewController else {
-            assertionFailure("Root Controller does not exist")
+        guard let vc = UIApplication.sharedApplication().keyWindow?.visibleViewController else {
+            assertionFailure("View Controller does not exist")
             return
         }
         let ac = UIAlertController(
