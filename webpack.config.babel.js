@@ -2,7 +2,7 @@
 import path from 'path';
 import bootstrap from 'bootstrap-styl';
 
-const entry = ['./SwiftyDraft/Sources/index.js'];
+const entry = ['babel-polyfill', './SwiftyDraft/Sources/index.js'];
 const plugins = [];
 
 export default {

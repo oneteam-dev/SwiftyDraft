@@ -14,6 +14,7 @@
   "author": "Oneteam Inc.",
   "license": "MIT",
   "dependencies": {
+    "babel-polyfill": "^6.8.0",
     "bootstrap-styl": "^5.0.5",
     "classnames": "^2.2.3",
     "lodash": "^4.11.1",
