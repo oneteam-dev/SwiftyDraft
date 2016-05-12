@@ -90,6 +90,10 @@ func localizedStringForKey(key: String) -> String {
         return resourceBundle.URLForResource("index", withExtension: "html")!
     }
 
+    public static var javaScriptURL: NSURL {
+        return resourceBundle.URLForResource("bundle", withExtension: "js")!
+    }
+
     public static var resourceBundle: NSBundle {
         let bundleURL = NSBundle(forClass: self)
             .URLForResource("SwiftyDraft", withExtension: "bundle")!
@@ -109,8 +113,9 @@ func localizedStringForKey(key: String) -> String {
         self.webView.delegate = self
         self.webView.keyboardDisplayRequiresUserAction = false
         self.webView.cjw_inputAccessoryView = self.editorToolbar
-        let req = NSURLRequest(URL: SwiftyDraft.htmlURL)
-        self.webView.loadRequest(req)
+        let js = try! String(contentsOfURL: SwiftyDraft.javaScriptURL)
+        let html = try! String(contentsOfURL: SwiftyDraft.htmlURL).stringByReplacingOccurrencesOfString(" src=\"./bundle.js\"><", withString: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
+        self.webView.loadHTMLString(html, baseURL: nil)
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
                        name: UIKeyboardDidChangeFrameNotification, object: nil)
