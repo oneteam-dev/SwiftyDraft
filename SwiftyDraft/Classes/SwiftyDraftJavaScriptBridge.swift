@@ -30,27 +30,12 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
 
-    var domPaddingTop: CGFloat {
-        get {
-//            if let v = runScript("window.editor.paddingTop") {
-//                return CGFloat(Int(v) ?? 0)
-//            }
-            return 0
-        }
-        set(value) {
-            // runScript("window.editor.paddingTop = \(value)")
-            self.runScript("window.editor.paddingTop = \(value)", completionHandler: nil)
-        }
+    func setDOMPaddingTop(value: CGFloat) {
+        runScript("window.editor.paddingTop = \(value)", completionHandler: nil)
     }
 
-    var domPlaceholder: String {
-        get {
-//            return runScript("window.editor.placeholder") ?? ""
-            return ""
-        }
-        set(value) {
-            runScript("window.editor.placeholder = \"\(value)\"")
-        }
+    func setDOMPlaceholder(value: String) {
+        runScript("window.editor.placeholder = \"\(value)\"")
     }
 
     func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
@@ -128,8 +113,8 @@ extension SwiftyDraft: WKScriptMessageHandler {
     func didSetCallbackToken(token: String) {
         assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
         editorInitialized = true
-        domPaddingTop = paddingTop
-        domPlaceholder = placeholder
+        setDOMPaddingTop(paddingTop)
+        setDOMPlaceholder(placeholder)
         domHTML = html
     }
 

@@ -59,7 +59,7 @@ func localizedStringForKey(key: String) -> String {
     public var paddingTop: CGFloat = 0.0 {
         didSet(value) {
             if editorInitialized {
-                domPaddingTop = value
+                setDOMPaddingTop(value)
             }
         }
     }
@@ -67,7 +67,7 @@ func localizedStringForKey(key: String) -> String {
     public var placeholder: String = localizedStringForKey("editor.placeholder") {
         didSet(value) {
             if editorInitialized {
-                domPlaceholder = value
+                setDOMPlaceholder(value)
             }
         }
     }
