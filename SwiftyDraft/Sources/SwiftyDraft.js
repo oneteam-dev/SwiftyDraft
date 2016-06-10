@@ -76,13 +76,13 @@ export default class SwiftyDraft extends Component {
     }
     setCallbackToken(callbackToken) {
         this.setState({callbackToken});
-        this.callbackNavigation('didSetCallbackToken', callbackToken);
+        window.webkit.messageHandlers.didSetCallbackToken.postMessage(callbackToken);
     }
     debugLog(data) {
         if(console.debug) {
           console.debug(data);
         }
-        this.callbackNavigation('debugLog', data);
+        window.webkit.messageHandlers.debugLog.postMessage(data);
     }
     getHTML() {
         if(this.editor) {
@@ -100,14 +100,7 @@ export default class SwiftyDraft extends Component {
             inlineStyles: this.getCurrentInlineStyles(),
             blockType: this.getCurrentBlockType()
         };
-        this.callbackNavigation('didChangeEditorState', data);
-    }
-    callbackNavigation(method, data) {
-        const {callbackToken} = this.state;
-        if(callbackToken) {
-            const path = [method, encodeURIComponent(JSON.stringify(data))].join('/');
-            window.location.href = `callback-${callbackToken}://swifty-draft.internal/${path}`;
-        }
+        window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
     }
     render() {
         return (

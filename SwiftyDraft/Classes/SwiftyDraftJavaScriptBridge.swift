@@ -6,9 +6,9 @@
 //
 //
 
-import UIKit
+import WebKit
 
-extension SwiftyDraft: UIWebViewDelegate {
+extension SwiftyDraft: WKScriptMessageHandler {
 
     func handleKeyboardChangeFrame(note: NSNotification) {
         //
@@ -21,25 +21,32 @@ extension SwiftyDraft: UIWebViewDelegate {
         // runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
     }
 
-    public var editorInitialized: Bool {
-        return runScript("!!window.editor") == "true"
+
+    public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+        if let c = WebViewCallback(rawValue: message.name) {
+            self.handleWebViewCallback(c, data: message.body)
+        } else {
+            fatalError("Unknown callback \(message.body)")
+        }
     }
 
     var domPaddingTop: CGFloat {
         get {
-            if let v = runScript("window.editor.paddingTop") {
-                return CGFloat(Int(v) ?? 0)
-            }
+//            if let v = runScript("window.editor.paddingTop") {
+//                return CGFloat(Int(v) ?? 0)
+//            }
             return 0
         }
         set(value) {
-            runScript("window.editor.paddingTop = \(value)")
+            // runScript("window.editor.paddingTop = \(value)")
+            self.runScript("window.editor.paddingTop = \(value)", completionHandler: nil)
         }
     }
 
     var domPlaceholder: String {
         get {
-            return runScript("window.editor.placeholder") ?? ""
+//            return runScript("window.editor.placeholder") ?? ""
+            return ""
         }
         set(value) {
             runScript("window.editor.placeholder = \"\(value)\"")
@@ -58,14 +65,15 @@ extension SwiftyDraft: UIWebViewDelegate {
             openImagePicker()
         default:
             if let js = buttonTag.javaScript {
-                runScript(js)
+                self.runScript(js)
             }
         }
     }
 
     var domHTML: String {
         get {
-            return runScript("window.editor.getHTML()") ?? ""
+            // return runScript("window.editor.getHTML()") ?? ""
+            return ""
         }
         set(value) {
             if editorInitialized {
@@ -75,29 +83,30 @@ extension SwiftyDraft: UIWebViewDelegate {
     }
 
     func setCallbackToken() {
-        runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
+        self.runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
+        
     }
 
     public func insertLink(url: String) {
-        runScript("window.editor.toggleLink(\"\(url)\")")
+        self.runScript("window.editor.toggleLink(\"\(url)\")")
     }
 
     public func insertIFrame(src: String) {
-        runScript("window.editor.insertIFrame(\"\(src)\")")
+        self.runScript("window.editor.insertIFrame(\"\(src)\")")
     }
 
     public func insertImage(img: SwiftyDraftImageResult) {
-        runScript("window.editor.insertImage(\(img.json))")
+        self.runScript("window.editor.insertImage(\(img.json))")
     }
 
     public func insertFileDownload(file: SwiftyDraftFileResult) {
-        runScript("window.editor.insertDownloadLink(\(file.json))")
+        self.runScript("window.editor.insertDownloadLink(\(file.json))")
     }
 
     public func focus(delayed: Bool = false) {
         let fn = {
             self.webView.becomeFirstResponder()
-            self.runScript("window.editor.focus()")
+            self.runScript("window.editor.focus()", completionHandler: nil)
         }
         if delayed {
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), fn)
@@ -108,7 +117,7 @@ extension SwiftyDraft: UIWebViewDelegate {
 
     public func blur() {
         webView.becomeFirstResponder()
-        runScript("window.editor.blur()")
+        self.runScript("window.editor.blur()", completionHandler: nil)
     }
 
     func didChangeEditorState(withInlineStyles inlineStyles: [InlineStyle], blockType: BlockType) {
@@ -118,18 +127,15 @@ extension SwiftyDraft: UIWebViewDelegate {
 
     func didSetCallbackToken(token: String) {
         assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
+        editorInitialized = true
         domPaddingTop = paddingTop
         domPlaceholder = placeholder
         domHTML = html
     }
 
-    private func runScript(script: String) -> String? {
-        let js = "(function(){ try { return \(script); } catch(e) { return e + '' } }).call()"
-        let res = self.webView.stringByEvaluatingJavaScriptFromString(js)
-        if let res = res where res.hasPrefix("TypeError:") {
-            print(res)
-        }
-        return res
+    private func runScript(script: String, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
+        let js = "(function(){ try { return \(script); } catch(e) { window.webkit.messageHandlers.debugLog.postMessage(e + '') } }).call()"
+        self.webView.evaluateJavaScript(js, completionHandler: completionHandler)
     }
 
     private func handleWebViewCallback(callback: WebViewCallback, data: AnyObject?) {
@@ -147,11 +153,14 @@ extension SwiftyDraft: UIWebViewDelegate {
 
     // MARK: - UIWebViewDelegate
 
-    public func webViewDidFinishLoad(webView: UIWebView) {
+    public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
         if self.isFirstResponder() {
             focus()
         }
         setCallbackToken()
+    }
+
+    public func webViewDidFinishLoad(webView: UIWebView) {
     }
 
     public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest,
