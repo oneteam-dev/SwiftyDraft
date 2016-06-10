@@ -28264,7 +28264,8 @@
 	        value: function triggerOnChange() {
 	            var data = {
 	                inlineStyles: this.getCurrentInlineStyles(),
-	                blockType: this.getCurrentBlockType()
+	                blockType: this.getCurrentBlockType(),
+	                html: this.editor.html
 	            };
 	            window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
 	        }

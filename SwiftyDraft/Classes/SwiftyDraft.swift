@@ -32,29 +32,16 @@ func localizedStringForKey(key: String) -> String {
         return randomString
     }()
 
-    private var _initialHTML: String? = ""
-
     public var editorInitialized: Bool = false
 
-    public var html: String {
-        get {
+    public var defaultHTML: String = "" {
+        didSet {
             if editorInitialized {
-                if let h = _initialHTML {
-                    _initialHTML = nil
-                    return h
-                }
-                return domHTML
-            }
-            return _initialHTML ?? ""
-        }
-        set(value) {
-            if editorInitialized {
-                domHTML = value
-            } else {
-                _initialHTML = value
+                setDOMHTML(html)
             }
         }
     }
+    public var html: String = ""
 
     public var paddingTop: CGFloat = 0.0 {
         didSet(value) {

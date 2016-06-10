@@ -38,6 +38,12 @@ extension SwiftyDraft: WKScriptMessageHandler {
         runScript("window.editor.placeholder = \"\(value)\"")
     }
 
+    func setDOMHTML(value: String) {
+        if editorInitialized {
+            runScript("window.editor.setHTML(\(value.javaScriptEscapedString()))")
+        }
+    }
+
     func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
         switch buttonTag {
         case .InsertLink:
@@ -51,18 +57,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         default:
             if let js = buttonTag.javaScript {
                 self.runScript(js)
-            }
-        }
-    }
-
-    var domHTML: String {
-        get {
-            // return runScript("window.editor.getHTML()") ?? ""
-            return ""
-        }
-        set(value) {
-            if editorInitialized {
-                runScript("window.editor.setHTML(\(value.javaScriptEscapedString()))")
             }
         }
     }
@@ -105,9 +99,10 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.runScript("window.editor.blur()", completionHandler: nil)
     }
 
-    func didChangeEditorState(withInlineStyles inlineStyles: [InlineStyle], blockType: BlockType) {
+    func didChangeEditorState(html: String, inlineStyles: [InlineStyle], blockType: BlockType) {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
+        self.html = html
     }
 
     func didSetCallbackToken(token: String) {
@@ -115,7 +110,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         editorInitialized = true
         setDOMPaddingTop(paddingTop)
         setDOMPlaceholder(placeholder)
-        domHTML = html
+        setDOMHTML(defaultHTML)
     }
 
     private func runScript(script: String, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
@@ -130,40 +125,21 @@ extension SwiftyDraft: WKScriptMessageHandler {
         case .DidChangeEditorState:
             let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).map({ InlineStyle(rawValue: $0)! })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
-            didChangeEditorState(withInlineStyles: inlineStyles, blockType: blockType)
+            let html = data?["html"] as? String ?? ""
+            didChangeEditorState(html, inlineStyles: inlineStyles, blockType: blockType)
         case .DebugLog:
             print("[DEBUG] \(data)")
         }
     }
 
-    // MARK: - UIWebViewDelegate
+    // MARK: - WKNavigationDelegate
 
     public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
-        if self.isFirstResponder() {
-            focus()
-        }
-        setCallbackToken()
-    }
-
-    public func webViewDidFinishLoad(webView: UIWebView) {
-    }
-
-    public func webView(webView: UIWebView, shouldStartLoadWithRequest request: NSURLRequest,
-                        navigationType: UIWebViewNavigationType) -> Bool {
-        if let url = request.URL
-            , pathComponents = url.pathComponents
-            , callback = WebViewCallback(rawValue: pathComponents[1])
-            where url.scheme == "callback-\(callbackToken)" {
-            do {
-                let data = try NSJSONSerialization.JSONObjectWithData(
-                    pathComponents[2].dataUsingEncoding(NSUTF8StringEncoding)!,
-                    options: .AllowFragments)
-                self.handleWebViewCallback(callback, data: data)
-            } catch {
-                self.handleWebViewCallback(callback, data: nil)
+        if !editorInitialized {
+            if isFirstResponder() {
+                focus()
             }
-            return false
+            setCallbackToken()
         }
-        return true
     }
 }

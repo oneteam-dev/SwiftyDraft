@@ -21,7 +21,7 @@ class ViewController: UIViewController {
         draftView.filePickerDelegate = self
         draftView.imagePickerDelegate = self
         draftView.paddingTop = metaView.bounds.height
-        draftView.html = "<h1>Yo</h1><p>Hello</p>"
+        draftView.defaultHTML = "<h1>Yo</h1><p>Hello</p>"
     }
 }
 

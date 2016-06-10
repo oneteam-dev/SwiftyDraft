@@ -98,7 +98,8 @@ export default class SwiftyDraft extends Component {
     triggerOnChange() {
         const data = {
             inlineStyles: this.getCurrentInlineStyles(),
-            blockType: this.getCurrentBlockType()
+            blockType: this.getCurrentBlockType(),
+            html: this.editor.html
         };
         window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
     }
