@@ -12,4 +12,6 @@ enum WebViewCallback: String {
     case DebugLog = "debugLog"
     case DidSetCallbackToken = "didSetCallbackToken"
     case DidChangeEditorState = "didChangeEditorState"
+
+    static let all: [WebViewCallback] = [DebugLog, DidSetCallbackToken, DidChangeEditorState]
 }

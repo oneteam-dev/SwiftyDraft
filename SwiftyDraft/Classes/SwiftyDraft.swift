@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import WebKit
 
 func localizedStringForKey(key: String) -> String {
     return SwiftyDraft.localizedStringForKey(key)
 }
 
-@IBDesignable public class SwiftyDraft: UIView {
+@IBDesignable public class SwiftyDraft: UIView, WKNavigationDelegate {
 
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
@@ -31,32 +32,21 @@ func localizedStringForKey(key: String) -> String {
         return randomString
     }()
 
-    private var _initialHTML: String? = ""
+    public var editorInitialized: Bool = false
 
-    public var html: String {
-        get {
+    public var defaultHTML: String = "" {
+        didSet {
             if editorInitialized {
-                if let h = _initialHTML {
-                    _initialHTML = nil
-                    return h
-                }
-                return domHTML
-            }
-            return _initialHTML ?? ""
-        }
-        set(value) {
-            if editorInitialized {
-                domHTML = value
-            } else {
-                _initialHTML = value
+                setDOMHTML(html)
             }
         }
     }
+    public var html: String = ""
 
     public var paddingTop: CGFloat = 0.0 {
         didSet(value) {
             if editorInitialized {
-                domPaddingTop = value
+                setDOMPaddingTop(value)
             }
         }
     }
@@ -64,15 +54,32 @@ func localizedStringForKey(key: String) -> String {
     public var placeholder: String = localizedStringForKey("editor.placeholder") {
         didSet(value) {
             if editorInitialized {
-                domPlaceholder = value
+                setDOMPlaceholder(value)
             }
         }
     }
 
-    public lazy var webView: UIWebView = {
-        let wv = UIWebView(frame: self.frame)
+    public lazy var webView: WKWebView = {
+        let c = WKWebViewConfiguration()
+        if #available(iOS 9.0, *) {
+            c.allowsAirPlayForMediaPlayback = true
+            c.allowsPictureInPictureMediaPlayback = true
+        }
+        c.allowsInlineMediaPlayback = true
+        c.userContentController = self.userContentController
+        let wv = WKWebView(frame: self.frame, configuration: c)
+        wv.navigationDelegate = self
+        wv.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         self.addSubview(wv)
         return wv
+    }()
+
+    public lazy var userContentController: WKUserContentController = {
+        let uc = WKUserContentController()
+        WebViewCallback.all.forEach {
+            uc.addScriptMessageHandler(self, name: $0.rawValue)
+        }
+        return uc
     }()
 
     public lazy var editorToolbar: Toolbar = {
@@ -106,13 +113,9 @@ func localizedStringForKey(key: String) -> String {
     }
 
     private func setup() {
-        self.webView.scalesPageToFit = false
         self.webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        self.webView.dataDetectorTypes = .None
         self.webView.backgroundColor = UIColor.whiteColor()
-        self.webView.delegate = self
-        self.webView.keyboardDisplayRequiresUserAction = false
-        self.webView.cjw_inputAccessoryView = self.editorToolbar
+        self.webView.addRichEditorInputAccessoryView(self.editorToolbar)
         let js = try! String(contentsOfURL: SwiftyDraft.javaScriptURL)
         let html = try! String(contentsOfURL: SwiftyDraft.htmlURL).stringByReplacingOccurrencesOfString(" src=\"./bundle.js\"><", withString: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
         self.webView.loadHTMLString(html, baseURL: nil)

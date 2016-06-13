@@ -46,8 +46,9 @@ public class Toolbar: UIView {
 
     private func setup() {
         addSubview(scrollView)
-        addSubview(closeButton)
-        addSubview(openButton)
+        // WKWebView does not support userInteractionEnabled
+        // addSubview(closeButton)
+        // addSubview(openButton)
         backgroundColor = UIColor.whiteColor()
         let unselectedTintColor = UIColor(white: 0.8, alpha: 1.0)
         let borderColor = UIColor(white: 0.90, alpha: 1.0)
@@ -176,11 +177,11 @@ public class Toolbar: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         let b = self.bounds
-        let closeButtonWidth: CGFloat = 54
+        let closeButtonWidth: CGFloat = 0 // 54
         let toolbarWidth: CGFloat = self.toolbarItems.reduce(0) { sofar, item in
             var w = (item.valueForKey("view") as? UIView)?.bounds.width ?? 22.0
             return sofar + w + 11.0
-        } + 75
+        } + 25 // 75
         let toolbarSize = CGSize(width: toolbarWidth, height: 44)
         toolbar.frame = CGRect(origin: CGPointZero, size: toolbarSize)
         scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
