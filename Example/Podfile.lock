@@ -2,13 +2,15 @@ PODS:
   - SwiftyDraft (0.0.1)
 
 DEPENDENCIES:
-  - SwiftyDraft (from `../`)
+  - SwiftyDraft (from `..`)
 
 EXTERNAL SOURCES:
   SwiftyDraft:
-    :path: "../"
+    :path: ".."
 
 SPEC CHECKSUMS:
   SwiftyDraft: 054f4f316bbdae777f1c648b1299874db184952a
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: 304777b0c1a0b0a7f2d79fa0de7a2f38e366982b
+
+COCOAPODS: 1.0.1

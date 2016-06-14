@@ -102,8 +102,8 @@ func localizedStringForKey(key: String) -> String {
     }
 
     public static var resourceBundle: NSBundle {
-        let bundleURL = NSBundle(forClass: self)
-            .URLForResource("SwiftyDraft", withExtension: "bundle")!
+        let b = NSBundle(forClass: self)
+        let bundleURL = b.URLForResource("SwiftyDraft", withExtension: "bundle")!
         return NSBundle(URL: bundleURL)!
     }
 
