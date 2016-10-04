@@ -17,6 +17,7 @@ func localizedStringForKey(key: String) -> String {
 
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
+    public var baseURL:NSURL?
 
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
@@ -112,13 +113,13 @@ func localizedStringForKey(key: String) -> String {
                                  bundle: resourceBundle, value: "", comment: "")
     }
 
-    private func setup() {
+    public func setup() {
         self.webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
         self.webView.backgroundColor = UIColor.whiteColor()
         self.webView.addRichEditorInputAccessoryView(self.editorToolbar)
         let js = try! String(contentsOfURL: SwiftyDraft.javaScriptURL)
         let html = try! String(contentsOfURL: SwiftyDraft.htmlURL).stringByReplacingOccurrencesOfString(" src=\"./bundle.js\"><", withString: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
-        self.webView.loadHTMLString(html, baseURL: nil)
+        self.webView.loadHTMLString(html, baseURL:baseURL)
         let nc = NSNotificationCenter.defaultCenter()
         nc.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
                        name: UIKeyboardDidChangeFrameNotification, object: nil)
@@ -205,12 +206,10 @@ func localizedStringForKey(key: String) -> String {
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setup()
     }
 
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        setup()
     }
 
     public override func layoutSubviews() {
