@@ -15,12 +15,12 @@ extension String {
         // must encode them first. See here: http://timelessrepo.com/json-isnt-a-javascript-subset
         // Also here: http://media.giphy.com/media/wloGlwOXKijy8/giphy.gif
         let str = self
-            .stringByReplacingOccurrencesOfString("\u{2028}", withString: "\\u2028")
-            .stringByReplacingOccurrencesOfString("\u{2029}", withString: "\\u2029")
+            .replacingOccurrences(of: "\u{2028}", with: "\\u2028")
+            .replacingOccurrences(of: "\u{2029}", with: "\\u2029")
         // Because escaping JavaScript is a non-trivial task (https://github.com/johnezang/JSONKit/blob/master/JSONKit.m#L1423)
         // we proceed to hax instead:
-        let data = try! NSJSONSerialization.dataWithJSONObject([str], options: [])
-        let encodedString = NSString(data: data, encoding: NSUTF8StringEncoding)!
-        return encodedString.substringWithRange(NSMakeRange(1, encodedString.length - 2))
+        let data = try! JSONSerialization.data(withJSONObject: [str], options: [])
+        let encodedString = NSString(data: data, encoding: String.Encoding.utf8.rawValue)!
+        return encodedString.substring(with: NSMakeRange(1, encodedString.length - 2))
     }
 }

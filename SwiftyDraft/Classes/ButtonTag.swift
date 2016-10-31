@@ -50,30 +50,28 @@ enum ButtonTag: Int {
     }
 
     var iconImage: UIImage {
-        return UIImage(named: "toolbar-icon-\(self.iconName)",
-                       inBundle: SwiftyDraft.resourceBundle,
-                       compatibleWithTraitCollection: nil)!
+        return UIImage(named: "toolbar-icon-\(self.iconName)", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
     }
 
     var iconName: String {
         switch self {
-        case InsertLink: return "insert-link"
-        case RemoveLink: return "remove-link"
-        case Heading1: return "heading-1"
-        case Heading2: return "heading-2"
-        case Heading3: return "heading-3"
-        case Heading4: return "heading-4"
-        case Heading5: return "heading-5"
-        case Bold: return "bold"
-        case Italic: return "italic"
-        case Strikethrough: return "strikethrough"
-        case Blockquote: return "blockquote"
-        case CheckBox: return "check-box"
-        case BulletedList: return "bulleted-list"
-        case NumberedList: return "numbered-list"
-        case EmbedCode: return "embed"
-        case InsertImage: return "insert-picture"
-        case AttachFile: return "file-attach"
+        case .InsertLink: return "insert-link"
+        case .RemoveLink: return "remove-link"
+        case .Heading1: return "heading-1"
+        case .Heading2: return "heading-2"
+        case .Heading3: return "heading-3"
+        case .Heading4: return "heading-4"
+        case .Heading5: return "heading-5"
+        case .Bold: return "bold"
+        case .Italic: return "italic"
+        case .Strikethrough: return "strikethrough"
+        case .Blockquote: return "blockquote"
+        case .CheckBox: return "check-box"
+        case .BulletedList: return "bulleted-list"
+        case .NumberedList: return "numbered-list"
+        case .EmbedCode: return "embed"
+        case .InsertImage: return "insert-picture"
+        case .AttachFile: return "file-attach"
         }
     }
 
