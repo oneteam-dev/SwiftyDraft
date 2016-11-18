@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import { ENTITY_TYPES } from 'oneteam-rte-constants';
 import RichTextEditor, { Body } from 'oneteam-rte';
+import WebCard from './HOCWebCard';
+//import WebCard from './WebCard';
 
 export default class SwiftyDraft extends Component {
     constructor(props) {
@@ -103,13 +106,34 @@ export default class SwiftyDraft extends Component {
         };
         window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
     }
+    customAtomicBlockRendererFn(entity, block) {
+        const key = entity.getType();
+        if (key === ENTITY_TYPES.WEB_CARD) {
+            const data = entity.getData()
+            return {
+                component: WebCard,
+                props: {
+                url: data.url,
+                imageRemoved: data.imageRemoved,
+                onDelete: () => this.editor.removeBlock(block),
+                onRemoveImage: () => this.editor.mergeEntityData(block.getEntityAt(0), { imageRemoved: true })
+                },
+                editable: false,
+            };
+        }
+        return null;
+    }
     render() {
         return (
             <div style={{ paddingTop: this.state.paddingTop }}>
               <RichTextEditor
                   onChange={() => { this.triggerOnChange() }}
                   ref={(c) => this.setEditor(c)}>
-                  <Body placeholder={this.placeholder} />
+                  <Body
+                        placeholder={this.placeholder}
+                        ref={c => this.body = c}
+                        customAtomicBlockRendererFn={this.customAtomicBlockRendererFn}
+                  />
               </RichTextEditor>
             </div>
         )

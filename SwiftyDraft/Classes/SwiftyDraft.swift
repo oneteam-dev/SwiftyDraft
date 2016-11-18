@@ -215,4 +215,5 @@ func localizedStringForKey(key: String) -> String {
         let b = self.bounds
         self.webView.frame = CGRect(origin: CGPoint.zero, size: b.size)
     }
+
 }
