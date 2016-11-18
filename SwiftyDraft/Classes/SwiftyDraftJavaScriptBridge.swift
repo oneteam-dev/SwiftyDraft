@@ -10,7 +10,7 @@ import WebKit
 
 extension SwiftyDraft: WKScriptMessageHandler {
 
-    func handleKeyboardChangeFrame(note: NSNotification) {
+    func handleKeyboardChangeFrame(_ note: Notification) {
         //
         // FIXME! to much spaces in the bottom
         //
@@ -21,30 +21,29 @@ extension SwiftyDraft: WKScriptMessageHandler {
         // runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
     }
 
-
-    public func userContentController(userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let c = WebViewCallback(rawValue: message.name) {
-            self.handleWebViewCallback(c, data: message.body)
+            self.handleWebViewCallback(callback: c, data: message.body as AnyObject?)
         } else {
             fatalError("Unknown callback \(message.body)")
         }
     }
 
     func setDOMPaddingTop(value: CGFloat) {
-        runScript("window.editor.paddingTop = \(value)", completionHandler: nil)
+        runScript(script: "window.editor.paddingTop = \(value)", completionHandler: nil)
     }
 
     func setDOMPlaceholder(value: String) {
-        runScript("window.editor.placeholder = \"\(value)\"")
+        runScript(script: "window.editor.placeholder = \"\(value)\"")
     }
 
     func setDOMHTML(value: String) {
         if editorInitialized {
-            runScript("window.editor.setHTML(\(value.javaScriptEscapedString()))")
+            runScript(script: "window.editor.setHTML(\(value.javaScriptEscapedString()))")
         }
     }
 
-    func toolbarButtonTapped(buttonTag: ButtonTag, _ item: UIBarButtonItem) {
+    func toolbarButtonTapped(_ buttonTag: ButtonTag, _ item: UIBarButtonItem) {
         switch buttonTag {
         case .InsertLink:
             promptLinkURL()
@@ -56,39 +55,39 @@ extension SwiftyDraft: WKScriptMessageHandler {
             openImagePicker()
         default:
             if let js = buttonTag.javaScript {
-                self.runScript(js)
+                self.runScript(script: js)
             }
         }
     }
 
     func setCallbackToken() {
-        self.runScript("window.editor.setCallbackToken(\"\(callbackToken)\")")
+        self.runScript(script: "window.editor.setCallbackToken(\"\(callbackToken)\")")
         
     }
 
     public func insertLink(url: String) {
-        self.runScript("window.editor.toggleLink(\"\(url)\")")
+        self.runScript(script: "window.editor.toggleLink(\"\(url)\")")
     }
 
     public func insertIFrame(src: String) {
-        self.runScript("window.editor.insertIFrame(\"\(src)\")")
+        self.runScript(script: "window.editor.insertIFrame(\"\(src)\")")
     }
 
     public func insertImage(img: SwiftyDraftImageResult) {
-        self.runScript("window.editor.insertImage(\(img.json))")
+        self.runScript(script: "window.editor.insertImage(\(img.json))")
     }
 
     public func insertFileDownload(file: SwiftyDraftFileResult) {
-        self.runScript("window.editor.insertDownloadLink(\(file.json))")
+        self.runScript(script: "window.editor.insertDownloadLink(\(file.json))")
     }
 
     public func focus(delayed: Bool = false) {
         let fn = {
             self.webView.becomeFirstResponder()
-            self.runScript("window.editor.focus()", completionHandler: nil)
+            self.runScript(script: "window.editor.focus()", completionHandler: nil)
         }
         if delayed {
-            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(0.1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), fn)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: fn)
         } else {
             fn()
         }
@@ -96,7 +95,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
 
     public func blur() {
         webView.becomeFirstResponder()
-        self.runScript("window.editor.blur()", completionHandler: nil)
+        self.runScript(script: "window.editor.blur()", completionHandler: nil)
     }
 
     func didChangeEditorState(html: String, inlineStyles: [InlineStyle], blockType: BlockType) {
@@ -108,12 +107,12 @@ extension SwiftyDraft: WKScriptMessageHandler {
     func didSetCallbackToken(token: String) {
         assert(token == callbackToken, "Callback token does not match with \(callbackToken) and \(token)")
         editorInitialized = true
-        setDOMPaddingTop(paddingTop)
-        setDOMPlaceholder(placeholder)
-        setDOMHTML(defaultHTML)
+        setDOMPaddingTop(value: paddingTop)
+        setDOMPlaceholder(value: placeholder)
+        setDOMHTML(value: defaultHTML)
     }
-
-    private func runScript(script: String, completionHandler: ((AnyObject?, NSError?) -> Void)? = nil) {
+    
+    private func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
         let js = "(function(){ try { return \(script); } catch(e) { window.webkit.messageHandlers.debugLog.postMessage(e + '') } }).call()"
         self.webView.evaluateJavaScript(js, completionHandler: completionHandler)
     }
@@ -121,22 +120,22 @@ extension SwiftyDraft: WKScriptMessageHandler {
     private func handleWebViewCallback(callback: WebViewCallback, data: AnyObject?) {
         switch callback {
         case .DidSetCallbackToken:
-            didSetCallbackToken(data as! String)
+            didSetCallbackToken(token: data as! String)
         case .DidChangeEditorState:
             let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).map({ InlineStyle(rawValue: $0)! })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             let html = data?["html"] as? String ?? ""
-            didChangeEditorState(html, inlineStyles: inlineStyles, blockType: blockType)
+            didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType)
         case .DebugLog:
             print("[DEBUG] \(data)")
         }
     }
 
     // MARK: - WKNavigationDelegate
-
-    public func webView(webView: WKWebView, didFinishNavigation navigation: WKNavigation!) {
+    
+    @objc(webView:didFinishNavigation:) public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         if !editorInitialized {
-            if isFirstResponder() {
+            if isFirstResponder {
                 focus()
             }
             setCallbackToken()

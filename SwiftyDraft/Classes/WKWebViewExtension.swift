@@ -18,12 +18,12 @@ extension WKWebView {
 
         var candidateView: UIView? = nil
         for view in self.scrollView.subviews {
-            if String(view.dynamicType).hasPrefix("WKContent") {
+            if String(describing: type(of: view)).hasPrefix("WKContent") {
                 candidateView = view
             }
         }
         guard let targetView = candidateView else { return }
-        let newClass: AnyClass? = classWithCustomAccessoryView(targetView)
+        let newClass: AnyClass? = classWithCustomAccessoryView(targetView: targetView)
         object_setClass(targetView, newClass)
     }
 

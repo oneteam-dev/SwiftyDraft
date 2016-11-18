@@ -12,8 +12,8 @@ public class Toolbar: UIView {
 
     let scrollView = UIScrollView()
     let toolbar = UIToolbar()
-    let closeButton = UIButton(type: .Custom)
-    let openButton = UIButton(type: .Custom)
+    let closeButton = UIButton(type: .custom)
+    let openButton = UIButton(type: .custom)
     var opened = true {
         didSet {
             setNeedsLayout()
@@ -49,60 +49,60 @@ public class Toolbar: UIView {
         // WKWebView does not support userInteractionEnabled
         // addSubview(closeButton)
         // addSubview(openButton)
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = UIColor.white
         let unselectedTintColor = UIColor(white: 0.8, alpha: 1.0)
         let borderColor = UIColor(white: 0.90, alpha: 1.0)
         closeButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
-                              forControlEvents: .TouchUpInside)
+                              for: .touchUpInside)
         openButton.addTarget(self, action: #selector(Toolbar.toggleOpened(_:)),
-                             forControlEvents: .TouchUpInside)
+                             for: .touchUpInside)
         var img = UIImage(named: "toolbar-icon-close",
-            inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)?
-            .imageWithRenderingMode(.AlwaysTemplate)
-        closeButton.setImage(img, forState: .Normal)
-        closeButton.setImage(img, forState: .Highlighted)
+            in: SwiftyDraft.resourceBundle, compatibleWith: nil)?
+            .withRenderingMode(.alwaysTemplate)
+        closeButton.setImage(img, for: .normal)
+        closeButton.setImage(img, for: .highlighted)
         img = UIImage(named: "toolbar-icon-open",
-            inBundle: SwiftyDraft.resourceBundle, compatibleWithTraitCollection: nil)?
-            .imageWithRenderingMode(.AlwaysTemplate)
-        openButton.setImage(img, forState: .Normal)
-        openButton.setImage(img, forState: .Highlighted)
-        closeButton.backgroundColor = UIColor.whiteColor()
-        openButton.backgroundColor = UIColor.whiteColor()
+            in: SwiftyDraft.resourceBundle, compatibleWith: nil)?
+            .withRenderingMode(.alwaysTemplate)
+        openButton.setImage(img, for: .normal)
+        openButton.setImage(img, for: .highlighted)
+        closeButton.backgroundColor = UIColor.white
+        openButton.backgroundColor = UIColor.white
         var borderLeft = CALayer()
-        borderLeft.backgroundColor = borderColor.CGColor
+        borderLeft.backgroundColor = borderColor.cgColor
         borderLeft.frame = CGRect(x: 0, y: 0, width: 1, height: 9999)
         closeButton.layer.addSublayer(borderLeft)
         borderLeft = CALayer()
-        borderLeft.backgroundColor = borderColor.CGColor
+        borderLeft.backgroundColor = borderColor.cgColor
         borderLeft.frame = CGRect(x: 0, y: 0, width: 1, height: 9999)
         openButton.layer.addSublayer(borderLeft)
         scrollView.addSubview(toolbar)
-        scrollView.autoresizingMask = [.FlexibleHeight, .FlexibleWidth]
+        scrollView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.showsVerticalScrollIndicator = false
-        scrollView.backgroundColor = UIColor.clearColor()
-        toolbar.autoresizingMask = .FlexibleWidth
-        toolbar.barTintColor = UIColor.whiteColor()
-        toolbar.backgroundColor = UIColor.clearColor()
+        scrollView.backgroundColor = UIColor.clear
+        toolbar.autoresizingMask = .flexibleWidth
+        toolbar.barTintColor = UIColor.white
+        toolbar.backgroundColor = UIColor.clear
         let borderTop = CALayer()
-        borderTop.backgroundColor = borderColor.CGColor
+        borderTop.backgroundColor = borderColor.cgColor
         borderTop.frame = CGRect(x: 0, y: 0, width: 9999, height: 1.0)
         layer.addSublayer(borderTop)
         var items: [UIBarButtonItem] = []
         for t in ButtonTag.all {
             let item = UIBarButtonItem(
-                image: t.iconImage, style: .Plain,
+                image: t.iconImage, style: .plain,
                 target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
             item.tag = t.rawValue
             item.tintColor = unselectedTintColor
             items.append(item)
         }
         toolbarItems = items
-        let nc = NSNotificationCenter.defaultCenter()
+        let nc = NotificationCenter.default
         nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardShow(_:)),
-                       name: UIKeyboardDidShowNotification, object: nil)
+                       name: .UIKeyboardDidShow, object: nil)
         nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardHide(_:)),
-                       name: UIKeyboardDidHideNotification, object: nil)
+                       name: .UIKeyboardDidHide, object: nil)
     }
 
     private func updateToolbarItems() {
@@ -122,7 +122,7 @@ public class Toolbar: UIView {
 
     }
 
-    @objc private func toggleOpened(item: AnyObject?) {
+    @objc private func toggleOpened(_ item: AnyObject?) {
         opened = !opened
         if opened {
             editor?.focus()
@@ -131,8 +131,8 @@ public class Toolbar: UIView {
         }
     }
 
-    @objc private func toolbarButtonTapped(item: AnyObject?) {
-        if let item = item as? UIBarButtonItem, tag = ButtonTag(rawValue: item.tag) {
+    @objc private func toolbarButtonTapped(_ item: AnyObject?) {
+        if let item = item as? UIBarButtonItem, let tag = ButtonTag(rawValue: item.tag) {
             self.editor?.toolbarButtonTapped(tag, item)
         }
     }
@@ -149,19 +149,19 @@ public class Toolbar: UIView {
 
     // MARK: - Keyboard handling
 
-    func handleKeyboardShow(note: NSNotification) {
-        guard let keyboardSize = note.userInfo?[UIKeyboardFrameEndUserInfoKey]?.CGRectValue() else { return }
+    func handleKeyboardShow(_ note: Notification) {
+        guard let keyboardSize = (note.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else { return }
         self.opened = keyboardSize.height > self.bounds.height
     }
 
-    func handleKeyboardHide(note: NSNotification) {
+    func handleKeyboardHide(_ note: Notification) {
         self.opened = false
     }
 
     // MARK: - UIView
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
     override init(frame: CGRect) {
@@ -179,17 +179,17 @@ public class Toolbar: UIView {
         let b = self.bounds
         let closeButtonWidth: CGFloat = 0 // 54
         let toolbarWidth: CGFloat = self.toolbarItems.reduce(0) { sofar, item in
-            var w = (item.valueForKey("view") as? UIView)?.bounds.width ?? 22.0
+            var w = (item.value(forKey: "view") as? UIView)?.bounds.width ?? 22.0
             return sofar + w + 11.0
         } + 25 // 75
         let toolbarSize = CGSize(width: toolbarWidth, height: 44)
-        toolbar.frame = CGRect(origin: CGPointZero, size: toolbarSize)
-        scrollView.frame = CGRect(origin: CGPointZero, size: b.size)
+        toolbar.frame = CGRect(origin: CGPoint.zero, size: toolbarSize)
+        scrollView.frame = CGRect(origin: CGPoint.zero, size: b.size)
         scrollView.contentSize = toolbarSize
         let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: 44)
         closeButton.frame = f
         openButton.frame = f
-        openButton.hidden = opened
-        closeButton.hidden = !opened
+        openButton.isHidden = opened
+        closeButton.isHidden = !opened
     }
 }

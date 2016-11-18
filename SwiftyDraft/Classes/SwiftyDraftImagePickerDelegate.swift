@@ -10,8 +10,8 @@ import Foundation
 
 public struct SwiftyDraftImageResult {
     var name: String
-    var originalURL: NSURL
-    var previewURL: NSURL
+    var originalURL: URL
+    var previewURL: URL
 
     var json: String {
         let dict = [
@@ -20,15 +20,15 @@ public struct SwiftyDraftImageResult {
             "preview_url": previewURL.absoluteString
         ]
         do {
-            let data = try NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions(rawValue: 0))
-            if let json = String(data: data, encoding: NSUTF8StringEncoding) {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions(rawValue: 0))
+            if let json = String(data: data, encoding: String.Encoding.utf8) {
                 return json
             }
         } catch {}
         return "{}"
     }
 
-    public init(name: String, originalURL: NSURL, previewURL: NSURL) {
+    public init(name: String, originalURL: URL, previewURL: URL) {
         self.name = name
         self.originalURL = originalURL
         self.previewURL = previewURL
@@ -37,5 +37,5 @@ public struct SwiftyDraftImageResult {
 
 public protocol SwiftyDraftImagePickerDelegate: class {
     func draftEditor(editor: SwiftyDraft,
-               requestImageAttachment callback: (result: SwiftyDraftImageResult) -> Void)
+               requestImageAttachment callback: @escaping (_ result: SwiftyDraftImageResult) -> Void)
 }

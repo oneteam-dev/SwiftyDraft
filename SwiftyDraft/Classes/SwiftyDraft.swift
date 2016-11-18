@@ -10,14 +10,14 @@ import UIKit
 import WebKit
 
 func localizedStringForKey(key: String) -> String {
-    return SwiftyDraft.localizedStringForKey(key)
+    return SwiftyDraft.localizedStringForKey(key: key)
 }
 
-@IBDesignable public class SwiftyDraft: UIView, WKNavigationDelegate {
+@IBDesignable open class SwiftyDraft: UIView, WKNavigationDelegate {
 
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
-    public var baseURL:NSURL?
+    public var baseURL: URL?
 
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
@@ -27,7 +27,7 @@ func localizedStringForKey(key: String) -> String {
         while randomString.utf8.count < len {
             let idx = Int(arc4random_uniform(UInt32(letters.count)))
             randomString = "\(randomString)\(letters[idx])"
-            letters.removeAtIndex(idx)
+            letters.remove(at: idx)
         }
 
         return randomString
@@ -38,24 +38,24 @@ func localizedStringForKey(key: String) -> String {
     public var defaultHTML: String = "" {
         didSet {
             if editorInitialized {
-                setDOMHTML(html)
+                setDOMHTML(value: html)
             }
         }
     }
-    public var html: String = ""
+    open var html: String = ""
 
     public var paddingTop: CGFloat = 0.0 {
         didSet(value) {
             if editorInitialized {
-                setDOMPaddingTop(value)
+                setDOMPaddingTop(value: value)
             }
         }
     }
 
-    public var placeholder: String = localizedStringForKey("editor.placeholder") {
+    public var placeholder: String = localizedStringForKey(key: "editor.placeholder") {
         didSet(value) {
             if editorInitialized {
-                setDOMPlaceholder(value)
+                setDOMPlaceholder(value: value)
             }
         }
     }
@@ -70,7 +70,7 @@ func localizedStringForKey(key: String) -> String {
         c.userContentController = self.userContentController
         let wv = WKWebView(frame: self.frame, configuration: c)
         wv.navigationDelegate = self
-        wv.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
+        wv.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(wv)
         return wv
     }()
@@ -78,7 +78,7 @@ func localizedStringForKey(key: String) -> String {
     public lazy var userContentController: WKUserContentController = {
         let uc = WKUserContentController()
         WebViewCallback.all.forEach {
-            uc.addScriptMessageHandler(self, name: $0.rawValue)
+            uc.add(self, name: $0.rawValue)
         }
         return uc
     }()
@@ -94,18 +94,17 @@ func localizedStringForKey(key: String) -> String {
         set(value) { self.webView.scrollView.delegate = value }
     }
 
-    public static var htmlURL: NSURL {
-        return resourceBundle.URLForResource("index", withExtension: "html")!
+    public static var htmlURL: URL {
+        return resourceBundle.url(forResource: "index", withExtension: "html")!
     }
 
-    public static var javaScriptURL: NSURL {
-        return resourceBundle.URLForResource("bundle", withExtension: "js")!
+    public static var javaScriptURL: URL {
+        return resourceBundle.url(forResource: "bundle", withExtension: "js")!
     }
 
-    public static var resourceBundle: NSBundle {
-        let b = NSBundle(forClass: self)
-        let bundleURL = b.URLForResource("SwiftyDraft", withExtension: "bundle")!
-        return NSBundle(URL: bundleURL)!
+    public static var resourceBundle: Bundle {
+        let bundleURL = Bundle(for: self).url(forResource: "SwiftyDraft", withExtension: "bundle")!
+        return Bundle(url: bundleURL)!
     }
 
     static func localizedStringForKey(key: String) -> String {
@@ -114,92 +113,91 @@ func localizedStringForKey(key: String) -> String {
     }
 
     public func setup() {
-        self.webView.autoresizingMask = [.FlexibleWidth, .FlexibleHeight]
-        self.webView.backgroundColor = UIColor.whiteColor()
-        self.webView.addRichEditorInputAccessoryView(self.editorToolbar)
-        let js = try! String(contentsOfURL: SwiftyDraft.javaScriptURL)
-        let html = try! String(contentsOfURL: SwiftyDraft.htmlURL).stringByReplacingOccurrencesOfString(" src=\"./bundle.js\"><", withString: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
-        self.webView.loadHTMLString(html, baseURL:baseURL)
-        let nc = NSNotificationCenter.defaultCenter()
-        nc.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
-                       name: UIKeyboardDidChangeFrameNotification, object: nil)
+        self.webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.webView.backgroundColor = UIColor.white
+        self.webView.addRichEditorInputAccessoryView(toolbar: self.editorToolbar)
+        let js = try! String(contentsOf: SwiftyDraft.javaScriptURL)
+        let html = try! String(contentsOf: SwiftyDraft.htmlURL).replacingOccurrences(of: " src=\"./bundle.js\"><", with: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
+        self.webView.loadHTMLString(html, baseURL: baseURL)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
+                       name: .UIKeyboardDidChangeFrame, object: nil)
     }
 
     public func promptEmbedCode() {
-        guard let vc = UIApplication.sharedApplication().keyWindow?.visibleViewController else {
+        guard let vc = UIApplication.shared.keyWindow?.visibleViewController else {
             assertionFailure("View Controller does not exist")
             return
         }
         let ac = UIAlertController(
-            title: localizedStringForKey("embed_iframe.prompt.title"),
-            message: localizedStringForKey("embed_iframe.prompt.message"),
-            preferredStyle: .Alert)
+            title: localizedStringForKey(key: "embed_iframe.prompt.title"),
+            message: localizedStringForKey(key: "embed_iframe.prompt.message"),
+            preferredStyle: .alert)
         var textField: UITextField!
-        ac.addTextFieldWithConfigurationHandler { tf in
-            tf.placeholder = localizedStringForKey("embed_iframe.placeholder")
-            tf.keyboardType = .ASCIICapable
-            tf.autocorrectionType = .No
+        ac.addTextField { tf in
+            tf.placeholder = localizedStringForKey(key: "embed_iframe.placeholder")
+            tf.keyboardType = .asciiCapable
+            tf.autocorrectionType = .no
             textField = tf
         }
         ac.addAction(UIAlertAction(
-            title: localizedStringForKey("button.ok"),
-            style: .Default, handler: { _ in
-                if let val = textField.text where val.hasPrefix("<iframe ") && val.hasSuffix("</iframe>") {
-                    self.insertIFrame(val)
+            title: localizedStringForKey(key: "button.ok"),
+            style: .default, handler: { _ in
+                if let val = textField.text , val.hasPrefix("<iframe ") && val.hasSuffix("</iframe>") {
+                    self.insertIFrame(src: val)
                 }
-                self.focus(true)
+                self.focus(delayed: true)
         }))
         ac.addAction(UIAlertAction(
-            title: localizedStringForKey("button.cancel"),
-            style: .Cancel, handler: { _ in
-                self.focus(true)
+            title: localizedStringForKey(key: "button.cancel"),
+            style: .cancel, handler: { _ in
+                self.focus(delayed: true)
         }))
-        vc.presentViewController(ac, animated: true, completion: nil)
+        vc.present(ac, animated: true, completion: nil)
     }
 
     public func promptLinkURL() {
-        guard let vc = UIApplication.sharedApplication().keyWindow?.visibleViewController else {
+        guard let vc = UIApplication.shared.keyWindow?.visibleViewController else {
             assertionFailure("View Controller does not exist")
             return
         }
         let ac = UIAlertController(
-            title: localizedStringForKey("insert_link.prompt.title"),
-            message: localizedStringForKey("insert_link.prompt.message"),
-            preferredStyle: .Alert)
+            title: localizedStringForKey(key: "insert_link.prompt.title"),
+            message: localizedStringForKey(key: "insert_link.prompt.message"),
+            preferredStyle: .alert)
         var textField: UITextField!
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             tf.placeholder = "https://"
             tf.keyboardType = .URL
             textField = tf
         }
-        ac.addAction(UIAlertAction(title: localizedStringForKey("button.ok"), style: .Default, handler: { _ in
+        ac.addAction(UIAlertAction(title: localizedStringForKey(key: "button.ok"), style: .default, handler: { _ in
             if let val = textField.text {
-                self.insertLink(val)
+                self.insertLink(url: val)
             }
-            self.focus(true)
+            self.focus(delayed: true)
         }))
-        ac.addAction(UIAlertAction(title: localizedStringForKey("button.cancel"), style: .Cancel, handler: { _ in
-            self.focus(true)
+        ac.addAction(UIAlertAction(title: localizedStringForKey(key: "button.cancel"), style: .cancel, handler: { _ in
+            self.focus(delayed: true)
         }))
-        vc.presentViewController(ac, animated: true, completion: nil)
+        vc.present(ac, animated: true, completion: nil)
     }
 
     public func openImagePicker() {
-        self.imagePickerDelegate?.draftEditor(self, requestImageAttachment: { result in
-            self.insertImage(result)
-            self.focus(true)
+        self.imagePickerDelegate?.draftEditor(editor: self, requestImageAttachment: { result in
+            self.insertImage(img: result)
+            self.focus(delayed: true)
         })
     }
 
     public func openFilePicker() {
-        self.filePickerDelegate?.draftEditor(self, requestFileAttachment: { result in
-            self.insertFileDownload(result)
-            self.focus(true)
+        self.filePickerDelegate?.draftEditor(editor: self, requestFileAttachment: { result in
+            self.insertFileDownload(file: result)
+            self.focus(delayed: true)
         })
     }
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
     }
 
     // MARK: - UIView
@@ -212,9 +210,9 @@ func localizedStringForKey(key: String) -> String {
         super.init(coder: aDecoder)
     }
 
-    public override func layoutSubviews() {
+    override open func layoutSubviews() {
         super.layoutSubviews()
         let b = self.bounds
-        self.webView.frame = CGRect(origin: CGPointZero, size: b.size)
+        self.webView.frame = CGRect(origin: CGPoint.zero, size: b.size)
     }
 }

@@ -10,25 +10,25 @@ import Foundation
 
 public struct SwiftyDraftFileResult {
     var name: String
-    var downloadURL: NSURL
+    var downloadURL: URL
     var dataSize: Int = -1
 
     var json: String {
         let dict = [
             "name": name,
             "download_url": downloadURL.absoluteString,
-            "size": dataSize
+            "size": "\(dataSize)"
         ]
         do {
-            let data = try NSJSONSerialization.dataWithJSONObject(dict, options: NSJSONWritingOptions(rawValue: 0))
-            if let json = String(data: data, encoding: NSUTF8StringEncoding) {
+            let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions(rawValue: 0))
+            if let json = String(data: data, encoding: String.Encoding.utf8) {
                 return json
             }
         } catch {}
         return "{}"
     }
 
-    public init(name: String, downloadURL: NSURL, dataSize: Int = -1) {
+    public init(name: String, downloadURL: URL, dataSize: Int = -1) {
         self.name = name
         self.downloadURL = downloadURL
         self.dataSize = dataSize
@@ -37,5 +37,5 @@ public struct SwiftyDraftFileResult {
 
 public protocol SwiftyDraftFilePickerDelegate: class {
     func draftEditor(editor: SwiftyDraft,
-               requestFileAttachment callback: (result: SwiftyDraftFileResult) -> Void)
+               requestFileAttachment callback: @escaping (_ result: SwiftyDraftFileResult) -> Void)
 }
