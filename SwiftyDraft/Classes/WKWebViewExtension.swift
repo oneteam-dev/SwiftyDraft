@@ -39,7 +39,7 @@ extension WKWebView {
         }
 
         let newMethod = class_getInstanceMethod(WKWebView.self, #selector(WKWebView.getCustomInputAccessoryView))
-        class_addMethod(newClass.self, Selector("inputAccessoryView"), method_getImplementation(newMethod), method_getTypeEncoding(newMethod))
+        class_addMethod(newClass.self, #selector(getter: UIResponder.inputAccessoryView), method_getImplementation(newMethod), method_getTypeEncoding(newMethod))
 
         objc_registerClassPair(newClass);
 
