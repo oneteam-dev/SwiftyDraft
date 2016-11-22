@@ -65,9 +65,6 @@ export default class HOCWebCard extends Component {
           title={data.title}
           description={data.description}
           image={!imageRemoved ? data.image : undefined}/>
-        {!imageRemoved && data.image ?
-          <span onClick={onRemoveImage} style={{ border: '1px solid #999', cursor: 'pointer' }}>Remove image</span> : null}
-        {this.renderDelete()}
       </div>
     )
   }
