@@ -32,6 +32,13 @@ extension SwiftyDraft: WKScriptMessageHandler {
     func setDOMPaddingTop(value: CGFloat) {
         runScript(script: "window.editor.paddingTop = \(value)", completionHandler: nil)
     }
+    
+    func setEditorHeight() {
+        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.height = '100%'")
+        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.maxHeight = 'none'")
+        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.minHeight = '100vh'")
+    }
+
 
     func setDOMPlaceholder(value: String) {
         runScript(script: "window.editor.placeholder = \"\(value)\"")
@@ -110,6 +117,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
+        setEditorHeight()
     }
     
     private func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
