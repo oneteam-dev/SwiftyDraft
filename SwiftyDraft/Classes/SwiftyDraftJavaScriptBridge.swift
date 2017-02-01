@@ -115,6 +115,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         if isFocus == true && self.editing == false {
             scrollY(offset: self.paddingTop - 10)
         }
+        setEditorHeight()
         self.editing = isFocus
     }
 
