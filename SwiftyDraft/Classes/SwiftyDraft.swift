@@ -34,6 +34,7 @@ func localizedStringForKey(key: String) -> String {
     }()
 
     public var editorInitialized: Bool = false
+    public var editing:Bool = false
 
     public var defaultHTML: String = "" {
         didSet {

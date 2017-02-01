@@ -38,7 +38,10 @@ extension SwiftyDraft: WKScriptMessageHandler {
         runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.maxHeight = 'none'")
         runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.minHeight = '100vh'")
     }
-
+    
+    func scrollY(offset: CGFloat) {
+        runScript(script: "window.scrollTo(0, \(offset))")
+    }
 
     func setDOMPlaceholder(value: String) {
         runScript(script: "window.editor.placeholder = \"\(value)\"")
@@ -105,10 +108,14 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.runScript(script: "window.editor.blur()", completionHandler: nil)
     }
 
-    func didChangeEditorState(html: String, inlineStyles: [InlineStyle], blockType: BlockType) {
+    func didChangeEditorState(html: String, inlineStyles: [InlineStyle], blockType: BlockType, isFocus:Bool) {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
         self.html = html
+        if isFocus == true && self.editing == false {
+            scrollY(offset: self.paddingTop - 10)
+        }
+        self.editing = isFocus
     }
 
     func didSetCallbackToken(token: String) {
@@ -133,7 +140,12 @@ extension SwiftyDraft: WKScriptMessageHandler {
             let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).map({ InlineStyle(rawValue: $0)! })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             let html = data?["html"] as? String ?? ""
-            didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType)
+            var isFocused = false
+            if let data = data as? NSDictionary {
+                isFocused = (data["state"] as! NSNumber ?? 1).boolValue
+            }
+            didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType, isFocus: isFocused)
+
         case .DebugLog:
             print("[DEBUG] \(data)")
         }
