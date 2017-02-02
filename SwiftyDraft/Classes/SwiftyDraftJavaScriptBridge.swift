@@ -113,7 +113,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.editorToolbar.currentBlockType = blockType
         self.html = html
         if isFocus == true && self.editing == false {
-            scrollY(offset: self.paddingTop - 10)
+            scrollY(offset: 0)
         }
         setEditorHeight()
         self.editing = isFocus
