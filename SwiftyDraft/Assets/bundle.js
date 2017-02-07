@@ -39074,7 +39074,7 @@
 	          'div',
 	          {
 	            className: cx('DraftEditor/editorContainer'),
-	            key: 'editor' + this.state.containerKey,
+//	            key: 'editor' + this.state.containerKey,
 	            ref: 'editorContainer' },
 	          React.createElement(
 	            'div',
@@ -39189,11 +39189,6 @@
 	      var y = _ref.y;
 
 	      editorNode.focus();
-	      if (scrollParent === window) {
-	        window.scrollTo(x, y);
-	      } else {
-	        Scroll.setTop(scrollParent, y);
-	      }
 
 	      // On Chrome and Safari, calling focus on contenteditable focuses the
 	      // cursor at the first character. This is something you don't expect when
@@ -53975,6 +53970,7 @@
 	        {
 	          type: _constants.BLOCK_TYPES.BLOCKQUOTE,
 	          editorState: this.props.editorState,
+              key: 'editor' + this.state.containerKey,
 	          onToggle: this.props.onToggleBlockType,
 	          className: this.props.className },
 	        this.props.children
