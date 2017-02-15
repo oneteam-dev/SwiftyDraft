@@ -99,7 +99,8 @@ export default class SwiftyDraft extends Component {
         const data = {
             inlineStyles: this.getCurrentInlineStyles(),
             blockType: this.getCurrentBlockType(),
-            html: this.editor.html
+            html: this.editor.html,
+            state: this.editor.state.editorState.getSelection().getHasFocus()
         };
         window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
     }
