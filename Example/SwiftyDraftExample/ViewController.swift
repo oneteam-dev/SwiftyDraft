@@ -17,6 +17,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        draftView.setup()
         draftView.scrollViewDelegate = self
         draftView.filePickerDelegate = self
         draftView.imagePickerDelegate = self
@@ -26,82 +27,83 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UIScrollViewDelegate {
-    func scrollViewDidScroll(scrollView: UIScrollView) {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
         metaViewTopConstraint.constant = scrollView.contentOffset.y
     }
 }
 
 
 extension ViewController: SwiftyDraftImagePickerDelegate {
-    func draftEditor(editor: SwiftyDraft, requestImageAttachment callback: (result: SwiftyDraftImageResult) -> Void) {
-        let ac = UIAlertController(title: "Image Picker Demo", message: "Fill your example content", preferredStyle: .Alert)
+    public func draftEditor(editor: SwiftyDraft, requestImageAttachment callback: @escaping (SwiftyDraftImageResult) -> Void) {
+        let ac = UIAlertController(title: "Image Picker Demo", message: "Fill your example content", preferredStyle: .alert)
         var nameField: UITextField!
         var originalField: UITextField!
         var previewField: UITextField!
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             nameField = tf
             nameField.text = "Swift"
             nameField.placeholder = "Name"
         }
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             originalField = tf
             originalField.text = "https://swift.org/apple-touch-icon-180x180.png"
             originalField.placeholder = "Original URL"
         }
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             previewField = tf
             previewField.text = "https://swift.org/apple-touch-icon-57x57.png"
             previewField.placeholder = "Preview URL"
         }
-        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
+        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             if let name = nameField.text
-                , originalURLString = originalField.text
-                , originalURL = NSURL(string: originalURLString)
-                , previewURLString = previewField.text
-                , previewURL = NSURL(string: previewURLString) {
+                , let originalURLString = originalField.text
+                , let originalURL = URL(string: originalURLString)
+                , let previewURLString = previewField.text
+                , let previewURL = URL(string: previewURLString) {
                 let result = SwiftyDraftImageResult(name: name, originalURL: originalURL, previewURL: previewURL)
-                callback(result: result)
+                callback(result)
             }
         }))
-        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
         }))
-        self.presentViewController(ac, animated: true, completion: nil)
+        self.present(ac, animated: true, completion: nil)
     }
 }
 
 extension ViewController: SwiftyDraftFilePickerDelegate {
-    func draftEditor(editor: SwiftyDraft, requestFileAttachment callback: (result: SwiftyDraftFileResult) -> Void) {
-        let ac = UIAlertController(title: "File Picker Demo", message: "Fill your example content", preferredStyle: .Alert)
+    public func draftEditor(editor: SwiftyDraft, requestFileAttachment callback: @escaping (SwiftyDraftFileResult) -> Void) {
+        
+        let ac = UIAlertController(title: "File Picker Demo", message: "Fill your example content", preferredStyle: .alert)
         var nameField: UITextField!
         var downloadField: UITextField!
         var sizeField: UITextField!
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             nameField = tf
             nameField.text = "Swift (8,988 bytes)"
             nameField.placeholder = "Name"
         }
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             downloadField = tf
             downloadField.text = "https://swift.org/apple-touch-icon-180x180.png"
             downloadField.placeholder = "Download URL"
         }
-        ac.addTextFieldWithConfigurationHandler { tf in
+        ac.addTextField { tf in
             sizeField = tf
             sizeField.text = "8988"
             sizeField.placeholder = "File Size"
         }
-        ac.addAction(UIAlertAction(title: "OK", style: .Default, handler: { _ in
+        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: { _ in
             if let name = nameField.text
-                , downloadURLString = downloadField.text
-                , downloadURL = NSURL(string: downloadURLString)
-                , dataSizeString = sizeField.text
-                , dataSize = Int(dataSizeString)  {
+                , let downloadURLString = downloadField.text
+                , let downloadURL = URL(string: downloadURLString)
+                , let dataSizeString = sizeField.text
+                , let dataSize = Int(dataSizeString)  {
                 let result = SwiftyDraftFileResult(name: name, downloadURL: downloadURL, dataSize: dataSize)
-                callback(result: result)
+                callback(result)
             }
         }))
-        ac.addAction(UIAlertAction(title: "Cancel", style: .Cancel, handler: { _ in
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: { _ in
         }))
-        self.presentViewController(ac, animated: true, completion: nil)
+        self.present(ac, animated: true, completion: nil)
     }
 }
