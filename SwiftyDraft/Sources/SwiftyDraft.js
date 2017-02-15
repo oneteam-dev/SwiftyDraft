@@ -34,17 +34,17 @@ export default class SwiftyDraft extends Component {
     }
     insertImage(...args) {
         if(this.editor) {
-            this.editor._insertImage(...args);
+            this.editor.insertImageAtomicBlock(...args);
         }
     }
     insertDownloadLink(...args) {
         if(this.editor) {
-            this.editor._insertDownloadLink(...args);
+            this.editor.insertAtomicBlock('FILE_PLACEHOLDER', 'IMMUTABLE', ...args);
         }
     }
-    insertIFrame(iframeTag) {
+    insertIFrame(tag) {
         if(this.editor) {
-            this.editor._insertIFrame(iframeTag); // FIXME: DO NOT call private method
+            this.editor.insertIFrameAtomicBlock(tag);
         }
     }
     toggleLink(url = null) {

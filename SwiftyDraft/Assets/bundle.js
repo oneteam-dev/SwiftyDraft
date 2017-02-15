@@ -29528,7 +29528,7 @@
 	            if (this.editor) {
 	                var _editor;
 
-	                (_editor = this.editor)._insertImage.apply(_editor, arguments);
+	                (_editor = this.editor).insertImageAtomicBlock.apply(_editor, arguments);
 	            }
 	        }
 	    }, {
@@ -29537,14 +29537,18 @@
 	            if (this.editor) {
 	                var _editor2;
 
-	                (_editor2 = this.editor)._insertDownloadLink.apply(_editor2, arguments);
+	                for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+	                    args[_key] = arguments[_key];
+	                }
+
+	                (_editor2 = this.editor).insertAtomicBlock.apply(_editor2, ['FILE_PLACEHOLDER', 'IMMUTABLE'].concat(args));
 	            }
 	        }
 	    }, {
 	        key: 'insertIFrame',
-	        value: function insertIFrame(iframeTag) {
+	        value: function insertIFrame(tag) {
 	            if (this.editor) {
-	                this.editor._insertIFrame(iframeTag); // FIXME: DO NOT call private method
+	                this.editor.insertIFrameAtomicBlock(tag);
 	            }
 	        }
 	    }, {
