@@ -39074,7 +39074,6 @@
 	          'div',
 	          {
 	            className: cx('DraftEditor/editorContainer'),
-//	            key: 'editor' + this.state.containerKey,
 	            ref: 'editorContainer' },
 	          React.createElement(
 	            'div',
@@ -39121,7 +39120,8 @@
 	              blockStyleFn: this.props.blockStyleFn,
 	              customStyleMap: _extends({}, DefaultDraftInlineStyle, this.props.customStyleMap),
 	              editorKey: this._editorKey,
-	              editorState: this.props.editorState
+	              editorState: this.props.editorState,
+                  key: 'contents' + this.state.containerKey,
 	            })
 	          )
 	        )
@@ -53970,7 +53970,6 @@
 	        {
 	          type: _constants.BLOCK_TYPES.BLOCKQUOTE,
 	          editorState: this.props.editorState,
-              key: 'editor' + this.state.containerKey,
 	          onToggle: this.props.onToggleBlockType,
 	          className: this.props.className },
 	        this.props.children
