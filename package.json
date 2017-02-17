@@ -20,7 +20,7 @@
     "bootstrap-styl": "^5.0.7",
     "classnames": "^2.2.5",
     "lodash": "^4.15.0",
-    "oneteam-rte": "1.0.0",
+    "oneteam-rte": "github:oneteam-dev/oneteam-rte#ed9218d36ca6c0a1aa616dce7230233670c3ba3e",
     "react": "^15.3.1",
     "react-dom": "^15.3.1"
   },
