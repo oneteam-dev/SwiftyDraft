@@ -143,7 +143,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             let html = data?["html"] as? String ?? ""
             var isFocused = false
             if let data = data as? NSDictionary {
-                isFocused = (data["state"] as! NSNumber ?? 1).boolValue
+                isFocused = (data["state"] as? NSNumber ?? 1).boolValue
             }
             didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType, isFocus: isFocused)
 

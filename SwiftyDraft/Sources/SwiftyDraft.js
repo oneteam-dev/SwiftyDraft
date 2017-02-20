@@ -109,7 +109,6 @@ export default class SwiftyDraft extends Component {
               <RichTextEditor
                   onChange={() => { this.triggerOnChange() }}
                   ref={(c) => this.setEditor(c)}>
-                  <Body placeholder={this.placeholder} />
               </RichTextEditor>
             </div>
         )

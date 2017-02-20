@@ -9,7 +9,8 @@
     "clean": "if [ -d dist ]; then rm -rf dist; fi",
     "build": "npm run clean && npm run jade && webpack",
     "build:watch": "npm run clean && npm run jade && webpack --progress --colors --watch",
-    "jade": "jade -o SwiftyDraft/Assets SwiftyDraft/Sources/index.jade"
+    "jade": "jade -o SwiftyDraft/Assets SwiftyDraft/Sources/index.jade",
+    "start": "http-server -o"
   },
   "author": "Oneteam Inc.",
   "license": "MIT",
@@ -18,7 +19,7 @@
     "bootstrap-styl": "^5.0.7",
     "classnames": "^2.2.5",
     "lodash": "^4.15.0",
-    "oneteam-rte": "0.2.20",
+    "oneteam-rte": "github:oneteam-dev/oneteam-rte#9751083c43c54038c8241b31f9fc947223b09891",
     "react": "^15.3.1",
     "react-dom": "^15.3.1"
   },
@@ -35,6 +36,7 @@
     "eslint": "^3.3.1",
     "eslint-plugin-babel": "^3.3.0",
     "eslint-plugin-react": "^6.1.2",
+    "grunt": "^1.0.1",
     "jade": "^1.11.0",
     "jsdom": "^9.4.2",
     "mocha": "^3.0.2",
@@ -46,6 +48,7 @@
     "stylus": "^0.54.5",
     "stylus-loader": "^2.3.1",
     "webpack": "^1.13.2",
-    "webpack-dev-server": "^1.15.0"
+    "webpack-dev-server": "^1.15.0",
+    "http-server": "^0.7.4"
   }
 }
