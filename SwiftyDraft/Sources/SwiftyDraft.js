@@ -17,7 +17,7 @@ export default class SwiftyDraft extends Component {
         this.setState({ placeholder: value });
     }
     get placeholder() {
-        return this.state.placeholder || Body.defaultProps.placeholder;
+        return this.state.placeholder
     }
     setEditor(editor) {
         this.editor = editor;
@@ -34,17 +34,17 @@ export default class SwiftyDraft extends Component {
     }
     insertImage(...args) {
         if(this.editor) {
-            this.editor._insertImage(...args);
+            this.editor.insertImageAtomicBlock(...args);
         }
     }
     insertDownloadLink(...args) {
         if(this.editor) {
-            this.editor._insertDownloadLink(...args);
+            this.editor.insertAtomicBlock('FILE_PLACEHOLDER', 'IMMUTABLE', ...args);
         }
     }
-    insertIFrame(iframeTag) {
+    insertIFrame(tag) {
         if(this.editor) {
-            this.editor._insertIFrame(iframeTag); // FIXME: DO NOT call private method
+            this.editor.insertIFrameAtomicBlock(tag);
         }
     }
     toggleLink(url = null) {
@@ -99,7 +99,8 @@ export default class SwiftyDraft extends Component {
         const data = {
             inlineStyles: this.getCurrentInlineStyles(),
             blockType: this.getCurrentBlockType(),
-            html: this.editor.html
+            html: this.editor.html,
+            state: this.editor.state.editorState.getSelection().getHasFocus()
         };
         window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
     }
@@ -109,7 +110,6 @@ export default class SwiftyDraft extends Component {
               <RichTextEditor
                   onChange={() => { this.triggerOnChange() }}
                   ref={(c) => this.setEditor(c)}>
-                  <Body placeholder={this.placeholder} />
               </RichTextEditor>
             </div>
         )
