@@ -15,9 +15,9 @@ public struct SwiftyDraftImageResult {
 
     var json: String {
         let dict = [
-            "name": name,
-            "original_url": originalURL.absoluteString,
-            "preview_url": previewURL.absoluteString
+            "alt": name,
+            "url": originalURL.absoluteString,
+            "title": name
         ]
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions(rawValue: 0))
