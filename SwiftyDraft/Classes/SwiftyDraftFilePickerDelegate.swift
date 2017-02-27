@@ -15,9 +15,8 @@ public struct SwiftyDraftFileResult {
 
     var json: String {
         let dict = [
-            "name": name,
-            "download_url": downloadURL.absoluteString,
-            "size": "\(dataSize)"
+            "title": name,
+            "url": downloadURL.absoluteString,
         ]
         do {
             let data = try JSONSerialization.data(withJSONObject: dict, options: JSONSerialization.WritingOptions(rawValue: 0))
