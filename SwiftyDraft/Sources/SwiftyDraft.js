@@ -39,7 +39,7 @@ export default class SwiftyDraft extends Component {
     }
     insertDownloadLink(...args) {
         if(this.editor) {
-            this.editor.insertAtomicBlock('FILE_PLACEHOLDER', 'IMMUTABLE', ...args);
+            this.editor.html += "<a href=\"" + arguments[0]["url"] + "\" target=\"_blank\">"+ arguments[0]["title"] +"</a>"
         }
     }
     insertIFrame(tag) {
