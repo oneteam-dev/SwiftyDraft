@@ -35,8 +35,6 @@ enum ButtonTag: Int {
         return [
             .Font,
             .List,
-            .Emoji,
-            .Link,
             .InsertImage,
             .AttachFile,
             // .EmbedCode
@@ -88,8 +86,8 @@ enum ButtonTag: Int {
         case .EmbedCode: return "embed"
         case .InsertImage: return "insert-picture"
         case .AttachFile: return "file-attach"
-        case .Font: return "bold"
-        case .List: return "bold"
+        case .Font: return "text-heading"
+        case .List: return "list-ul"
         case .Emoji: return "bold"
         case .Link: return "bold"
         }
