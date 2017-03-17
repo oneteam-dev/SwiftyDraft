@@ -85,7 +85,7 @@ public class Toolbar: UIView {
         toolbar.barTintColor = UIColor.white
         toolbar.backgroundColor = UIColor.clear
         let borderTop = CALayer()
-        borderTop.backgroundColor = borderColor.cgColor
+        borderTop.backgroundColor = UIColor.clear.cgColor
         borderTop.frame = CGRect(x: 0, y: 0, width: 9999, height: 1.0)
         layer.addSublayer(borderTop)
         var items: [UIBarButtonItem] = []
@@ -103,12 +103,17 @@ public class Toolbar: UIView {
                        name: .UIKeyboardDidShow, object: nil)
         nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardHide(_:)),
                        name: .UIKeyboardDidHide, object: nil)
+        
+        let lineView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1))
+        lineView.backgroundColor = borderColor
+        scrollView.addSubview(lineView)
     }
 
     private func updateToolbarItems() {
         closeButton.tintColor = unselectedTintColor
         openButton.tintColor = unselectedTintColor
-        for item in toolbarItems {
+        
+        for item in (toolbarItems + showedToolbarItems) {
             var selected = false
             if let buttonTag = ButtonTag(rawValue: item.tag) {
                 if let blockType = buttonTag.blockType {
@@ -119,7 +124,6 @@ public class Toolbar: UIView {
             }
             item.tintColor = selected ? selectedTintColor : unselectedTintColor
         }
-
     }
 
     @objc private func toggleOpened(_ item: AnyObject?) {
@@ -141,6 +145,11 @@ public class Toolbar: UIView {
         didSet {
             self.toolbar.items = toolbarItems
             self.setNeedsLayout()
+            self.updateToolbarItems()
+        }
+    }
+    public var showedToolbarItems: [UIBarButtonItem] = [] {
+        didSet {
             self.updateToolbarItems()
         }
     }
@@ -176,6 +185,7 @@ public class Toolbar: UIView {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
+        backgroundColor = UIColor.white
         let b = self.bounds
         let closeButtonWidth: CGFloat = 0 // 54
         let toolbarWidth: CGFloat = self.toolbarItems.reduce(0) { sofar, item in
@@ -183,8 +193,9 @@ public class Toolbar: UIView {
             return sofar + w + 11.0
         } + 25 // 75
         let toolbarSize = CGSize(width: toolbarWidth, height: 44)
-        toolbar.frame = CGRect(origin: CGPoint.zero, size: toolbarSize)
-        scrollView.frame = CGRect(origin: CGPoint.zero, size: b.size)
+        toolbar.frame = CGRect(origin: CGPoint.zero,
+                               size: CGSize(width: b.size.width, height: 44))
+        scrollView.frame = CGRect(origin: CGPoint(x: 0, y: b.height - 44), size: b.size)
         scrollView.contentSize = toolbarSize
         let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: 44)
         closeButton.frame = f

@@ -63,10 +63,101 @@ extension SwiftyDraft: WKScriptMessageHandler {
             openFilePicker()
         case .InsertImage:
             openImagePicker()
+        case .Font, .List:
+            openHeaderPicker(buttonTag: buttonTag, item: item)
         default:
             if let js = buttonTag.javaScript {
                 self.runScript(script: js)
             }
+        }
+    }
+    
+    func openHeaderPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {
+        
+        if self.editorToolbar.showedToolbarItems.count == 0 {
+
+            let bar = UIToolbar(frame: CGRect(x: 0, y: 44,
+                                              width: self.editorToolbar.frame.width, height: 44)
+            )
+            var items: [UIBarButtonItem] = []
+            bar.barTintColor = UIColor.white
+            bar.backgroundColor = UIColor.clear
+            
+            for t in subToolBarItems(tag: buttonTag) {
+                let item = UIBarButtonItem(
+                    image: t.iconImage, style: .plain,
+                    target: self, action:  #selector(toolbarButtonTapped(_:)))
+                item.tag = t.rawValue
+                item.tintColor = self.editorToolbar.unselectedTintColor
+                items.append(item)
+            }
+            bar.items = items
+            self.editorToolbar.showedToolbarItems = items
+            item.tintColor = self.editorToolbar.selectedTintColor
+            self.editorToolbar.insertSubview(bar, at: 0)
+            bar.layer.borderWidth = 0.0
+            self.editorToolbar.translatesAutoresizingMaskIntoConstraints = true
+            UIView.animate(withDuration: 0.2, animations: { 
+                self.editorToolbar.frame = CGRect(x: 0, y: 0,
+                                                  width: self.frame.size.width,
+                                                  height: 88)
+                bar.frame = CGRect(x: 0, y: 0, width: self.editorToolbar.frame.width, height: 44)
+            })
+        } else {
+            let flag = item.tintColor != self.editorToolbar.selectedTintColor
+            closePickerBar(item: item, completion: {[weak self] (_) in
+                if flag {
+                    self?.openHeaderPicker(buttonTag: buttonTag, item: item)
+                }
+            })
+        }
+    }
+    
+    private func subToolBarItems(tag: ButtonTag) -> [ButtonTag] {
+        switch tag {
+        case .Font:
+            return ButtonTag.fonts
+        case .List:
+            return ButtonTag.lists
+        default:
+            return []
+        }
+    }
+    
+    private func closePickerBar(item: UIBarButtonItem, completion: ((Void) -> Void)? = nil) {
+        var bar: UIToolbar?
+        self.editorToolbar.subviews.forEach({ (b) in
+            if let b = b as? UIToolbar {
+                bar = b
+            }
+        })
+        guard let removeBar = bar else {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.2,
+                       animations: {
+                        removeBar.frame = CGRect(x: 0, y: 44,
+                                                 width: self.editorToolbar.frame.width, height: 44)
+        }, completion: { (_) in
+            self.editorToolbar.frame = CGRect(x: 0, y: 0,
+                                              width: self.frame.size.width,
+                                              height: 44)
+            item.tintColor = self.editorToolbar.unselectedTintColor
+            self.editorToolbar.showedToolbarItems = []
+            removeBar.removeFromSuperview()
+            completion?()
+        })
+    }
+    
+    @objc private func toolbarButtonTapped(_ item: AnyObject?) {
+        if let item = item as? UIBarButtonItem, let tag = ButtonTag(rawValue: item.tag) {
+            itemOpen(tag, item)
+        }
+    }
+    func itemOpen(_ buttonTag: ButtonTag, _ item: UIBarButtonItem) {
+        if let js = buttonTag.javaScript {
+            self.runScript(script: js)
         }
     }
 
