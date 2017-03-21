@@ -143,7 +143,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
             self.editorToolbar.frame = CGRect(x: 0, y: 0,
                                               width: self.frame.size.width,
                                               height: 44)
-            item.tintColor = self.editorToolbar.unselectedTintColor
+            self.editorToolbar.toolbarItems.forEach({ (item) in
+                item.tintColor = self.editorToolbar.unselectedTintColor
+            })
             self.editorToolbar.showedToolbarItems = []
             removeBar.removeFromSuperview()
             completion?()

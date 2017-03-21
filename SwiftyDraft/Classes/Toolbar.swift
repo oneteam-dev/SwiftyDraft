@@ -113,7 +113,7 @@ public class Toolbar: UIView {
         closeButton.tintColor = unselectedTintColor
         openButton.tintColor = unselectedTintColor
         
-        for item in (toolbarItems + showedToolbarItems) {
+        for item in (showedToolbarItems) {
             var selected = false
             if let buttonTag = ButtonTag(rawValue: item.tag) {
                 if let blockType = buttonTag.blockType {
