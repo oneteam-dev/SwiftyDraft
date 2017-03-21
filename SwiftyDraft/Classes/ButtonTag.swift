@@ -35,6 +35,7 @@ enum ButtonTag: Int {
         return [
             .Font,
             .List,
+            .Emoji,
             .InsertImage,
             .AttachFile,
             // .EmbedCode
@@ -58,9 +59,6 @@ enum ButtonTag: Int {
             .NumberedList
         ]
     }
-
-
-    
     
 
     var iconImage: UIImage {

@@ -18,6 +18,8 @@ func localizedStringForKey(key: String) -> String {
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
     public var baseURL: URL?
+    internal var emojiKeyboard:UIView?
+    
 
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
@@ -122,6 +124,12 @@ func localizedStringForKey(key: String) -> String {
         self.webView.loadHTMLString(html, baseURL: baseURL)
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
                        name: .UIKeyboardDidChangeFrame, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidShow(_:)),
+                                               name: .UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidHide(_:)),
+                                               name: .UIKeyboardDidHide, object: nil)
+
+
     }
 
     public func promptEmbedCode() {
