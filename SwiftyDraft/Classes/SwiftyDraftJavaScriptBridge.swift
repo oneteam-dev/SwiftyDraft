@@ -14,7 +14,7 @@ import ISEmojiView
 extension SwiftyDraft: ISEmojiViewDelegate {
     public func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
         html += emoji
-        setDOMHTML(value: html)
+        insertText(text: emoji)
     }
     public func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
         if html.characters.count > 0 {
@@ -29,6 +29,10 @@ extension SwiftyDraft: ISEmojiViewDelegate {
 
 
 extension SwiftyDraft: WKScriptMessageHandler {
+    
+    func insertText(text:String) {
+        runScript(script: "editor.editor.insertText(\"\(text)\")")
+    }
 
     func handleKeyboardChangeFrame(_ note: Notification) {
         //
