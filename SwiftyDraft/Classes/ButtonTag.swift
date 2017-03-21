@@ -26,28 +26,40 @@ enum ButtonTag: Int {
     case EmbedCode
     case InsertImage
     case AttachFile
+    case Font
+    case List
+    case Emoji
+    case Link
 
     static var all: [ButtonTag] {
         return [
+            .Font,
+            .List,
+            .Emoji,
             .InsertImage,
             .AttachFile,
-            .InsertLink,
-            .RemoveLink,
-            .Bold,
-            .Italic,
-            .Strikethrough,
-            .Blockquote,
-            .CheckBox,
-            .BulletedList,
-            .NumberedList,
-            .Heading1,
-            .Heading2,
-            .Heading3,
-            .Heading4,
-            .Heading5
             // .EmbedCode
         ]
     }
+    
+    static var fonts: [ButtonTag] {
+        return [
+            .Heading1,
+            .Heading2,
+            .Bold,
+            .Italic,
+            .Strikethrough
+        ]
+    }
+    
+    static var lists: [ButtonTag] {
+        return [
+            .CheckBox,
+            .BulletedList,
+            .NumberedList
+        ]
+    }
+    
 
     var iconImage: UIImage {
         return UIImage(named: "toolbar-icon-\(self.iconName)", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
@@ -72,6 +84,10 @@ enum ButtonTag: Int {
         case .EmbedCode: return "embed"
         case .InsertImage: return "insert-picture"
         case .AttachFile: return "file-attach"
+        case .Font: return "text-heading"
+        case .List: return "list-ul"
+        case .Emoji: return "bold"
+        case .Link: return "bold"
         }
     }
 

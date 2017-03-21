@@ -1,16 +1,19 @@
 PODS:
+  - ISEmojiView (0.0.4)
   - SwiftyDraft (0.0.1)
 
 DEPENDENCIES:
+  - ISEmojiView
   - SwiftyDraft (from `..`)
 
 EXTERNAL SOURCES:
   SwiftyDraft:
-    :path: ..
+    :path: ".."
 
 SPEC CHECKSUMS:
+  ISEmojiView: 04bea1836abeb628af1d2ae2b5617fd4dfa813ec
   SwiftyDraft: 054f4f316bbdae777f1c648b1299874db184952a
 
-PODFILE CHECKSUM: 304777b0c1a0b0a7f2d79fa0de7a2f38e366982b
+PODFILE CHECKSUM: 03cb3bc581b898c451ef7a001a040e4ab1e71d8f
 
 COCOAPODS: 1.2.0

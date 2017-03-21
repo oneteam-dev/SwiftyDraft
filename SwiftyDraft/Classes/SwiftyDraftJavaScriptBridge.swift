@@ -7,8 +7,32 @@
 //
 
 import WebKit
+import ISEmojiView
+
+
+
+extension SwiftyDraft: ISEmojiViewDelegate {
+    public func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
+        html += emoji
+        insertText(text: emoji)
+    }
+    public func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
+        if html.characters.count > 0 {
+            var str = html
+            let range = str.index((str.endIndex), offsetBy: -1)..<(str.endIndex)
+            str.removeSubrange(range)
+            html = str
+            setDOMHTML(value: html)
+        }
+    }
+}
+
 
 extension SwiftyDraft: WKScriptMessageHandler {
+    
+    func insertText(text:String) {
+        runScript(script: "editor.editor.insertText(\"\(text)\")")
+    }
 
     func handleKeyboardChangeFrame(_ note: Notification) {
         //
@@ -19,6 +43,11 @@ extension SwiftyDraft: WKScriptMessageHandler {
         // runScript("document.getElementById('app-root').style.height = '\(h)px'")
         // runScript("document.getElementById('app-root').style.overflow = 'hidden'")
         // runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
+    }
+    func handleKeyboardDidShow(_ note: Notification) {
+        emojiKeyboard?.removeFromSuperview()
+    }
+    func handleKeyboardDidHide(_ note: Notification) {
     }
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -63,10 +92,118 @@ extension SwiftyDraft: WKScriptMessageHandler {
             openFilePicker()
         case .InsertImage:
             openImagePicker()
+        case .Emoji:
+            emojiPicker(buttonTag: buttonTag, item: item)
+        case .Font, .List:
+            openHeaderPicker(buttonTag: buttonTag, item: item)
         default:
             if let js = buttonTag.javaScript {
                 self.runScript(script: js)
             }
+        }
+    }
+    
+    func emojiPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {
+        let baseView = UIView()
+        let emojiView = ISEmojiView()
+        emojiView.delegate = self
+        
+        baseView.frame = CGRect(x: CGFloat(0), y: self.frame.height-emojiView.frame.height,
+                                width: emojiView.frame.width, height: emojiView.frame.height)
+        baseView.addSubview(emojiView)
+        self.endEditing(true)
+        emojiKeyboard = baseView
+        self.addSubview(baseView)
+    }
+    
+    func openHeaderPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {
+        
+        if self.editorToolbar.showedToolbarItems.count == 0 {
+
+            let bar = UIToolbar(frame: CGRect(x: 0, y: 44,
+                                              width: self.editorToolbar.frame.width, height: 44)
+            )
+            var items: [UIBarButtonItem] = []
+            bar.barTintColor = UIColor.white
+            bar.backgroundColor = UIColor.clear
+            
+            for t in subToolBarItems(tag: buttonTag) {
+                let item = UIBarButtonItem(
+                    image: t.iconImage, style: .plain,
+                    target: self, action:  #selector(toolbarButtonTapped(_:)))
+                item.tag = t.rawValue
+                item.tintColor = self.editorToolbar.unselectedTintColor
+                items.append(item)
+            }
+            bar.items = items
+            self.editorToolbar.showedToolbarItems = items
+            item.tintColor = self.editorToolbar.selectedTintColor
+            self.editorToolbar.insertSubview(bar, at: 0)
+            bar.layer.borderWidth = 0.0
+            self.editorToolbar.translatesAutoresizingMaskIntoConstraints = true
+            UIView.animate(withDuration: 0.2, animations: { 
+                self.editorToolbar.frame = CGRect(x: 0, y: 0,
+                                                  width: self.frame.size.width,
+                                                  height: 88)
+                bar.frame = CGRect(x: 0, y: 0, width: self.editorToolbar.frame.width, height: 44)
+            })
+        } else {
+            let flag = item.tintColor != self.editorToolbar.selectedTintColor
+            closePickerBar(item: item, completion: {[weak self] (_) in
+                if flag {
+                    self?.openHeaderPicker(buttonTag: buttonTag, item: item)
+                }
+            })
+        }
+    }
+    
+    private func subToolBarItems(tag: ButtonTag) -> [ButtonTag] {
+        switch tag {
+        case .Font:
+            return ButtonTag.fonts
+        case .List:
+            return ButtonTag.lists
+        default:
+            return []
+        }
+    }
+    
+    private func closePickerBar(item: UIBarButtonItem, completion: ((Void) -> Void)? = nil) {
+        var bar: UIToolbar?
+        self.editorToolbar.subviews.forEach({ (b) in
+            if let b = b as? UIToolbar {
+                bar = b
+            }
+        })
+        guard let removeBar = bar else {
+            return
+        }
+        
+        UIView.animate(withDuration: 0.2,
+                       animations: {
+                        removeBar.frame = CGRect(x: 0, y: 44,
+                                                 width: self.editorToolbar.frame.width, height: 44)
+        }, completion: { (_) in
+            self.editorToolbar.frame = CGRect(x: 0, y: 0,
+                                              width: self.frame.size.width,
+                                              height: 44)
+            self.editorToolbar.toolbarItems.forEach({ (item) in
+                item.tintColor = self.editorToolbar.unselectedTintColor
+            })
+            self.editorToolbar.showedToolbarItems = []
+            removeBar.removeFromSuperview()
+            completion?()
+        })
+    }
+    
+    @objc private func toolbarButtonTapped(_ item: AnyObject?) {
+        if let item = item as? UIBarButtonItem, let tag = ButtonTag(rawValue: item.tag) {
+            itemOpen(tag, item)
+        }
+    }
+    func itemOpen(_ buttonTag: ButtonTag, _ item: UIBarButtonItem) {
+        if let js = buttonTag.javaScript {
+            self.runScript(script: js)
         }
     }
 
@@ -163,3 +300,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
 }
+
+
+
