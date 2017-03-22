@@ -81,25 +81,32 @@ extension SwiftyDraft: WKScriptMessageHandler {
             runScript(script: "window.editor.setHTML(\(value.javaScriptEscapedString()))")
         }
     }
-
-    func toolbarButtonTapped(_ buttonTag: ButtonTag, _ item: UIBarButtonItem) {
-        switch buttonTag {
-        case .InsertLink:
-            promptLinkURL()
-        case .EmbedCode:
-            promptEmbedCode()
-        case .AttachFile:
-            openFilePicker()
-        case .InsertImage:
-            openImagePicker()
-        case .Emoji:
-            emojiPicker(buttonTag: buttonTag, item: item)
-        case .Font, .List:
-            openHeaderPicker(buttonTag: buttonTag, item: item)
-        default:
-            if let js = buttonTag.javaScript {
-                self.runScript(script: js)
+    
+    func toolbarButtonTapped(_ buttonTag: ButtonTag, _ item: UIBarButtonItem, toolBar: Toolbar) {
+        
+        if toolBar == editorToolbar {
+            switch buttonTag {
+            case .InsertLink:
+                promptLinkURL()
+            case .EmbedCode:
+                promptEmbedCode()
+            case .AttachFile:
+                openFilePicker()
+            case .InsertImage:
+                openImagePicker()
+            case .Emoji:
+                emojiPicker(buttonTag: buttonTag, item: item)
+            case .Font, .List:
+                openHeaderPicker(buttonTag: buttonTag, item: item)
+            default:
+                if let js = buttonTag.javaScript {
+                    self.runScript(script: js)
+                }
             }
+        } else {
+            emojiKeyboard?.removeFromSuperview()
+            focus(delayed: false)
+            toolbarButtonTapped(buttonTag, item, toolBar: self.editorToolbar)
         }
     }
     
@@ -107,13 +114,20 @@ extension SwiftyDraft: WKScriptMessageHandler {
         let baseView = UIView()
         let emojiView = ISEmojiView()
         emojiView.delegate = self
-        
-        baseView.frame = CGRect(x: CGFloat(0), y: self.frame.height-emojiView.frame.height,
+        baseView.frame = CGRect(x: 0, y: 44,
                                 width: emojiView.frame.width, height: emojiView.frame.height)
         baseView.addSubview(emojiView)
+        
+        emojiKeyboard = UIView()
+        let v = Toolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
+        v.editor = self
+        emojiKeyboard?.addSubview(v)
+        emojiKeyboard?.addSubview(baseView)
+
+        emojiKeyboard?.frame = CGRect(x: CGFloat(0), y: self.frame.height-(emojiView.frame.height + 44),
+                                     width: emojiView.frame.width, height: emojiView.frame.height)
         self.endEditing(true)
-        emojiKeyboard = baseView
-        self.addSubview(baseView)
+        self.addSubview(emojiKeyboard!)
     }
     
     func openHeaderPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {

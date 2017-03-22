@@ -137,7 +137,7 @@ public class Toolbar: UIView {
 
     @objc private func toolbarButtonTapped(_ item: AnyObject?) {
         if let item = item as? UIBarButtonItem, let tag = ButtonTag(rawValue: item.tag) {
-            self.editor?.toolbarButtonTapped(tag, item)
+            self.editor?.toolbarButtonTapped(tag, item, toolBar:self)
         }
     }
 
