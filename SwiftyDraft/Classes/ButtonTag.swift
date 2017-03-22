@@ -83,10 +83,10 @@ enum ButtonTag: Int {
         case .NumberedList: return "numbered-list"
         case .EmbedCode: return "embed"
         case .InsertImage: return "insert-picture"
-        case .AttachFile: return "file-attach"
+        case .AttachFile: return "more"
         case .Font: return "text-heading"
         case .List: return "list-ul"
-        case .Emoji: return "bold"
+        case .Emoji: return "emoji"
         case .Link: return "bold"
         }
     }
