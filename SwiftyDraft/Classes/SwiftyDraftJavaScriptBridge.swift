@@ -44,10 +44,28 @@ extension SwiftyDraft: WKScriptMessageHandler {
         // runScript("document.getElementById('app-root').style.overflow = 'hidden'")
         // runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
     }
-    func handleKeyboardDidShow(_ note: Notification) {
+    func handleKeyboardWillShow(_ note: Notification) {
         emojiKeyboard?.removeFromSuperview()
+        if let userInfo = note.userInfo{
+            if let keyboard = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue{
+                let keyBoardRect = keyboard.cgRectValue
+                NSLog("\(keyBoardRect.size.height)")
+               self.translatesAutoresizingMaskIntoConstraints = true
+               webView.frame = CGRect(x: webView.frame.origin.x,
+                                    y: webView.frame.origin.y,
+                                    width: webView.frame.size.width,
+                                    height: self.frame.size.height-keyBoardRect.size.height)
+            }
+        }
     }
-    func handleKeyboardDidHide(_ note: Notification) {
+    func handleKeyboardWillHide(_ note: Notification) {
+        if let emojiKeyboard = emojiKeyboard {
+            webView.frame = CGRect(x: webView.frame.origin.x,
+                                   y: webView.frame.origin.y,
+                                   width: webView.frame.size.width,
+                                   height: self.frame.size.height-(emojiKeyboard.frame.size.height+44))
+            
+        }
     }
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -160,6 +178,8 @@ extension SwiftyDraft: WKScriptMessageHandler {
                                                   width: self.frame.size.width,
                                                   height: 88)
                 bar.frame = CGRect(x: 0, y: 0, width: self.editorToolbar.frame.width, height: 44)
+                let y = self.webView.scrollView.contentOffset.y + 44
+                self.webView.scrollView.setContentOffset(CGPoint(x:0, y:y), animated: true)
             })
         } else {
             let flag = item.tintColor != self.editorToolbar.selectedTintColor
@@ -201,6 +221,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
             self.editorToolbar.frame = CGRect(x: 0, y: 0,
                                               width: self.frame.size.width,
                                               height: 44)
+            let y = self.webView.scrollView.contentOffset.y - 44
+            self.webView.scrollView.setContentOffset(CGPoint(x:0, y:y), animated: false)
+
             self.editorToolbar.toolbarItems.forEach({ (item) in
                 item.tintColor = self.editorToolbar.unselectedTintColor
             })
@@ -263,9 +286,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
         self.html = html
-        if isFocus == true && self.editing == false {
-            scrollY(offset: 0)
-        }
         setEditorHeight()
         self.editing = isFocus
     }
