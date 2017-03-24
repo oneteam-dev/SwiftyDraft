@@ -19,6 +19,7 @@ func localizedStringForKey(key: String) -> String {
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
     public var baseURL: URL?
     internal var emojiKeyboard:UIView?
+    public var webViewContentHeight:CGFloat = 0.0
     
 
     lazy var callbackToken: String = {
@@ -123,14 +124,30 @@ func localizedStringForKey(key: String) -> String {
         let js = try! String(contentsOf: SwiftyDraft.javaScriptURL)
         let html = try! String(contentsOf: SwiftyDraft.htmlURL).replacingOccurrences(of: " src=\"./bundle.js\"><", with: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
         self.webView.loadHTMLString(html, baseURL: baseURL)
+
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
                        name: .UIKeyboardDidChangeFrame, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidShow(_:)),
-                                               name: .UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidHide(_:)),
-                                               name: .UIKeyboardDidHide, object: nil)
-
-
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillShow(_:)),
+                                               name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillHide(_:)),
+                                               name: .UIKeyboardWillHide, object: nil)
+        self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
+    }
+    open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath != "contentSize" {
+            return
+        }
+        if self.webViewContentHeight == 0 {
+            self.webViewContentHeight = self.webView.scrollView.contentSize.height
+        }
+        let scroll = self.webView.scrollView.contentSize.height - self.webViewContentHeight
+        var scrollY:CGFloat = scroll + self.webView.scrollView.contentOffset.y
+        scrollY = scrollY < 0 ? CGFloat(0): scrollY
+        self.webView.scrollView.setContentOffset(
+            CGPoint(x:0, y:scrollY),
+            animated: false
+        )
+        self.webViewContentHeight = self.webView.scrollView.contentSize.height
     }
 
     public func promptEmbedCode() {
