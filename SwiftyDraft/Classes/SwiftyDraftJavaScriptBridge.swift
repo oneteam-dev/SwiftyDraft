@@ -46,8 +46,26 @@ extension SwiftyDraft: WKScriptMessageHandler {
     }
     func handleKeyboardDidShow(_ note: Notification) {
         emojiKeyboard?.removeFromSuperview()
+        if let userInfo = note.userInfo{
+            if let keyboard = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue{
+                let keyBoardRect = keyboard.cgRectValue
+                NSLog("\(keyBoardRect.size.height)")
+               self.translatesAutoresizingMaskIntoConstraints = true
+               webView.frame = CGRect(x: webView.frame.origin.x,
+                                    y: webView.frame.origin.y,
+                                    width: webView.frame.size.width,
+                                    height: self.frame.size.height-keyBoardRect.size.height)
+            }
+        }
     }
     func handleKeyboardDidHide(_ note: Notification) {
+        if let emojiKeyboard = emojiKeyboard {
+            webView.frame = CGRect(x: webView.frame.origin.x,
+                                   y: webView.frame.origin.y,
+                                   width: webView.frame.size.width,
+                                   height: self.frame.size.height-emojiKeyboard.frame.size.height)
+            
+        }
     }
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -263,9 +281,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
         self.html = html
-        if isFocus == true && self.editing == false {
-            scrollY(offset: 0)
-        }
         setEditorHeight()
         self.editing = isFocus
     }

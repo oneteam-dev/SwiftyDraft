@@ -71,7 +71,8 @@ func localizedStringForKey(key: String) -> String {
         }
         c.allowsInlineMediaPlayback = true
         c.userContentController = self.userContentController
-        let wv = WKWebView(frame: self.frame, configuration: c)
+
+        let wv = WKWebView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: self.frame.height), configuration: c)
         wv.navigationDelegate = self
         wv.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         self.addSubview(wv)
@@ -221,7 +222,6 @@ func localizedStringForKey(key: String) -> String {
 
     override open func layoutSubviews() {
         super.layoutSubviews()
-        let b = self.bounds
-        self.webView.frame = CGRect(origin: CGPoint.zero, size: b.size)
+        self.backgroundColor = UIColor.green
     }
 }
