@@ -6,6 +6,7 @@
 //
 
 #import <UIKit/UIKit.h>
+@import WebKit;
 
 // Inspiration for this extension comes from:
 //   - bjhomes: https://gist.github.com/bjhomer/2048571
@@ -17,4 +18,8 @@
 // Set to a custom view to override. Setting to nil will remove it.
 @property (nonatomic, strong, nullable) UIView *cjw_inputAccessoryView;
 
+@end
+
+@interface WKWebView (SwiftyDraft_showKeyboard)
+- (void)keyboardDisplayDoesNotRequireUserAction;
 @end
