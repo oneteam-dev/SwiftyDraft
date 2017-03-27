@@ -239,6 +239,5 @@ func localizedStringForKey(key: String) -> String {
 
     override open func layoutSubviews() {
         super.layoutSubviews()
-        self.backgroundColor = UIColor.green
     }
 }

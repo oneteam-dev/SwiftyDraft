@@ -55,6 +55,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
                                     y: webView.frame.origin.y,
                                     width: webView.frame.size.width,
                                     height: self.frame.size.height-keyBoardRect.size.height)
+                setEditorHeight(value: webView.frame.height-self.paddingTop)
             }
         }
     }
@@ -64,7 +65,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
                                    y: webView.frame.origin.y,
                                    width: webView.frame.size.width,
                                    height: self.frame.size.height-(emojiKeyboard.frame.size.height+44))
-            
+            setEditorHeight(value: webView.frame.height-self.paddingTop)
         }
     }
 
@@ -80,10 +81,10 @@ extension SwiftyDraft: WKScriptMessageHandler {
         runScript(script: "window.editor.paddingTop = \(value)", completionHandler: nil)
     }
     
-    func setEditorHeight() {
+    func setEditorHeight(value: CGFloat) {
         runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.height = '100%'")
         runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.maxHeight = 'none'")
-        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.minHeight = '100vh'")
+        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.minHeight = '\(value)px'")
     }
     
     func scrollY(offset: CGFloat) {
@@ -286,7 +287,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
         self.html = html
-        setEditorHeight()
         self.editing = isFocus
     }
 
@@ -296,7 +296,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
-        setEditorHeight()
+        setEditorHeight(value: webView.frame.height-self.paddingTop)
     }
     
     private func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
