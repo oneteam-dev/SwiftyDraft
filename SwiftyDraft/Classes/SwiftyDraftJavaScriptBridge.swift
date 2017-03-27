@@ -180,7 +180,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
                                                   height: 88)
                 bar.frame = CGRect(x: 0, y: 0, width: self.editorToolbar.frame.width, height: 44)
                 let y = self.webView.scrollView.contentOffset.y + 44
-                self.webView.scrollView.setContentOffset(CGPoint(x:0, y:y), animated: true)
+                self.webView.scrollView.setContentOffset(CGPoint(x:0, y:y), animated: false)
             })
         } else {
             let flag = item.tintColor != self.editorToolbar.selectedTintColor

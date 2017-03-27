@@ -35,7 +35,7 @@ enum ButtonTag: Int {
         return [
             .Font,
             .List,
-            .Emoji,
+//            .Emoji,
             .InsertImage,
             .AttachFile,
             // .EmbedCode
