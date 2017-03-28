@@ -134,7 +134,8 @@ func localizedStringForKey(key: String) -> String {
         self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
     }
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        if keyPath != "contentSize" {
+        let editingView = webView.scrollView.subviews.filter{ $0.isFirstResponder }
+        if keyPath != "contentSize" || editingView.count <= 0 {
             return
         }
         if self.webViewContentHeight == 0 {
@@ -225,6 +226,7 @@ func localizedStringForKey(key: String) -> String {
 
     deinit {
         NotificationCenter.default.removeObserver(self)
+        webView.scrollView.removeObserver(self, forKeyPath: "contentSize")
     }
 
     // MARK: - UIView
