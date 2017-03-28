@@ -132,7 +132,6 @@ func localizedStringForKey(key: String) -> String {
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillHide(_:)),
                                                name: .UIKeyboardWillHide, object: nil)
         self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
-        self.webView.keyboardDisplayDoesNotRequireUserAction()
     }
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath != "contentSize" {
