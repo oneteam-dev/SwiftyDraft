@@ -19,6 +19,8 @@ public class Toolbar: UIView {
             setNeedsLayout()
         }
     }
+    var lineView:UIView?
+
 
     var currentInlineStyles = [InlineStyle]() {
         didSet {
@@ -104,9 +106,9 @@ public class Toolbar: UIView {
         nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardHide(_:)),
                        name: .UIKeyboardDidHide, object: nil)
         
-        let lineView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1))
-        lineView.backgroundColor = borderColor
-        scrollView.addSubview(lineView)
+        lineView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1))
+        lineView?.backgroundColor = borderColor
+        scrollView.addSubview(lineView!)
     }
 
     private func updateToolbarItems() {
@@ -197,6 +199,7 @@ public class Toolbar: UIView {
                                size: CGSize(width: b.size.width, height: 44))
         scrollView.frame = CGRect(origin: CGPoint(x: 0, y: b.height - 44), size: b.size)
         scrollView.contentSize = toolbarSize
+        lineView?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 1)
         let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: 44)
         closeButton.frame = f
         openButton.frame = f
