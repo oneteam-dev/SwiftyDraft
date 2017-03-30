@@ -60,13 +60,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     func handleKeyboardWillHide(_ note: Notification) {
-        if let emojiKeyboard = emojiKeyboard {
-            webView.frame = CGRect(x: webView.frame.origin.x,
-                                   y: webView.frame.origin.y,
-                                   width: webView.frame.size.width,
-                                   height: self.frame.size.height-(emojiKeyboard.frame.size.height+44))
             setEditorHeight(value: webView.frame.height-self.paddingTop)
-        }
     }
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -247,7 +241,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
 
     func setCallbackToken() {
         self.runScript(script: "window.editor.setCallbackToken(\"\(callbackToken)\")")
-        
     }
 
     public func insertLink(url: String) {
@@ -267,15 +260,15 @@ extension SwiftyDraft: WKScriptMessageHandler {
     }
 
     public func focus(delayed: Bool = false) {
-        let fn = {
-            self.webView.becomeFirstResponder()
-            self.runScript(script: "window.editor.focus()", completionHandler: nil)
-        }
-        if delayed {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: fn)
-        } else {
-            fn()
-        }
+//        let fn = {
+//            self.webView.becomeFirstResponder()
+//            self.runScript(script: "window.editor.focus()", completionHandler: nil)
+//        }
+//        if delayed {
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: fn)
+//        } else {
+//            fn()
+//        }
     }
 
     public func blur() {
@@ -296,7 +289,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
-        setEditorHeight(value: webView.frame.height-self.paddingTop)
     }
     
     private func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
