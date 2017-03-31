@@ -50,8 +50,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             if let keyboard = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue{
                 let keyBoardRect = keyboard.cgRectValue
                 NSLog("\(keyBoardRect.size.height)")
-               self.translatesAutoresizingMaskIntoConstraints = true
-               webView.frame = CGRect(x: webView.frame.origin.x,
+                webView.frame = CGRect(x: webView.frame.origin.x,
                                     y: webView.frame.origin.y,
                                     width: webView.frame.size.width,
                                     height: self.frame.size.height-keyBoardRect.size.height)
