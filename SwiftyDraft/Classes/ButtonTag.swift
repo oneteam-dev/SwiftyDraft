@@ -44,8 +44,8 @@ enum ButtonTag: Int {
     
     static var fonts: [ButtonTag] {
         return [
-            .Heading1,
             .Heading2,
+            .Heading4,
             .Bold,
             .Italic,
             .Strikethrough
@@ -62,7 +62,17 @@ enum ButtonTag: Int {
     
 
     var iconImage: UIImage {
-        return UIImage(named: "toolbar-icon-\(self.iconName)", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
+        
+        switch (self,NSLocale.preferredLanguages.first) {
+        case (.Heading2, "ja-JP"?):
+            return UIImage(named: "toolbar-icon-\(self.iconName)-jp", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
+        case (.Heading4, "ja-JP"?):
+            return UIImage(named: "toolbar-icon-\(self.iconName)-jp", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
+        case (.Bold, "ja-JP"?):
+            return UIImage(named: "toolbar-icon-\(self.iconName)-jp", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
+        default:
+            return UIImage(named: "toolbar-icon-\(self.iconName)", in: SwiftyDraft.resourceBundle, compatibleWith: nil)!
+        }
     }
 
     var iconName: String {
