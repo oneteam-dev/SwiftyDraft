@@ -20,6 +20,7 @@ func localizedStringForKey(key: String) -> String {
     public var baseURL: URL?
     internal var emojiKeyboard:UIView?
     public var webViewContentHeight:CGFloat = 0.0
+    internal var isAutoScrollDisable = false
     
 
     lazy var callbackToken: String = {
@@ -129,13 +130,24 @@ func localizedStringForKey(key: String) -> String {
                        name: .UIKeyboardDidChangeFrame, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillShow(_:)),
                                                name: .UIKeyboardWillShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidShow(_:)),
+                                               name: .UIKeyboardDidShow, object: nil)
+
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillHide(_:)),
                                                name: .UIKeyboardWillHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidHide(_:)),
+                                               name: .UIKeyboardDidHide, object: nil)
+
         self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
     }
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
         let editingView = webView.scrollView.subviews.filter{ $0.isFirstResponder }
         if keyPath != "contentSize" || editingView.count <= 0 {
+            return
+        }
+        
+        if isAutoScrollDisable {
+            self.webViewContentHeight = self.webView.scrollView.contentSize.height
             return
         }
         if self.webViewContentHeight == 0 {
@@ -147,10 +159,7 @@ func localizedStringForKey(key: String) -> String {
         if scrollY == webView.scrollView.contentOffset.y {
             return
         }
-        self.webView.scrollView.setContentOffset(
-            CGPoint(x:0, y:scrollY),
-            animated: false
-        )
+        self.scrollY(offset: scrollY)
         self.webViewContentHeight = self.webView.scrollView.contentSize.height
     }
 
