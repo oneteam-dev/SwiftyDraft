@@ -55,15 +55,26 @@ extension SwiftyDraft: WKScriptMessageHandler {
                                     width: webView.frame.size.width,
                                     height: self.frame.size.height-keyBoardRect.size.height)
                 setEditorHeight(value: webView.frame.height-self.paddingTop)
+                self.isAutoScrollDisable = true
             }
         }
     }
+    
+    func handleKeyboardDidShow(_ note: Notification) {
+        isAutoScrollDisable = false
+    }
+    
     func handleKeyboardWillHide(_ note: Notification) {
         webView.frame = CGRect(x: webView.frame.origin.x,
                                y: webView.frame.origin.y,
                                width: webView.frame.size.width,
                                height: self.frame.size.height)
         setEditorHeight(value: webView.frame.height-self.paddingTop)
+        self.isAutoScrollDisable = true
+    }
+    
+    func handleKeyboardDidHide(_ note: Notification) {
+        isAutoScrollDisable = false
     }
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -79,9 +90,10 @@ extension SwiftyDraft: WKScriptMessageHandler {
     }
     
     func setEditorHeight(value: CGFloat) {
-        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.height = '100%'")
-        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.maxHeight = 'none'")
-        runScript(script: "document.getElementsByClassName('public-DraftEditor-content')[0].style.minHeight = '\(value)px'")
+        let js = "document.getElementsByClassName('public-DraftEditor-content')[0].style.height = '100%';" +
+            "document.getElementsByClassName('public-DraftEditor-content')[0].style.maxHeight = 'none';" +
+            "document.getElementsByClassName('public-DraftEditor-content')[0].style.minHeight = '\(value)px';"
+        self.webView.evaluateJavaScript(js, completionHandler: nil)
     }
     
     func scrollY(offset: CGFloat) {
@@ -283,10 +295,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
         self.html = html
-        if self.editing == false && isFocus == true {
+        if editing == false && isFocus == true {
             scrollY(offset: paddingTop - 10)
         }
-
         self.editing = isFocus
     }
 
