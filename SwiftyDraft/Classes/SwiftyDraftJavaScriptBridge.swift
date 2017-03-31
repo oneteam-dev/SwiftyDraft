@@ -60,7 +60,11 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     func handleKeyboardWillHide(_ note: Notification) {
-            setEditorHeight(value: webView.frame.height-self.paddingTop)
+        webView.frame = CGRect(x: webView.frame.origin.x,
+                               y: webView.frame.origin.y,
+                               width: webView.frame.size.width,
+                               height: self.frame.size.height)
+        setEditorHeight(value: webView.frame.height-self.paddingTop)
     }
 
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -280,6 +284,10 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
         self.html = html
+        if self.editing == false && isFocus == true {
+            scrollY(offset: paddingTop - 10)
+        }
+
         self.editing = isFocus
     }
 

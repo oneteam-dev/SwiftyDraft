@@ -140,10 +140,13 @@ func localizedStringForKey(key: String) -> String {
         }
         if self.webViewContentHeight == 0 {
             self.webViewContentHeight = self.webView.scrollView.contentSize.height
+            return
         }
         let scroll = self.webView.scrollView.contentSize.height - self.webViewContentHeight
         var scrollY:CGFloat = scroll + self.webView.scrollView.contentOffset.y
-        scrollY = scrollY < 0 ? CGFloat(0): scrollY
+        if scrollY == webView.scrollView.contentOffset.y {
+            return
+        }
         self.webView.scrollView.setContentOffset(
             CGPoint(x:0, y:scrollY),
             animated: false
