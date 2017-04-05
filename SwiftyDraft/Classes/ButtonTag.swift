@@ -30,6 +30,8 @@ enum ButtonTag: Int {
     case List
     case Emoji
     case Link
+    case Indent
+    case IndentMinus
 
     static var all: [ButtonTag] {
         return [
@@ -56,7 +58,9 @@ enum ButtonTag: Int {
         return [
             .CheckBox,
             .BulletedList,
-            .NumberedList
+            .NumberedList,
+            .IndentMinus,
+            .Indent
         ]
     }
     
@@ -89,7 +93,7 @@ enum ButtonTag: Int {
         case .Strikethrough: return "strikethrough"
         case .Blockquote: return "blockquote"
         case .CheckBox: return "check-box"
-        case .BulletedList: return "bulleted-list"
+        case .BulletedList: return "list-ul"
         case .NumberedList: return "numbered-list"
         case .EmbedCode: return "embed"
         case .InsertImage: return "insert-picture"
@@ -98,6 +102,8 @@ enum ButtonTag: Int {
         case .List: return "list-ul"
         case .Emoji: return "emoji"
         case .Link: return "bold"
+        case .Indent: return "indent"
+        case .IndentMinus: return "indentminus"
         }
     }
 
@@ -128,6 +134,12 @@ enum ButtonTag: Int {
     var javaScript: String? {
         if self == .RemoveLink {
             return "window.editor.toggleLink(null)"
+        }
+        if self == .Indent {
+            return "window.editor.editor.adjustBlockDepth(1,3)"
+        }
+        if self == .IndentMinus {
+            return "window.editor.editor.adjustBlockDepth(-1,3)"
         }
         return blockType?.javaScript ?? inlineStyle?.javaScript
     }
