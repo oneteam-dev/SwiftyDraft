@@ -3,5 +3,4 @@ use_frameworks!
 
 target 'SwiftyDraftExample' do
   pod 'SwiftyDraft', :path => '..'
-  pod 'ISEmojiView'
 end

@@ -7,25 +7,25 @@
 //
 
 import WebKit
-import ISEmojiView
+//import ISEmojiView
 
 
 
-extension SwiftyDraft: ISEmojiViewDelegate {
-    public func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
-        html += emoji
-        insertText(text: emoji)
-    }
-    public func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
-        if html.characters.count > 0 {
-            var str = html
-            let range = str.index((str.endIndex), offsetBy: -1)..<(str.endIndex)
-            str.removeSubrange(range)
-            html = str
-            setDOMHTML(value: html)
-        }
-    }
-}
+//extension SwiftyDraft: ISEmojiViewDelegate {
+//    public func emojiViewDidSelectEmoji(emojiView: ISEmojiView, emoji: String) {
+//        html += emoji
+//        insertText(text: emoji)
+//    }
+//    public func emojiViewDidPressDeleteButton(emojiView: ISEmojiView) {
+//        if html.characters.count > 0 {
+//            var str = html
+//            let range = str.index((str.endIndex), offsetBy: -1)..<(str.endIndex)
+//            str.removeSubrange(range)
+//            html = str
+//            setDOMHTML(value: html)
+//        }
+//    }
+//}
 
 
 extension SwiftyDraft: WKScriptMessageHandler {
@@ -139,23 +139,23 @@ extension SwiftyDraft: WKScriptMessageHandler {
     }
     
     func emojiPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {
-        let baseView = UIView()
-        let emojiView = ISEmojiView()
-        emojiView.delegate = self
-        baseView.frame = CGRect(x: 0, y: 44,
-                                width: emojiView.frame.width, height: emojiView.frame.height)
-        baseView.addSubview(emojiView)
-        
-        emojiKeyboard = UIView()
-        let v = Toolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
-        v.editor = self
-        emojiKeyboard?.addSubview(v)
-        emojiKeyboard?.addSubview(baseView)
-
-        emojiKeyboard?.frame = CGRect(x: CGFloat(0), y: self.frame.height-(emojiView.frame.height + 44),
-                                     width: emojiView.frame.width, height: emojiView.frame.height)
-        self.endEditing(true)
-        self.addSubview(emojiKeyboard!)
+//        let baseView = UIView()
+//        let emojiView = ISEmojiView()
+//        emojiView.delegate = self
+//        baseView.frame = CGRect(x: 0, y: 44,
+//                                width: emojiView.frame.width, height: emojiView.frame.height)
+//        baseView.addSubview(emojiView)
+//        
+//        emojiKeyboard = UIView()
+//        let v = Toolbar(frame: CGRect(x: 0, y: 0, width: self.bounds.width, height: 44))
+//        v.editor = self
+//        emojiKeyboard?.addSubview(v)
+//        emojiKeyboard?.addSubview(baseView)
+//
+//        emojiKeyboard?.frame = CGRect(x: CGFloat(0), y: self.frame.height-(emojiView.frame.height + 44),
+//                                     width: emojiView.frame.width, height: emojiView.frame.height)
+//        self.endEditing(true)
+//        self.addSubview(emojiKeyboard!)
     }
     
     func openHeaderPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {
@@ -175,6 +175,10 @@ extension SwiftyDraft: WKScriptMessageHandler {
                     target: self, action:  #selector(toolbarButtonTapped(_:)))
                 item.tag = t.rawValue
                 item.tintColor = self.editorToolbar.unselectedTintColor
+                if t == .IndentMinus {
+                    let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+                    items.append(flexibleItem)
+                }
                 items.append(item)
             }
             bar.items = items
