@@ -102,8 +102,8 @@ enum ButtonTag: Int {
         case .List: return "list-ul"
         case .Emoji: return "emoji"
         case .Link: return "bold"
-        case .Indent: return "indent"
-        case .IndentMinus: return "indentminus"
+        case .Indent: return "Indent"
+        case .IndentMinus: return "Indentminus"
         }
     }
 
