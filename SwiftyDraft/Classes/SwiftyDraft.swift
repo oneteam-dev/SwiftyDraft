@@ -254,4 +254,80 @@ func localizedStringForKey(key: String) -> String {
     override open func layoutSubviews() {
         super.layoutSubviews()
     }
+    
+    open func toolbarButtonTapped(_ buttonTag: ButtonTag, _ item: UIBarButtonItem, toolBar: Toolbar) {
+        
+        if toolBar == editorToolbar {
+            switch buttonTag {
+            case .InsertLink:
+                promptLinkURL()
+            case .EmbedCode:
+                promptEmbedCode()
+            case .AttachFile:
+                openFilePicker()
+            case .InsertImage:
+                openImagePicker()
+            case .Emoji:
+                emojiPicker(buttonTag: buttonTag, item: item)
+            case .Font, .List:
+                openHeaderPicker(buttonTag: buttonTag, item: item)
+            default:
+                if let js = buttonTag.javaScript {
+                    self.runScript(script: js)
+                }
+            }
+        } else {
+            emojiKeyboard?.removeFromSuperview()
+            focus(delayed: false)
+            toolbarButtonTapped(buttonTag, item, toolBar: self.editorToolbar)
+        }
+    }
+    
+    open func openHeaderPicker(buttonTag: ButtonTag, item: UIBarButtonItem) {
+        
+        if self.editorToolbar.showedToolbarItems.count == 0 {
+            
+            let bar = UIToolbar(frame: CGRect(x: 0, y: 44,
+                                              width: self.editorToolbar.frame.width, height: 44)
+            )
+            var items: [UIBarButtonItem] = []
+            bar.barTintColor = UIColor.white
+            bar.backgroundColor = UIColor.clear
+            
+            for t in subToolBarItems(tag: buttonTag) {
+                let item = UIBarButtonItem(
+                    image: t.iconImage, style: .plain,
+                    target: self, action:  #selector(toolbarButtonTapped(_:)))
+                item.tag = t.rawValue
+                item.tintColor = self.editorToolbar.unselectedTintColor
+                if t == .IndentMinus {
+                    let flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+                    items.append(flexibleItem)
+                }
+                items.append(item)
+            }
+            bar.items = items
+            self.editorToolbar.showedToolbarItems = items
+            item.tintColor = self.editorToolbar.selectedTintColor
+            self.editorToolbar.insertSubview(bar, at: 0)
+            bar.layer.borderWidth = 0.0
+            self.editorToolbar.translatesAutoresizingMaskIntoConstraints = true
+            UIView.animate(withDuration: 0.2, animations: {
+                self.editorToolbar.frame = CGRect(x: 0, y: 0,
+                                                  width: self.frame.size.width,
+                                                  height: 88)
+                bar.frame = CGRect(x: 0, y: 0, width: self.editorToolbar.frame.width, height: 44)
+                let y = self.webView.scrollView.contentOffset.y + 44
+                self.webView.scrollView.setContentOffset(CGPoint(x:0, y:y), animated: false)
+            })
+        } else {
+            let flag = item.tintColor != self.editorToolbar.selectedTintColor
+            closePickerBar(item: item, completion: {[weak self] (_) in
+                if flag {
+                    self?.openHeaderPicker(buttonTag: buttonTag, item: item)
+                }
+            })
+        }
+    }
+
 }

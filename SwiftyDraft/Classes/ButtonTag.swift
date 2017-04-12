@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ButtonTag: Int {
+public enum ButtonTag: Int {
     case InsertLink = 1000
     case RemoveLink
     case Heading1
