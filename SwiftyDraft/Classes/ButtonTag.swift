@@ -79,7 +79,7 @@ public enum ButtonTag: Int {
         }
     }
 
-    var iconName: String {
+    public var iconName: String {
         switch self {
         case .InsertLink: return "insert-link"
         case .RemoveLink: return "remove-link"
