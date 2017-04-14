@@ -228,6 +228,13 @@ func localizedStringForKey(key: String) -> String {
             self.focus(delayed: true)
         })
     }
+    
+    public func openCamera() {
+        self.imagePickerDelegate?.draftEditor(editor: self, requestCameraAttachment: { (result) in
+            self.insertImage(img: result)
+            self.focus(delayed: true)
+        })
+    }
 
     public func openFilePicker() {
         self.filePickerDelegate?.draftEditor(editor: self, requestFileAttachment: { result in
@@ -267,6 +274,8 @@ func localizedStringForKey(key: String) -> String {
                 openFilePicker()
             case .InsertImage:
                 openImagePicker()
+            case .Camera:
+                openCamera()
             case .Emoji:
                 emojiPicker(buttonTag: buttonTag, item: item)
             case .Font, .List:
