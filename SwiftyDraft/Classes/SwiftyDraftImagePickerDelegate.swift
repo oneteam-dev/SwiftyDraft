@@ -38,4 +38,6 @@ public struct SwiftyDraftImageResult {
 public protocol SwiftyDraftImagePickerDelegate: class {
     func draftEditor(editor: SwiftyDraft,
                requestImageAttachment callback: @escaping (_ result: SwiftyDraftImageResult) -> Void)
+    func draftEditor(editor: SwiftyDraft,
+                     requestCameraAttachment callback: @escaping (_ result: SwiftyDraftImageResult) -> Void)
 }
