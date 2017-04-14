@@ -32,6 +32,7 @@ public enum ButtonTag: Int {
     case Link
     case Indent
     case IndentMinus
+    case Camera
 
     static var all: [ButtonTag] {
         return [
@@ -39,6 +40,7 @@ public enum ButtonTag: Int {
             .List,
 //            .Emoji,
             .InsertImage,
+            .Camera,
             .AttachFile,
             // .EmbedCode
         ]
@@ -104,6 +106,7 @@ public enum ButtonTag: Int {
         case .Link: return "bold"
         case .Indent: return "Indent"
         case .IndentMinus: return "Indentminus"
+        case .Camera : return "camera"
         }
     }
 
