@@ -305,20 +305,22 @@ func localizedStringForKey(key: String) -> String {
             bar.backgroundColor = UIColor.clear
             
             for t in subToolBarItems(tag: buttonTag) {
-                let item = UIBarButtonItem(
-                    image: t.iconImage, style: .plain,
-                    target: self, action:  #selector(toolbarButtonTapped(_:)))
-                item.tag = t.rawValue
-                item.tintColor = self.editorToolbar.unselectedTintColor
-                if t == .IndentMinus && UIScreen.main.bounds.width > 320.0 {
-                    var  flexibleItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+                switch t {
+                case .Space:
+                    let  flexibleItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
                     flexibleItem.width = 63.0
                     let f = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
                     items.append(flexibleItem)
                     items.append(f)
+                default:
+                    let item = UIBarButtonItem(
+                        image: t.iconImage, style: .plain,
+                        target: self, action:  #selector(toolbarButtonTapped(_:)))
+                    item.tag = t.rawValue
+                    item.tintColor = self.editorToolbar.unselectedTintColor
+                    items.append(item)
+                    items.append(f)
                 }
-                items.append(item)
-                items.append(f)
             }
             
             bar.items = items
