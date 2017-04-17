@@ -34,6 +34,11 @@ extension ViewController: UIScrollViewDelegate {
 
 
 extension ViewController: SwiftyDraftImagePickerDelegate {
+    
+    func draftEditor(editor: SwiftyDraft, requestCameraAttachment callback: @escaping (SwiftyDraftImageResult) -> Void) {
+        
+    }
+    
     public func draftEditor(editor: SwiftyDraft, requestImageAttachment callback: @escaping (SwiftyDraftImageResult) -> Void) {
         let ac = UIAlertController(title: "Image Picker Demo", message: "Fill your example content", preferredStyle: .alert)
         var nameField: UITextField!
