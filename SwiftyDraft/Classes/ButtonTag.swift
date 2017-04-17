@@ -52,7 +52,8 @@ public enum ButtonTag: Int {
             .Heading4,
             .Bold,
             .Italic,
-            .Strikethrough
+            .Space,
+            .Space
         ]
     }
     
@@ -61,6 +62,7 @@ public enum ButtonTag: Int {
             .CheckBox,
             .BulletedList,
             .NumberedList,
+            .Space,
             .IndentMinus,
             .Indent
         ]
