@@ -90,14 +90,26 @@ public class Toolbar: UIView {
         borderTop.backgroundColor = UIColor.clear.cgColor
         borderTop.frame = CGRect(x: 0, y: 0, width: 9999, height: 1.0)
         layer.addSublayer(borderTop)
-        var items: [UIBarButtonItem] = []
+        let f = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+        var items: [UIBarButtonItem] = [f]
         for t in ButtonTag.all {
-            let item = UIBarButtonItem(
-                image: t.iconImage, style: .plain,
-                target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
-            item.tag = t.rawValue
-            item.tintColor = unselectedTintColor
-            items.append(item)
+            switch t {
+            case .Space:
+                let  item = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
+                item.width = 63.0
+                item.tag = t.rawValue
+                item.tintColor = unselectedTintColor
+                items.append(item)
+                items.append(f)
+            default:
+                let item = UIBarButtonItem(
+                    image: t.iconImage, style: .plain,
+                    target: self, action:  #selector(Toolbar.toolbarButtonTapped(_:)))
+                item.tag = t.rawValue
+                item.tintColor = unselectedTintColor
+                items.append(item)
+                items.append(f)
+            }
         }
         toolbarItems = items
         let nc = NotificationCenter.default

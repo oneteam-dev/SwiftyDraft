@@ -299,7 +299,8 @@ func localizedStringForKey(key: String) -> String {
             let bar = UIToolbar(frame: CGRect(x: 0, y: 44,
                                               width: self.editorToolbar.frame.width, height: 44)
             )
-            var items: [UIBarButtonItem] = []
+            let f = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
+            var items: [UIBarButtonItem] = [f]
             bar.barTintColor = UIColor.white
             bar.backgroundColor = UIColor.clear
             
@@ -311,13 +312,13 @@ func localizedStringForKey(key: String) -> String {
                 item.tintColor = self.editorToolbar.unselectedTintColor
                 if t == .IndentMinus && UIScreen.main.bounds.width > 320.0 {
                     var  flexibleItem = UIBarButtonItem(barButtonSystemItem: .fixedSpace, target: nil, action: nil)
-                    flexibleItem.width = 60.0
-                    if UIScreen.main.bounds.width > 375 {
-                        flexibleItem = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-                    }
+                    flexibleItem.width = 63.0
+                    let f = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
                     items.append(flexibleItem)
+                    items.append(f)
                 }
                 items.append(item)
+                items.append(f)
             }
             
             bar.items = items
