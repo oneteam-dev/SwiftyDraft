@@ -140,7 +140,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     
-    func closePickerBar(item: UIBarButtonItem, completion: ((Void) -> Void)? = nil) {
+    func closePickerBar(item: UIBarButtonItem, completion: (() -> Void)? = nil) {
         var bar: UIToolbar?
         self.editorToolbar.subviews.forEach({ (b) in
             if let b = b as? UIToolbar {

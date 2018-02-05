@@ -172,12 +172,12 @@ public class Toolbar: UIView {
 
     // MARK: - Keyboard handling
 
-    func handleKeyboardShow(_ note: Notification) {
+    @objc func handleKeyboardShow(_ note: Notification) {
         guard let keyboardSize = (note.userInfo?[UIKeyboardFrameEndUserInfoKey] as AnyObject).cgRectValue else { return }
         self.opened = keyboardSize.height > self.bounds.height
     }
 
-    func handleKeyboardHide(_ note: Notification) {
+    @objc func handleKeyboardHide(_ note: Notification) {
         self.opened = false
     }
 

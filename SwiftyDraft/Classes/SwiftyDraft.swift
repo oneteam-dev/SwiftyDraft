@@ -169,18 +169,18 @@ func localizedStringForKey(key: String) -> String {
             return
         }
         let ac = UIAlertController(
-            title: localizedStringForKey(key: "embed_iframe.prompt.title"),
-            message: localizedStringForKey(key: "embed_iframe.prompt.message"),
+            title: SwiftyDraft.localizedStringForKey(key: "embed_iframe.prompt.title"),
+            message: SwiftyDraft.localizedStringForKey(key: "embed_iframe.prompt.message"),
             preferredStyle: .alert)
         var textField: UITextField!
         ac.addTextField { tf in
-            tf.placeholder = localizedStringForKey(key: "embed_iframe.placeholder")
+            tf.placeholder = SwiftyDraft.localizedStringForKey(key: "embed_iframe.placeholder")
             tf.keyboardType = .asciiCapable
             tf.autocorrectionType = .no
             textField = tf
         }
         ac.addAction(UIAlertAction(
-            title: localizedStringForKey(key: "button.ok"),
+            title: SwiftyDraft.localizedStringForKey(key: "button.ok"),
             style: .default, handler: { _ in
                 if let val = textField.text , val.hasPrefix("<iframe ") && val.hasSuffix("</iframe>") {
                     self.insertIFrame(src: val)
@@ -188,7 +188,7 @@ func localizedStringForKey(key: String) -> String {
                 self.focus(delayed: true)
         }))
         ac.addAction(UIAlertAction(
-            title: localizedStringForKey(key: "button.cancel"),
+            title: SwiftyDraft.localizedStringForKey(key: "button.cancel"),
             style: .cancel, handler: { _ in
                 self.focus(delayed: true)
         }))
@@ -201,8 +201,8 @@ func localizedStringForKey(key: String) -> String {
             return
         }
         let ac = UIAlertController(
-            title: localizedStringForKey(key: "insert_link.prompt.title"),
-            message: localizedStringForKey(key: "insert_link.prompt.message"),
+            title: SwiftyDraft.localizedStringForKey(key: "insert_link.prompt.title"),
+            message: SwiftyDraft.localizedStringForKey(key: "insert_link.prompt.message"),
             preferredStyle: .alert)
         var textField: UITextField!
         ac.addTextField { tf in
@@ -210,13 +210,13 @@ func localizedStringForKey(key: String) -> String {
             tf.keyboardType = .URL
             textField = tf
         }
-        ac.addAction(UIAlertAction(title: localizedStringForKey(key: "button.ok"), style: .default, handler: { _ in
+        ac.addAction(UIAlertAction(title: SwiftyDraft.localizedStringForKey(key: "button.ok"), style: .default, handler: { _ in
             if let val = textField.text {
                 self.insertLink(url: val)
             }
             self.focus(delayed: true)
         }))
-        ac.addAction(UIAlertAction(title: localizedStringForKey(key: "button.cancel"), style: .cancel, handler: { _ in
+        ac.addAction(UIAlertAction(title: SwiftyDraft.localizedStringForKey(key: "button.cancel"), style: .cancel, handler: { _ in
             self.focus(delayed: true)
         }))
         vc.present(ac, animated: true, completion: nil)
@@ -339,7 +339,7 @@ func localizedStringForKey(key: String) -> String {
             })
         } else {
             let flag = item.tintColor != self.editorToolbar.selectedTintColor
-            closePickerBar(item: item, completion: {[weak self] (_) in
+            closePickerBar(item: item, completion: {[weak self] in
                 if flag {
                     self?.openHeaderPicker(buttonTag: buttonTag, item: item)
                 }

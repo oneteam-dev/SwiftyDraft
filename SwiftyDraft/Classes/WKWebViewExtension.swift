@@ -24,7 +24,7 @@ extension WKWebView {
         }
         guard let targetView = candidateView else { return }
         let newClass: AnyClass? = classWithCustomAccessoryView(targetView: targetView)
-        object_setClass(targetView, newClass)
+        object_setClass(targetView, newClass!)
     }
 
     private func classWithCustomAccessoryView(targetView: UIView) -> AnyClass? {
@@ -39,9 +39,9 @@ extension WKWebView {
         }
 
         let newMethod = class_getInstanceMethod(WKWebView.self, #selector(WKWebView.getCustomInputAccessoryView))
-        class_addMethod(newClass.self, Selector("inputAccessoryView"), method_getImplementation(newMethod), method_getTypeEncoding(newMethod))
+        class_addMethod(newClass.self, #selector(getter: UIResponder.inputAccessoryView), method_getImplementation(newMethod!), method_getTypeEncoding(newMethod!))
 
-        objc_registerClassPair(newClass);
+        objc_registerClassPair(newClass!);
 
         return newClass
     }
