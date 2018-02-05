@@ -60,7 +60,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     
-     func handleKeyboardDidShow(_ note: Notification) {
+     @objc func handleKeyboardDidShow(_ note: Notification) {
         isAutoScrollDisable = false
     }
     
