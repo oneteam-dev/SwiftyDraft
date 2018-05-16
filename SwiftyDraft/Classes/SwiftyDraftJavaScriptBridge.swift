@@ -34,7 +34,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         runScript(script: "editor.editor.insertText(\"\(text)\")")
     }
 
-    func handleKeyboardChangeFrame(_ note: Notification) {
+    @objc func handleKeyboardChangeFrame(_ note: Notification) {
         //
         // FIXME! to much spaces in the bottom
         //
@@ -44,7 +44,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         // runScript("document.getElementById('app-root').style.overflow = 'hidden'")
         // runScript("document.getElementById('app-root').style.backgroundColor = 'red'")
     }
-    func handleKeyboardWillShow(_ note: Notification) {
+    @objc func handleKeyboardWillShow(_ note: Notification) {
         emojiKeyboard?.removeFromSuperview()
         if let userInfo = note.userInfo{
             if let keyboard = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue{
@@ -60,11 +60,11 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     
-    func handleKeyboardDidShow(_ note: Notification) {
+     @objc func handleKeyboardDidShow(_ note: Notification) {
         isAutoScrollDisable = false
     }
     
-    func handleKeyboardWillHide(_ note: Notification) {
+    @objc func handleKeyboardWillHide(_ note: Notification) {
         webView.frame = CGRect(x: webView.frame.origin.x,
                                y: webView.frame.origin.y,
                                width: webView.frame.size.width,
@@ -73,7 +73,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         self.isAutoScrollDisable = true
     }
     
-    func handleKeyboardDidHide(_ note: Notification) {
+    @objc func handleKeyboardDidHide(_ note: Notification) {
         isAutoScrollDisable = false
     }
 
@@ -140,7 +140,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     
-    func closePickerBar(item: UIBarButtonItem, completion: ((Void) -> Void)? = nil) {
+    func closePickerBar(item: UIBarButtonItem, completion: (() -> Void)? = nil) {
         var bar: UIToolbar?
         self.editorToolbar.subviews.forEach({ (b) in
             if let b = b as? UIToolbar {
