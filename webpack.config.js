@@ -1,7 +1,7 @@
 /*eslint-env node */
-import path from 'path';
-import bootstrap from 'bootstrap-styl';
-import stylusLoader from 'stylus-loader';
+const path = require('path');
+const bootstrap = require('bootstrap-styl');
+const stylusLoader = require('stylus-loader');
 
 const entry = ['@babel/polyfill', './SwiftyDraft/Sources/index.js'];
 const plugins = [
@@ -12,7 +12,7 @@ const plugins = [
   })
 ];
 
-export default {
+module.exports = {
   plugins,
   entry,
   cache: true,
