@@ -1,6 +1,9 @@
 {
   "presets": [
-    "es2015", "react"
+    ["@babel/preset-es2015", { "modules": false }],
+    "@babel/preset-es2016",
+    "@babel/preset-es2017",
+    "@babel/preset-react"
   ],
   "env": {
     "development": {
