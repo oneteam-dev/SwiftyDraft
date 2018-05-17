@@ -235,6 +235,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
+        addRawMentions()
     }
     
     open func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
@@ -259,6 +260,13 @@ extension SwiftyDraft: WKScriptMessageHandler {
         case .DebugLog:
             print("[DEBUG] \(data)")
         }
+    }
+    
+    public func addRawMentions() {
+        let test = "[{ id: 1, userName: \"yamamoto\"," +
+        "name:\"yamamoto\", email:\"aaa\"," +
+        "avatarURL: \"https://github.com/oneteam-dev/react-oneteam/commits/f54df7e2d0dbab1a6fe49f62987e23a19bf01d61/src/Mention/index.js?author=\" }]"
+        self.runScript(script: "window.editor.rawMentions = \(test)")
     }
 
     // MARK: - WKNavigationDelegate
