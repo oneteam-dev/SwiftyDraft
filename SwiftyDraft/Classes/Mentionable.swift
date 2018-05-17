@@ -7,7 +7,7 @@
 
 import Foundation
 
-public protocol Mentionable {
+public protocol SwiftyDraftMentionable {
     var id: String { get }
     var userName: String { get }
     var name: String { get }
@@ -15,7 +15,7 @@ public protocol Mentionable {
     var avatarURL: String { get }
 }
 
-extension Mentionable {
+extension SwiftyDraftMentionable {
     func toDict() -> Dictionary<String, String> {
         return [
             "id": id,

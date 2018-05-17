@@ -262,7 +262,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     
-    private func addRawMentions(mentions: Array<Mentionable>) {
+    private func addRawMentions(mentions: Array<SwiftyDraftMentionable>) {
         let dicts = mentions
             .map { (user) -> Dictionary<String, String> in
                 user.toDict()
