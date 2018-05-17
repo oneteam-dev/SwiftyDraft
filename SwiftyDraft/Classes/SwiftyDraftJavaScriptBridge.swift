@@ -235,7 +235,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
-        addRawMentions()
+        addRawMentions(mentions: mentions)
     }
     
     open func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
@@ -262,11 +262,19 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
     
-    public func addRawMentions() {
-        let test = "[{ id: 1, userName: \"yamamoto\"," +
-        "name:\"yamamoto\", email:\"aaa\"," +
-        "avatarURL: \"https://github.com/oneteam-dev/react-oneteam/commits/f54df7e2d0dbab1a6fe49f62987e23a19bf01d61/src/Mention/index.js?author=\" }]"
-        self.runScript(script: "window.editor.rawMentions = \(test)")
+    private func addRawMentions(mentions: Array<Mentionable>) {
+        let dicts = mentions
+            .map { (user) -> Dictionary<String, String> in
+                user.toDict()
+            }
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dicts, options: [])
+            if let jsonString = String(bytes: data, encoding: .utf8) {
+                self.runScript(script: "window.editor.rawMentions = \(jsonString)")
+            }
+        } catch {
+        }
     }
 
     // MARK: - WKNavigationDelegate
@@ -280,6 +288,3 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
 }
-
-
-
