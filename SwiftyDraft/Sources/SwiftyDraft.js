@@ -112,14 +112,14 @@ export default class SwiftyDraft extends Component {
     }
 
     render() {
-          return this.rawMentions.length > 0 ? (
-                  <div style={{ paddingTop: this.state.paddingTop }}>
-                    <RichTextEditor
-                        rawMentions={this.rawMentions}
-                        onChange={() => { this.triggerOnChange() }}
-                        ref={(c) => this.setEditor(c)}>
-                    </RichTextEditor>
-                  </div>
-          ) : null;        
+        return (
+            <div style={{ paddingTop: this.state.paddingTop }}>
+              <RichTextEditor
+	                rawMentions={this.state.rawMentions}
+                  onChange={() => { this.triggerOnChange() }}
+                  ref={(c) => this.setEditor(c)}>
+              </RichTextEditor>
+            </div>
+        )
     }
 }
