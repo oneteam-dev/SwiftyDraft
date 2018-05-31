@@ -235,7 +235,6 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
-        addRawMentions(mentions: mentions)
     }
     
     open func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
@@ -284,6 +283,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             if isFirstResponder {
                 focus()
             }
+            addRawMentions(mentions: mentions)
             setCallbackToken()
         }
     }

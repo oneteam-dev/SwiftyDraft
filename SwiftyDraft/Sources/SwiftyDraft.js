@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'oneteam-rte';
-
+window.oneteamMentions = []
 export default class SwiftyDraft extends Component {
     constructor(props) {
         super(props);
         this.editor = null;
-        this.state = { editorState: {}, paddingTop: 0, rawMentions:[] };
+        this.state = { editorState: {}, paddingTop: 0 };
     }
     set paddingTop(paddingTop) {
         this.setState({ paddingTop });
@@ -103,12 +103,6 @@ export default class SwiftyDraft extends Component {
             state: this.editor.state.editorState.getSelection().getHasFocus()
         };
         window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
-    }
-    set rawMentions(rawMentions) {
-        this.setState({ rawMentions });
-    }
-    get rawMentions() {
-        return this.state.rawMentions;
     }
 
     render() {
