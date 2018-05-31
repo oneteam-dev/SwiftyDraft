@@ -271,7 +271,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         do {
             let data = try JSONSerialization.data(withJSONObject: dicts, options: [])
             if let jsonString = String(bytes: data, encoding: .utf8) {
-                self.runScript(script: "window.editor.rawMentions = \(jsonString)")
+                self.runScript(script: "window.oneteamMentions = \(jsonString)")
             }
         } catch {
         }
