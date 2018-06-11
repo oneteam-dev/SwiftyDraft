@@ -5,7 +5,7 @@ export default class SwiftyDraft extends Component {
     constructor(props) {
         super(props);
         this.editor = null;
-        this.state = { editorState: {}, paddingTop: 0 };
+        this.state = { editorState: {}, paddingTop: 0, rawMentions:[] };
     }
     set paddingTop(paddingTop) {
         this.setState({ paddingTop });
@@ -104,14 +104,18 @@ export default class SwiftyDraft extends Component {
         };
         window.webkit.messageHandlers.didChangeEditorState.postMessage(data);
     }
+    set rawMentions(rawMentions) {
+        this.setState({ rawMentions });
+    }
+    get rawMentions() {
+        return this.state.rawMentions;
+    }
+
     render() {
         return (
             <div style={{ paddingTop: this.state.paddingTop }}>
               <RichTextEditor
-                  rawMentions={[]} // NOTE: this property is required. please update this later @keito5656.
-                  // refs:
-                  // https://github.com/oneteam-dev/oneteam-rte/blob/abcbf4338f9ab9467f96bce95a282a5ad7c3111c/src/RichTextEditor.js#L43-L45
-                  // https://github.com/oneteam-dev/react-oneteam/blob/f54df7e2d0dbab1a6fe49f62987e23a19bf01d61/src/Mention/index.js#L18-L30
+	                rawMentions={this.state.rawMentions}
                   onChange={() => { this.triggerOnChange() }}
                   ref={(c) => this.setEditor(c)}>
               </RichTextEditor>

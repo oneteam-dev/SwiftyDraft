@@ -21,7 +21,7 @@ func localizedStringForKey(key: String) -> String {
     internal var emojiKeyboard:UIView?
     public var webViewContentHeight:CGFloat = 0.0
     internal var isAutoScrollDisable = false
-    
+    public var mentions = Array<SwiftyDraftMentionable>()
 
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)

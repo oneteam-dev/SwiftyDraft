@@ -235,6 +235,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPaddingTop(value: paddingTop)
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
+        addRawMentions(mentions: mentions)
     }
     
     open func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
@@ -260,6 +261,21 @@ extension SwiftyDraft: WKScriptMessageHandler {
             print("[DEBUG] \(data)")
         }
     }
+    
+    private func addRawMentions(mentions: Array<SwiftyDraftMentionable>) {
+        let dicts = mentions
+            .map { (user) -> Dictionary<String, String> in
+                user.toDict()
+            }
+
+        do {
+            let data = try JSONSerialization.data(withJSONObject: dicts, options: [])
+            if let jsonString = String(bytes: data, encoding: .utf8) {
+                self.runScript(script: "window.editor.rawMentions = \(jsonString)")
+            }
+        } catch {
+        }
+    }
 
     // MARK: - WKNavigationDelegate
     
@@ -272,6 +288,3 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
 }
-
-
-
