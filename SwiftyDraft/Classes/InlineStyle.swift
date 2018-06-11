@@ -10,6 +10,7 @@ public enum InlineStyle: String {
     case Bold = "BOLD"
     case Italic = "ITALIC"
     case Strikethrough = "STRIKETHROUGH"
+    case Code = "CODE"
 
     var javaScript: String {
         return "window.editor.toggleInlineStyle(\"\(self.rawValue)\")"
