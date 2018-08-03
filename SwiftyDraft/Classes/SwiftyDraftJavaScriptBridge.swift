@@ -47,20 +47,20 @@ extension SwiftyDraft: WKScriptMessageHandler {
     @objc func handleKeyboardWillShow(_ note: Notification) {
         emojiKeyboard?.removeFromSuperview()
         if let userInfo = note.userInfo{
-            if let keyboard = userInfo[UIKeyboardFrameEndUserInfoKey] as? NSValue{
+            if let keyboard = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue{
                 let keyBoardRect = keyboard.cgRectValue
                 NSLog("\(keyBoardRect.size.height)")
                 webView.frame = CGRect(x: webView.frame.origin.x,
-                                    y: webView.frame.origin.y,
-                                    width: webView.frame.size.width,
-                                    height: self.frame.size.height-keyBoardRect.size.height)
+                                       y: webView.frame.origin.y,
+                                       width: webView.frame.size.width,
+                                       height: self.frame.size.height-keyBoardRect.size.height)
                 setEditorHeight(value: webView.frame.height-self.paddingTop)
                 self.isAutoScrollDisable = true
             }
         }
     }
     
-     @objc func handleKeyboardDidShow(_ note: Notification) {
+    @objc func handleKeyboardDidShow(_ note: Notification) {
         isAutoScrollDisable = false
     }
     

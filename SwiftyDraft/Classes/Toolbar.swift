@@ -114,15 +114,15 @@ public class Toolbar: UIView {
         toolbarItems = items
         let nc = NotificationCenter.default
         nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardShow(_:)),
-                       name: .UIKeyboardDidShow, object: nil)
+                       name: UIResponder.keyboardDidShowNotification, object: nil)
         nc.addObserver(self, selector: #selector(Toolbar.handleKeyboardHide(_:)),
-                       name: .UIKeyboardDidHide, object: nil)
+                       name: UIResponder.keyboardDidHideNotification, object: nil)
         
         lineView = UIView(frame: CGRect(x: 0, y: 0, width: self.frame.width, height: 1))
         lineView?.backgroundColor = borderColor
         scrollView.addSubview(lineView!)
     }
-
+    
     private func updateToolbarItems() {
         closeButton.tintColor = unselectedTintColor
         openButton.tintColor = unselectedTintColor
