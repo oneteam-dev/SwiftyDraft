@@ -277,9 +277,17 @@ extension SwiftyDraft: WKScriptMessageHandler {
         }
     }
 
+    private func injectCSS() {
+        // fix mentions to the left
+        let cssString = ".draftJsMentionPlugin__mentionSuggestions__2DWjA { left: 2px !important }"
+        let jsString = "var style = document.createElement('style'); style.innerHTML = '\(cssString)'; document.head.appendChild(style);"
+        webView.evaluateJavaScript(jsString, completionHandler: nil)
+    }
+
     // MARK: - WKNavigationDelegate
     
     @objc(webView:didFinishNavigation:) public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        injectCSS()
         if !editorInitialized {
             if isFirstResponder {
                 focus()
