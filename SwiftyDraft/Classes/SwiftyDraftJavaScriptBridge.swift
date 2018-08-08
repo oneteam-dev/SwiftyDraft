@@ -248,7 +248,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         case .DidSetCallbackToken:
             didSetCallbackToken(token: data as! String)
         case .DidChangeEditorState:
-            let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).map({ InlineStyle(rawValue: $0)! })
+            let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).compactMap({ InlineStyle(rawValue: $0) })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             let html = data?["html"] as? String ?? ""
             var isFocused = false
