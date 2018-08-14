@@ -88,7 +88,7 @@ public class Toolbar: UIView {
         toolbar.backgroundColor = UIColor.clear
         let borderTop = CALayer()
         borderTop.backgroundColor = UIColor.clear.cgColor
-        borderTop.frame = CGRect(x: 0, y: 0, width: 9999, height: 1.0)
+        borderTop.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 1.0)
         layer.addSublayer(borderTop)
         let f = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
         var items: [UIBarButtonItem] = [f]
@@ -210,7 +210,6 @@ public class Toolbar: UIView {
         toolbar.frame = CGRect(origin: CGPoint.zero,
                                size: CGSize(width: b.size.width, height: 44))
         scrollView.frame = CGRect(origin: CGPoint(x: 0, y: b.height - 44), size: b.size)
-        scrollView.contentSize = toolbarSize
         lineView?.frame = CGRect(x: 0, y: 0, width: self.frame.width, height: 1)
         let f = CGRect(x: b.width - closeButtonWidth, y: 0, width: closeButtonWidth, height: 44)
         closeButton.frame = f
