@@ -13,7 +13,7 @@ func localizedStringForKey(key: String) -> String {
     return SwiftyDraft.localizedStringForKey(key: key)
 }
 
-@IBDesignable open class SwiftyDraft: UIView, WKNavigationDelegate {
+open class SwiftyDraft: UIView, WKNavigationDelegate {
 
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
