@@ -192,7 +192,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
         let vc = UIViewController()
         vc.view.backgroundColor = .clear
         win.rootViewController = vc
-        win.windowLevel = UIWindowLevelAlert + 1
+        win.windowLevel = UIWindow.Level.alert + 1
         win.makeKeyAndVisible()
         vc.present(ac, animated: true, completion: nil)
     }
@@ -221,7 +221,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
         let vc = UIViewController()
         vc.view.backgroundColor = .clear
         win.rootViewController = vc
-        win.windowLevel = UIWindowLevelAlert + 1
+        win.windowLevel = UIWindow.Level.alert + 1
         win.makeKeyAndVisible()
         vc.present(ac, animated: true, completion: nil)
     }
