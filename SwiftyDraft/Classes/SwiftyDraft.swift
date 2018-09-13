@@ -13,7 +13,7 @@ func localizedStringForKey(key: String) -> String {
     return SwiftyDraft.localizedStringForKey(key: key)
 }
 
-@IBDesignable open class SwiftyDraft: UIView, WKNavigationDelegate {
+open class SwiftyDraft: UIView, WKNavigationDelegate {
 
     public weak var imagePickerDelegate: SwiftyDraftImagePickerDelegate?
     public weak var filePickerDelegate: SwiftyDraftFilePickerDelegate?
@@ -164,10 +164,6 @@ func localizedStringForKey(key: String) -> String {
     }
 
     public func promptEmbedCode() {
-        guard let vc = UIApplication.shared.keyWindow?.visibleViewController else {
-            assertionFailure("View Controller does not exist")
-            return
-        }
         let ac = UIAlertController(
             title: SwiftyDraft.localizedStringForKey(key: "embed_iframe.prompt.title"),
             message: SwiftyDraft.localizedStringForKey(key: "embed_iframe.prompt.message"),
@@ -192,14 +188,16 @@ func localizedStringForKey(key: String) -> String {
             style: .cancel, handler: { _ in
                 self.focus(delayed: true)
         }))
+        let win = UIWindow(frame: UIScreen.main.bounds)
+        let vc = UIViewController()
+        vc.view.backgroundColor = .clear
+        win.rootViewController = vc
+        win.windowLevel = UIWindowLevelAlert + 1
+        win.makeKeyAndVisible()
         vc.present(ac, animated: true, completion: nil)
     }
 
     public func promptLinkURL() {
-        guard let vc = UIApplication.shared.keyWindow?.visibleViewController else {
-            assertionFailure("View Controller does not exist")
-            return
-        }
         let ac = UIAlertController(
             title: SwiftyDraft.localizedStringForKey(key: "insert_link.prompt.title"),
             message: SwiftyDraft.localizedStringForKey(key: "insert_link.prompt.message"),
@@ -219,6 +217,12 @@ func localizedStringForKey(key: String) -> String {
         ac.addAction(UIAlertAction(title: SwiftyDraft.localizedStringForKey(key: "button.cancel"), style: .cancel, handler: { _ in
             self.focus(delayed: true)
         }))
+        let win = UIWindow(frame: UIScreen.main.bounds)
+        let vc = UIViewController()
+        vc.view.backgroundColor = .clear
+        win.rootViewController = vc
+        win.windowLevel = UIWindowLevelAlert + 1
+        win.makeKeyAndVisible()
         vc.present(ac, animated: true, completion: nil)
     }
 
