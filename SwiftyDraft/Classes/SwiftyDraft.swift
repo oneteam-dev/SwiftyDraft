@@ -125,19 +125,19 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
         let js = try! String(contentsOf: SwiftyDraft.javaScriptURL)
         let html = try! String(contentsOf: SwiftyDraft.htmlURL).replacingOccurrences(of: " src=\"./bundle.js\"><", with: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
         self.webView.loadHTMLString(html, baseURL: baseURL)
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
-                       name: .UIKeyboardDidChangeFrame, object: nil)
+                                               name: UIResponder.keyboardDidChangeFrameNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillShow(_:)),
-                                               name: .UIKeyboardWillShow, object: nil)
+                                               name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidShow(_:)),
-                                               name: .UIKeyboardDidShow, object: nil)
-
+                                               name: UIResponder.keyboardDidShowNotification, object: nil)
+        
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardWillHide(_:)),
-                                               name: .UIKeyboardWillHide, object: nil)
+                                               name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardDidHide(_:)),
-                                               name: .UIKeyboardDidHide, object: nil)
-
+                                               name: UIResponder.keyboardDidHideNotification, object: nil)
+        
         self.webView.scrollView.addObserver(self, forKeyPath: "contentSize", options: NSKeyValueObservingOptions(rawValue: 0), context: nil)
     }
     open override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
@@ -192,7 +192,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
         let vc = UIViewController()
         vc.view.backgroundColor = .clear
         win.rootViewController = vc
-        win.windowLevel = UIWindowLevelAlert + 1
+        win.windowLevel = UIWindow.Level.alert + 1
         win.makeKeyAndVisible()
         vc.present(ac, animated: true, completion: nil)
     }
@@ -221,7 +221,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
         let vc = UIViewController()
         vc.view.backgroundColor = .clear
         win.rootViewController = vc
-        win.windowLevel = UIWindowLevelAlert + 1
+        win.windowLevel = UIWindow.Level.alert + 1
         win.makeKeyAndVisible()
         vc.present(ac, animated: true, completion: nil)
     }
