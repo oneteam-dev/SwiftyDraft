@@ -222,7 +222,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
     func didChangeEditorState(html: String, inlineStyles: [InlineStyle], blockType: BlockType, isFocus:Bool) {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
-        self.html = html
+        if editorInitialized {
+            self.html = html
+        }
         if editing == false && isFocus == true {
             scrollY(offset: paddingTop - 10)
         }
