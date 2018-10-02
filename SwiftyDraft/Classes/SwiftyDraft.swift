@@ -83,7 +83,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
 
     public lazy var userContentController: WKUserContentController = {
         let uc = WKUserContentController()
-        WebViewCallback.all.forEach {
+        WebViewCallback.allCases.forEach {
             uc.add(self, name: $0.rawValue)
         }
         return uc

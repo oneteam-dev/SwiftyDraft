@@ -247,9 +247,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
 
     private func handleWebViewCallback(callback: WebViewCallback, data: AnyObject?) {
         switch callback {
-        case .DidSetCallbackToken:
+        case .didSetCallbackToken:
             didSetCallbackToken(token: data as! String)
-        case .DidChangeEditorState:
+        case .didChangeEditorState:
             let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).compactMap({ InlineStyle(rawValue: $0) })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             let html = data?["html"] as? String ?? ""
@@ -259,7 +259,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             }
             didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType, isFocus: isFocused)
 
-        case .DebugLog:
+        case .debugLog:
             print("[DEBUG] \(data)")
         }
     }
