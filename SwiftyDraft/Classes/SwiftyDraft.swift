@@ -123,7 +123,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
         self.webView.backgroundColor = UIColor.white
         self.webView.addRichEditorInputAccessoryView(toolbar: self.editorToolbar)
         let js = try! String(contentsOf: SwiftyDraft.javaScriptURL)
-        let html = try! String(contentsOf: SwiftyDraft.htmlURL).replacingOccurrences(of: " src=\"./bundle.js\"><", with: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.DebugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
+        let html = try! String(contentsOf: SwiftyDraft.htmlURL).replacingOccurrences(of: " src=\"./bundle.js\"><", with: "> window.onerror = function(e) { document.location.href = \"callback-\(callbackToken)://error.internal/\(WebViewCallback.debugLog.rawValue)/\" + encodeURIComponent(JSON.stringify({ error: '' + e })); } </script><script>\(js)<")
         self.webView.loadHTMLString(html, baseURL: baseURL)
         
         NotificationCenter.default.addObserver(self, selector: #selector(SwiftyDraft.handleKeyboardChangeFrame(_:)),
