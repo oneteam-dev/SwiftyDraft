@@ -222,7 +222,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
     func didChangeEditorState(html: String, inlineStyles: [InlineStyle], blockType: BlockType, isFocus:Bool) {
         self.editorToolbar.currentInlineStyles = inlineStyles
         self.editorToolbar.currentBlockType = blockType
-        self.html = html
+        if editorInitialized {
+            self.html = html
+        }
         if editing == false && isFocus == true {
             scrollY(offset: paddingTop - 10)
         }
@@ -245,9 +247,9 @@ extension SwiftyDraft: WKScriptMessageHandler {
 
     private func handleWebViewCallback(callback: WebViewCallback, data: AnyObject?) {
         switch callback {
-        case .DidSetCallbackToken:
+        case .didSetCallbackToken:
             didSetCallbackToken(token: data as! String)
-        case .DidChangeEditorState:
+        case .didChangeEditorState:
             let inlineStyles = ((data?["inlineStyles"] as? [String]) ?? [String]()).compactMap({ InlineStyle(rawValue: $0) })
             let blockType = BlockType(rawValue: (data?["blockType"] as? String) ?? "") ?? .Unstyled
             let html = data?["html"] as? String ?? ""
@@ -257,7 +259,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             }
             didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType, isFocus: isFocused)
 
-        case .DebugLog:
+        case .debugLog:
             print("[DEBUG] \(data)")
         }
     }
