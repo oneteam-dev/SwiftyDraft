@@ -40,6 +40,7 @@ export default class SwiftyDraft extends Component {
     insertDownloadLink(...args) {
         if(this.editor) {
             this.editor.html += "<a href=\"" + arguments[0]["url"] + "\" target=\"_blank\">"+ arguments[0]["title"] +"</a>"
+            this.editor.focus();
         }
     }
     insertIFrame(tag) {
