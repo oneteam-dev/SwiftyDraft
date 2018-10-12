@@ -1,0 +1,15 @@
+@import '../../../../utils/colors'
+
+.file-placeholder
+  .progress-bar-container
+    position: absolute
+    z-index: 2
+    top: 0
+    width: 100%
+    height: 4px
+    left: 0
+    background-color: rgba($black-color, .03)
+    overflow: hidden
+    border-radius: 5px 5px 0 0
+  .progress-bar
+    transition: width .5s cubic-bezier(0, .98, .5, .99)

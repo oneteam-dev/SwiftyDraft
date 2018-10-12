@@ -1,0 +1,24 @@
+@import '../../../../utils/colors'
+
+.file-placeholder-info
+  line-height: 1.4
+  font-size: 13px
+  font-weight: 400
+  color: rgba($black-color, .3)
+  margin-top: 2px
+  white-space: nowrap
+  text-overflow: ellipsis
+  overflow: hidden
+  & > div > span:not(:first-child)
+    border-left: 1px solid
+    padding-left: .6em
+    margin-left: .6em
+  .uploaded-by
+    font-weight: 700
+  .file-placeholder-info-processing
+    animation: fade-in-out .6s linear alternate-reverse infinite
+  @keyframes fade-in-out
+    0%
+      opacity: 1
+    100%
+      opacity: .3
