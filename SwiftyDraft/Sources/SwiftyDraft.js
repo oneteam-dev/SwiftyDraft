@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import RichTextEditor from 'oneteam-rte';
+import WebCardAtomicBlock from './components/TopicEditor/components/Editor/components/RichTextEditor/components/WebCardAtomicBlock';
+import PlaceholderAtomicBlock from './components/TopicEditor/components/Editor/components/RichTextEditor/components/PlaceholderAtomicBlock';
+import FilePlaceholderAtomicBlock from './components/TopicEditor/components/Editor/components/RichTextEditor/components/FilePlaceholderAtomicBlock';
+import { WEB_CARD, PLACEHOLDER, FILE_PLACEHOLDER } from 'oneteam-rte/lib/constants';
 
 export default class SwiftyDraft extends Component {
     constructor(props) {
@@ -118,6 +122,11 @@ export default class SwiftyDraft extends Component {
               <RichTextEditor
 	                rawMentions={this.state.rawMentions}
                   onChange={() => { this.triggerOnChange() }}
+                  atomicBlockRenderMap={{
+                      [WEB_CARD]: WebCardAtomicBlock,
+                      [PLACEHOLDER]: PlaceholderAtomicBlock,
+                      [FILE_PLACEHOLDER]: FilePlaceholderAtomicBlock
+                    }}
                   ref={(c) => this.setEditor(c)}>
               </RichTextEditor>
             </div>

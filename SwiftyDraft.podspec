@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "SwiftyDraft"
-  s.version          = "0.0.3"
+  s.version          = "0.0.4"
   s.summary          = "Rich-text editor with Draft.js"
   s.homepage         = "https://github.com/oneteam-dev/SwiftyDraft"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"
@@ -23,8 +23,9 @@ Pod::Spec.new do |s|
   s.source_files = 'SwiftyDraft/Classes/**/*'
   s.resource_bundles = {
     'SwiftyDraft' => [
-      'SwiftyDraft/Assets/*.js',
-      'SwiftyDraft/Assets/*.html',
+      'SwiftyDraft/Assets/bundle.js',
+      'SwiftyDraft/Assets/index.html',
+      'SwiftyDraft/Assets/*.{svg,png}',
       'SwiftyDraft/Assets/Icons/*.png',
       'SwiftyDraft/Localizations/*.lproj'
     ]

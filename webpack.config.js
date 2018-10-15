@@ -41,11 +41,11 @@ module.exports = {
         options: { limit: 10000, mimetype: 'application/font-woff' }
       },
       {
-        test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        test: /\.(ttf|eot)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: ['file-loader']
       },
       {
-        test: /\.png$/,
+        test: /\.(png|svg)$/,
         loader: 'url-loader',
         options: { limit: 10000 }
       }
