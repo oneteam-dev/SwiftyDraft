@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
     'SwiftyDraft' => [
       'SwiftyDraft/Assets/bundle.js',
       'SwiftyDraft/Assets/index.html',
-      'SwiftyDraft/Assets/*.{svg,eot,woff,woff2,ttf,png}',
+      'SwiftyDraft/Assets/*.{svg,png}',
       'SwiftyDraft/Assets/Icons/*.png',
       'SwiftyDraft/Localizations/*.lproj'
     ]
