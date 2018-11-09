@@ -30,7 +30,7 @@ import WebKit
 
 extension SwiftyDraft: WKScriptMessageHandler {
     
-    func insertText(text:String) {
+    public func insertText(_ text: String) {
         runScript(script: "editor.editor.insertText(\"\(text)\")")
     }
 
