@@ -2563,10 +2563,10 @@ draft-js-modifiers@~0.2.1:
     draft-js "~0.10.5"
     immutable "~3.7.4"
 
-draft-js-oneteam-rte-plugin@^0.4.4:
-  version "0.4.4"
-  resolved "https://registry.yarnpkg.com/draft-js-oneteam-rte-plugin/-/draft-js-oneteam-rte-plugin-0.4.4.tgz#75e793e307d5603e4c33af2c9c392112e1c9006c"
-  integrity sha512-zbyWfv9LaK9to4j9f8OdffQOsJzDdh90Lok2CBSL6aSJz1i+/TdUhcqP3yESipZLZ9hH1y1XFxt9ilcNkLBt2w==
+draft-js-oneteam-rte-plugin@^0.4.6:
+  version "0.4.6"
+  resolved "https://registry.yarnpkg.com/draft-js-oneteam-rte-plugin/-/draft-js-oneteam-rte-plugin-0.4.6.tgz#b513ff244eafd6c6dc364b88a98160698cfadda3"
+  integrity sha512-kuODJ6mtOUj1SCr+vmSEes+7C5BXbBBAhQh/gR2XjVU55oVRFfkE74diHjijJpmtfrZCJ7VuHfU5gmRyn04Jfw==
   dependencies:
     autolinker "^1.6.2"
     decorate-component-with-props "^1.1.0"
@@ -5203,10 +5203,10 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-oneteam-rte@^2.1.8:
-  version "2.1.8"
-  resolved "https://registry.yarnpkg.com/oneteam-rte/-/oneteam-rte-2.1.8.tgz#c232b4b652b8d73c7de8179c3671273e5a3f78c6"
-  integrity sha512-c0AIg9c9J6G1TnP+4w3ukzvEjsVO9wHTTAF0d3C5M7icd42o4jRnr2kwCb/xECnAVSYvXa4GGhL+Q3TvfQ367g==
+oneteam-rte@2.1.11:
+  version "2.1.11"
+  resolved "https://registry.yarnpkg.com/oneteam-rte/-/oneteam-rte-2.1.11.tgz#8a2cc27bd722a0137e2957d6c5bcb1346a225fb1"
+  integrity sha512-qDUzfjPJnsS4rMvHLlOIVWDp0WQKHjck9C+LCuKjltIVYZjfwm/YeWDgb/K3hDClCuvs3Ze4GOz5b/+Nd4zOOA==
   dependencies:
     "@sugarshin/draft-js-emoji-plugin" "^2.0.1-oneteam.3"
     classnames "^2.2.6"
@@ -5216,7 +5216,7 @@ oneteam-rte@^2.1.8:
     draft-js-linkify-plugin "^2.0.1"
     draft-js-markdown-shortcuts-plugin "^0.5.0"
     draft-js-mention-plugin "^3.0.4"
-    draft-js-oneteam-rte-plugin "^0.4.4"
+    draft-js-oneteam-rte-plugin "^0.4.6"
     draft-js-plugins-editor "^2.1.1"
     draft-js-prism "^1.0.6"
     emojione "^2.2.7"
