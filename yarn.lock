@@ -5203,10 +5203,10 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-oneteam-rte@2.1.11:
-  version "2.1.11"
-  resolved "https://registry.yarnpkg.com/oneteam-rte/-/oneteam-rte-2.1.11.tgz#8a2cc27bd722a0137e2957d6c5bcb1346a225fb1"
-  integrity sha512-qDUzfjPJnsS4rMvHLlOIVWDp0WQKHjck9C+LCuKjltIVYZjfwm/YeWDgb/K3hDClCuvs3Ze4GOz5b/+Nd4zOOA==
+oneteam-rte@2.1.16:
+  version "2.1.16"
+  resolved "https://registry.yarnpkg.com/oneteam-rte/-/oneteam-rte-2.1.16.tgz#36c4ca2cc4a70ab04544fc5d72492656fc8a9de7"
+  integrity sha512-vvwXUE6CEmrvpxMKmOGD3/dHx1fs9IQhBDyfrSaVElNiA2ULIXcfX9zmdaZMZNd/h1G1uOZvSSqE3SlfTjJmQg==
   dependencies:
     "@sugarshin/draft-js-emoji-plugin" "^2.0.1-oneteam.3"
     classnames "^2.2.6"
@@ -5226,7 +5226,7 @@ oneteam-rte@2.1.11:
     prop-types "^15.6.2"
     react-bootstrap "^0.32.1"
     react-minimal-error-boundary "^1.0.1"
-    react-oneteam "^0.4.3"
+    react-oneteam "^0.4.5"
 
 onetime@^2.0.0:
   version "2.0.1"
@@ -6347,10 +6347,10 @@ react-minimal-error-boundary@^1.0.1:
     prop-types "^15.6.0"
     react-error-boundary "^1.2.1"
 
-react-oneteam@^0.4.3:
-  version "0.4.3"
-  resolved "https://registry.yarnpkg.com/react-oneteam/-/react-oneteam-0.4.3.tgz#f257d2fb04c0f340c6448003e4468ba4b738694f"
-  integrity sha512-Kc8F/0K4uqaqqPyZvN9W5aP+I/tnySv/7ofRkXf9tK6bCuG1/tR+tQgukBSdJQrp8L+nCWIIFI7x0mvxnIasVw==
+react-oneteam@^0.4.5:
+  version "0.4.5"
+  resolved "https://registry.yarnpkg.com/react-oneteam/-/react-oneteam-0.4.5.tgz#b1b3783445300c70cb2df52cdef08c4cedd033ac"
+  integrity sha512-owYq6eeaA4y48rvFht++dy74xASpwqvtxUQZrVG7zLe/Wyjp4+MbvQ4lUBPAJpoE/Y44fnyzOG++bweaJedIZg==
   dependencies:
     classnames "^2.2.5"
     color-hash "^1.0.3"
