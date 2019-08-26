@@ -155,7 +155,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
             return
         }
         let scroll = self.webView.scrollView.contentSize.height - self.webViewContentHeight
-        var scrollY:CGFloat = scroll + self.webView.scrollView.contentOffset.y
+        let scrollY:CGFloat = scroll + self.webView.scrollView.contentOffset.y
         if scrollY == webView.scrollView.contentOffset.y {
             return
         }

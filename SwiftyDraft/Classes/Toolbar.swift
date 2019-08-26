@@ -203,10 +203,9 @@ public class Toolbar: UIView {
         let b = self.bounds
         let closeButtonWidth: CGFloat = 0 // 54
         let toolbarWidth: CGFloat = self.toolbarItems.reduce(0) { sofar, item in
-            var w = (item.value(forKey: "view") as? UIView)?.bounds.width ?? 22.0
+            let w = (item.value(forKey: "view") as? UIView)?.bounds.width ?? 22.0
             return sofar + w + 11.0
         } + 25 // 75
-        let toolbarSize = CGSize(width: toolbarWidth, height: 44)
         toolbar.frame = CGRect(origin: CGPoint.zero,
                                size: CGSize(width: b.size.width, height: 44))
         scrollView.frame = CGRect(origin: CGPoint(x: 0, y: b.height - 44), size: b.size)

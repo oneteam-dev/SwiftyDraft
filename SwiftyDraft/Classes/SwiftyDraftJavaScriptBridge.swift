@@ -260,7 +260,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType, isFocus: isFocused)
 
         case .debugLog:
-            print("[DEBUG] \(data)")
+            print("[DEBUG] \(String(describing: data))")
         }
     }
     
