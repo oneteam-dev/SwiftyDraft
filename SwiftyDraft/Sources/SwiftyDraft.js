@@ -9,7 +9,7 @@ export default class SwiftyDraft extends Component {
     constructor(props) {
         super(props);
         this.editor = null;
-        this.state = { editorState: {}, paddingTop: 0, rawMentions:[] };
+        this.state = { editorState: {}, paddingTop: 0, rawMentions:[], hashtagList:[] };
     }
     set paddingTop(paddingTop) {
         this.setState({ paddingTop });
@@ -115,12 +115,19 @@ export default class SwiftyDraft extends Component {
     get rawMentions() {
         return this.state.rawMentions;
     }
+    set hashtagList(hashtagList) {
+        this.setState({ hashtagList });
+    }
+    get hashtagList() {
+        return this.state.hashtagList;
+    }
 
     render() {
         return (
             <div style={{ paddingTop: this.state.paddingTop }}>
               <RichTextEditor
 	                rawMentions={this.state.rawMentions}
+	                hashtagList={this.state.hashtagList}
                   onChange={() => { this.triggerOnChange() }}
                   atomicBlockRenderMap={{
                       [WEB_CARD]: WebCardAtomicBlock,

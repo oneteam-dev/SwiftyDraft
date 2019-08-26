@@ -22,6 +22,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
     public var webViewContentHeight:CGFloat = 0.0
     internal var isAutoScrollDisable = false
     public var mentions = Array<SwiftyDraftMentionable>()
+    public var hashtags = Array<String>()
 
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
