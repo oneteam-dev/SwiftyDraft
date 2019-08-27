@@ -22,7 +22,21 @@ class ViewController: UIViewController {
         draftView.filePickerDelegate = self
         draftView.imagePickerDelegate = self
 //        draftView.paddingTop = metaView.bounds.height
-        draftView.defaultHTML = "<h1>Yo</h1><p>Hello</p>"
+        draftView.defaultHTML = "<br><br><br><br><br><h1>Yo</h1><p>Hello</p>"
+        
+        let mention1 = SampleMentionUser()
+        mention1.id = "mention-01"
+        mention1.name = "name"
+        mention1.userName = "userName"
+        mention1.email = "email"
+        let mention2 = SampleMentionUser()
+        mention2.id = "mention-02"
+        mention2.name = "メンションID"
+        mention2.userName = "お名前"
+        mention2.email = "mention@email.com"
+        draftView.mentions = [mention1, mention2]
+
+        draftView.hashtags = ["#ahoge", "#bhoge", "#choge", "#ほげ"]
     }
 }
 
@@ -31,7 +45,6 @@ extension ViewController: UIScrollViewDelegate {
         metaViewTopConstraint.constant = scrollView.contentOffset.y
     }
 }
-
 
 extension ViewController: SwiftyDraftImagePickerDelegate {
     
@@ -112,3 +125,12 @@ extension ViewController: SwiftyDraftFilePickerDelegate {
         self.present(ac, animated: true, completion: nil)
     }
 }
+
+class SampleMentionUser {
+    var userName = ""
+    var name = ""
+    var id = ""
+    var email = ""
+    var avatarURL = ""
+}
+extension SampleMentionUser: SwiftyDraftMentionable {}

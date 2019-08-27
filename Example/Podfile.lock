@@ -1,5 +1,5 @@
 PODS:
-  - SwiftyDraft (0.0.1)
+  - SwiftyDraft (0.0.8)
 
 DEPENDENCIES:
   - SwiftyDraft (from `..`)
@@ -9,8 +9,8 @@ EXTERNAL SOURCES:
     :path: ".."
 
 SPEC CHECKSUMS:
-  SwiftyDraft: 054f4f316bbdae777f1c648b1299874db184952a
+  SwiftyDraft: 6605f75949b01f2f82c631d3939129f8f26f56dc
 
 PODFILE CHECKSUM: 304777b0c1a0b0a7f2d79fa0de7a2f38e366982b
 
-COCOAPODS: 1.2.0
+COCOAPODS: 1.7.1

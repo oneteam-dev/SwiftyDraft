@@ -238,6 +238,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
         setDOMPlaceholder(value: placeholder)
         setDOMHTML(value: defaultHTML)
         addRawMentions(mentions: mentions)
+        addHashtagList(hashtags: hashtags)
     }
     
     open func runScript(script: String, completionHandler: ((Any?, Error?) -> Void)? = nil) {
@@ -260,7 +261,7 @@ extension SwiftyDraft: WKScriptMessageHandler {
             didChangeEditorState(html: html, inlineStyles: inlineStyles, blockType: blockType, isFocus: isFocused)
 
         case .debugLog:
-            print("[DEBUG] \(data)")
+            print("[DEBUG] \(String(describing: data))")
         }
     }
     
@@ -276,6 +277,17 @@ extension SwiftyDraft: WKScriptMessageHandler {
                 self.runScript(script: "window.editor.rawMentions = \(jsonString)")
             }
         } catch {
+        }
+    }
+
+    private func addHashtagList(hashtags: Array<String>) {
+        do {
+            let data = try JSONSerialization.data(withJSONObject: hashtags, options: [])
+            if let jsonString = String(bytes: data, encoding: .utf8) {
+                self.runScript(script: "window.editor.hashtagList = \(jsonString)")
+            }
+        } catch let error {
+            print("\(error)")
         }
     }
 

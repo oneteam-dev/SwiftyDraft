@@ -5203,10 +5203,10 @@ once@^1.3.0:
   dependencies:
     wrappy "1"
 
-oneteam-rte@2.1.18:
-  version "2.1.18"
-  resolved "https://registry.yarnpkg.com/oneteam-rte/-/oneteam-rte-2.1.18.tgz#7518ee4c189d178c4edca918d4a1394c413b8a71"
-  integrity sha512-vZtLPsXo9wOIS1xbeaylzClQsbVAyg5CXFtWT5RifaAMwftQLs69rqEDf50wcDHBFg1X5vosTc6uovPdn6pI8w==
+oneteam-rte@2.2.2:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/oneteam-rte/-/oneteam-rte-2.2.2.tgz#86185bb85ed880615dfb40a7c3ecfb2b642ae3cb"
+  integrity sha512-9lgmo7gni+ErmtVFWjAvhCXYQQsDIkcLapM6kXtEPnW4ccehVY9DGYu58T9h8Gyi2ezaEug7elDM3+lO6rNauQ==
   dependencies:
     "@sugarshin/draft-js-emoji-plugin" "^2.0.1-oneteam.3"
     classnames "^2.2.6"

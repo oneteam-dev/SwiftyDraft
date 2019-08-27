@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "SwiftyDraft"
-  s.version          = "0.0.8"
+  s.version          = "0.0.9"
   s.summary          = "Rich-text editor with Draft.js"
   s.homepage         = "https://github.com/oneteam-dev/SwiftyDraft"
   # s.screenshots     = "www.example.com/screenshots_1", "www.example.com/screenshots_2"

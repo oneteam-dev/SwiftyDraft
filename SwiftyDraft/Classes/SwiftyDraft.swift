@@ -22,6 +22,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
     public var webViewContentHeight:CGFloat = 0.0
     internal var isAutoScrollDisable = false
     public var mentions = Array<SwiftyDraftMentionable>()
+    public var hashtags = Array<String>()
 
     lazy var callbackToken: String = {
         var letters = Array("abcdefghijklmnopqrstuvwxyz".characters)
@@ -155,7 +156,7 @@ open class SwiftyDraft: UIView, WKNavigationDelegate {
             return
         }
         let scroll = self.webView.scrollView.contentSize.height - self.webViewContentHeight
-        var scrollY:CGFloat = scroll + self.webView.scrollView.contentOffset.y
+        let scrollY:CGFloat = scroll + self.webView.scrollView.contentOffset.y
         if scrollY == webView.scrollView.contentOffset.y {
             return
         }
