@@ -23,7 +23,8 @@ class ViewController: UIViewController {
         draftView.imagePickerDelegate = self
 //        draftView.paddingTop = metaView.bounds.height
         draftView.defaultHTML = "<br><br><br><br><br><h1>Yo</h1><p>Hello</p>"
-        
+        draftView.placeholder = "ぷれえすほるだあ"
+
         let mention1 = SampleMentionUser()
         mention1.id = "mention-01"
         mention1.name = "name"

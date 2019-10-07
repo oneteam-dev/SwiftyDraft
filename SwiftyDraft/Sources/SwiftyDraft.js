@@ -21,7 +21,7 @@ export default class SwiftyDraft extends Component {
         this.setState({ placeholder: value });
     }
     get placeholder() {
-        return this.state.placeholder
+        return this.state.placeholder;
     }
     setEditor(editor) {
         this.editor = editor;
@@ -129,6 +129,7 @@ export default class SwiftyDraft extends Component {
 	                rawMentions={this.state.rawMentions}
 	                hashtagList={this.state.hashtagList}
                   onChange={() => { this.triggerOnChange() }}
+                  placeholder={this.state.placeholder}
                   atomicBlockRenderMap={{
                       [WEB_CARD]: WebCardAtomicBlock,
                       [PLACEHOLDER]: PlaceholderAtomicBlock,
