@@ -9,6 +9,5 @@
 #ifndef SwiftyDraft_Bridging_Header_h
 #define SwiftyDraft_Bridging_Header_h
 
-#import "CJWWebView+HackishAccessoryHiding.h"
 
 #endif /* SwiftyDraft_Bridging_Header_h */
