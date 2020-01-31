@@ -18,7 +18,7 @@
   "dependencies": {
     "bootstrap-styl": "^5.0.8",
     "classnames": "^2.2.5",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.13",
     "mime-types": "^2.1.20",
     "oneteam-rte": "2.2.7",
     "pretty-bytes": "^5.1.0",
